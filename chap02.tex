@@ -1,0 +1,76 @@
+%!TEX root = <main.tex>
+\chapter{Revisão Bibliográfica}
+
+Neste capitulo serão abordados os conceitos necessários para modelagem e controle de manipuladores robóticos.
+
+\section{Cinemática Direta}
+Um manipulador robótico é composto de uma série de corpos rígidos denominados \textit{elos} conectados através de \textit{juntas}. 
+Juntas podem ser:
+\begin{itemize} 
+\item Revolução
+\item Prismática
+\end{itemize}
+Essa estrutura é chamada de cadeia cinemática.
+Um extremo da cadeia é fixado a base e o outro ao efetuador.
+Nesse texto serão abordadas apenas cadeias cinemáticas abertas, ou seja, aquelas em que existe apenas uma sequêcia de elos conectando os dois extremos da cadeia.
+Cada junta acrescenta um grau de liberdade (DOF), ao qual está associado a uma variável de junta. No caso de uma junta de revolução um ângulo e no caso de uma junta prismática um deslocamento.
+O objetivo da cinemática direta é calcular a posição e orientação do efetuador em função das variáveis das juntas.
+
+%É possível expressar a 
+
+
+\subsection{Jacobiano Geométrico}
+\subsection{Jacobiano Analítico}
+Quando a posição e orientação do efetuador são dadas em função de um número mínimos de parametros no espaço operacional é possível computar o Jacobinano pela diferenciação das equações da cinemática direta em função das variáveis das juntas.
+Para isso utiliza-se a técnica analítica.
+
+Seja $\bm{p}_e$ a posição do sistema de coordenadas do efetuador representada no sistema de coordenadas da base. O vetor $\dot{\bm{p}}_e$ é portanto a velocidade de translação, ou linear.
+\begin{equation}
+\dot{\bm{p}}_e = \frac{\partial \bm{p}_e }{\partial \bm{q}} \dot{\bm{q}} = \bm{J}_P (\bm{q}) \dot{\bm{q}} 
+\end{equation}
+
+Para a velocidade angular, pode ser considerada uma representação mínima da orientação em função de três variáveis $\phi_e$. 
+A derivada no tempo $\dot{\bm{\phi}}_e$ não é igual a velocidade angular, no entanto, conhecida a função $\bm{\phi}_e(\bm{q})$:
+
+\begin{equation}
+\dot{\bm{\phi}}_e = \frac{\partial \bm{\phi}_e}{\partial \bm{q}} \bm{\dot{q}} = \bm{J}_{\phi}(\bm{q})\bm{\dot{q}}
+\end{equation}
+
+Sob essas premissas a cinemática diferencial pode ser obtida como:
+\begin{equation} \label{eq:jacoba}
+\bm{\dot{x}}_e = \m{\bm{\dot{p}}_e \\ \bm{\dot{\phi}}_e} = \m{\bm{J}_P(\bm{q}) \\ \bm{J_\phi}(\bm{q})} \bm{\dot{q}} = \bm{J}_A (\bm{q}) \dot{\bm{q}}
+\end{equation}
+
+ 
+\section{Controle Cinemático}
+Se $x$ é uma representação da posição e orientação e $x_d$ o valor desejado nessa representação, seja o erro no espaço operacional:
+\begin{equation}
+\bm{e} = \bm{x}_d - \bm{x}
+\end{equation}
+
+Derivando em relação ao tempo
+\begin{equation}
+\bm{\dot{e}} = \bm{\dot{x}}_d - \bm{\dot{x}}
+\end{equation}
+podemos escrever a partir da equação \ref{eq:jacoba}:
+\begin{equation}
+\bm{\dot{e}} = \bm{\dot{x}}_d - \bm{J}_a(\bm{q})\dot{\bm{q}}
+\end{equation}
+Sendo $\bm{x}_d(t)$ uma trajetória desejada, deseja-se que $\bm{x}$ atinja $\bm{x}_d(t)$ em $t \to \infty$ .
+A entrada de controle para o sistema é um valor de $\bm{u} = \dot{\bm{q}}$, logo, assumindo que $\bm{J}_A(q)$ é quadrada e não singular, a escolha da lei de controle
+\begin{equation}
+\bm{u} = \bm{J}_A^{-1}(\bm{q})\bar{\bm{u}}
+\end{equation}
+leva ao sistema linear:
+\begin{equation}
+\dot{\bm{e}} = \dot{\bm{x}}_d - \bar{\bm{u}}
+\end{equation}
+Se for escolhido $\bar{\bm{u}}$:
+\begin{equation}
+\bar{\bm{u}} = \dot{\bm{x}}_d + \bm{K} (\bm{x}_d - \bm{x})
+\end{equation}
+obtem-se a seguinte dinâmica para o erro
+\begin{equation}
+\dot{\bm{e}} + \bm{K} \bm{e} = 0
+\end{equation}
+
