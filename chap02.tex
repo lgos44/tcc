@@ -10,6 +10,7 @@ Juntas podem ser:
 \item Revolução
 \item Prismática
 \end{itemize}
+
 Essa estrutura é chamada de cadeia cinemática.
 Um extremo da cadeia é fixado a base e o outro ao efetuador.
 Nesse texto serão abordadas apenas cadeias cinemáticas abertas, ou seja, aquelas em que existe apenas uma sequêcia de elos conectando os dois extremos da cadeia.
@@ -18,8 +19,42 @@ O objetivo da cinemática direta é calcular a posição e orientação do efetu
 
 %É possível expressar a 
 
+Uma cadeia cinemática aberta é constituida por $n+1$ elos numerados de $0$ a $n$, onde o Elo 0 é fixado a base por convenção. O método utilizado consiste em definir um sistema de coordenadas associado a cada elo e calcular a transformação homogênea entre elos consecutivos. Em seguida a transformação do n-ésimo sistema de coordenadas pode ser obtida de forma recursiva como
+\begin{equation}\label{eq:cinedireta}
+\bm{T}_{0n}(\bm{q}) = \bm{T}_{01}(q_1) \bm{T}_{12}(q_{2}) {\dots} \bm{T}_{n-1,n}(q_n)
+\end{equation}
+onde $\bm{T}_{i-1,i}(q_i)$ denota a transformação homogênea do sistema de coordenadas solidário ao elo $i-1$àquele solídário ao elo $i$.
 
+Logo a transformação homogênea que da efetuador final com respeito a base é dada por
+\begin{equation}
+\bm{T}_{be}(\bm{q}) = \bm{T}_{b0} \bm{T}_{0n}(\bm{q}) \bm{T}_{ne} 
+\end{equation}
+
+\subsection{Convenção Denavit-Hartenberg}
+Para calcular a cinemática direta para uma manipulador de cadeia cinemática aberta de acordo com a equação \eqref{eq:cinedireta} um método sistemático foi definido para obter a relação entre a posição e orientação de dois elos consecutivos. A convenção Denavit-Hartenberg especifica um conjunto de regras sobre como definir os sistemas de coordenadas de cada elo.
+
+Seja o Eixo $i$ o eixo da junta que conecta o elo $i-1$, ao elo $i$, então:
+
+\begin{itemize}
+\item Escolher o eixo $z_i$ ao longo do eixo da junta $i+1$.
+\item Colocar a origem $O_i$ na interseção do eixo $z_i$ com a normal comum entre os eixos $z_{i-1}$ e $z_i$
+\item Escolher $x_i$ ao longo da normal comum aos eixos $z_{i-1}$ e $z_i$, com direção da junta $i$ para a junta $i+1$. 
+\item O eixo $y_i = z_i \times x_i$ é escolhido de forma a completar o sistema de coordenadas.
+\end{itemize}
+
+Essa convenção resulta em uma definição não única do sistema de coordenadas nos seguintes casos:
+
+\begin{itemize}
+\item Para o sistema de coordenadas $0$, somente a direção do eixo $z_0$ é especificada, portanto a escolha de $O_0$ e $ x_0$ é arbitrária.
+\item Para o sistema de coordenadas $n$, como não existe junta $n+1$, $z_n$ não está definido, mas $x_n$ deve ser normal ao eixo $z_{n-1}$. Tipicamente escolhe-se $z_n$ alinhado com $z_{n-1}$.
+\item Quando dois eixos consecutivos são paralelos, a normal comum entre eles não é definida de forma única. Tipicamente escolhe-se $O_i$ na junta $i+1$
+\item  Quando dois eixos consecutivos se interceptam, direção de $x_i$ é normal e o sentido é arbitrário. Escolhe-se $O_i$ na intesecção.
+\item Quando a junta $i$ é prismática a direção de $z_{i-1}$ é arbitrária.
+\end{itemize}
+
+\section{Cinemática Diferencial}
 \subsection{Jacobiano Geométrico}
+
 \subsection{Jacobiano Analítico}
 Quando a posição e orientação do efetuador são dadas em função de um número mínimos de parametros no espaço operacional é possível computar o Jacobinano pela diferenciação das equações da cinemática direta em função das variáveis das juntas.
 Para isso utiliza-se a técnica analítica.
@@ -43,6 +78,82 @@ Sob essas premissas a cinemática diferencial pode ser obtida como:
 
  
 \section{Controle Cinemático}
+\label{sec:controle_cinematico}
+O estratégia de controle cinemático pode ser aplicada quando considera-se que a dinâmica do manipulador pode ser desprezada. Essa hipótese se sustenta quando as seguintes premissas são válidas:
+\begin{itemize}
+\item Elevados fatores de redução nas juntas
+\item Baixas velocidades na realização das tarefas
+\item Existe uma malha de controle de velocidade de alto desempenho em cada junta
+\end{itemize}
+
+A maioria dos manipuladores possui uma malha de controle de velocidade em nível de juntas como na figura \ref{fig:controlejuntas}. Logo, para um controle de alto ganho temos que:
+\[ u \approx \dot{\theta}\]
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[auto, node distance=2cm,>=latex']
+    % We start by placing the blocks
+    \node [input, name=input] {};
+    \node [sum, right of=input] (sum) {};
+    \node [block, right of=sum] (K) {$K$};
+    \node [block, right of=K] (PWM) {PWM};
+    \node [block, right of=PWM] (Robo) {Robô};
+    \node [block, right of=Robo] (JA) {$\bm{J}_A$};
+    \node [block, right of=JA] (Integral) {$\int$};
+    \node [tmp, below of=K] (tmp1){};
+    \node [output, right of=Integral] (output) {};
+
+    % Once the nodes are placed, connecting them is easy. 
+    \draw [draw,->] (input) -- node {$u$} (sum);
+    \draw [->] (sum) -- node {$e$} (K);
+    \draw [->] (K) -- node {$v$} (PWM);
+    \draw [->] (PWM) -- node [name=tau] {$\tau$} (Robo);
+    \draw [->] (Robo) -- node [name=dtheta] {$\dot{\theta}$} (JA);
+    \draw [->] (JA) -- node {$\dot{x}$} (Integral);
+    \draw [->] (Integral) -- node [name=x] {$x$}(output);
+    \draw [->] (dtheta) |- (tmp1)-| node[pos=0.99] {$-$} (sum);
+\end{tikzpicture}
+\caption{Diagrama}
+\label{fig:controlejuntas}
+\end{figure}
+
+
+Portanto é possível implementar o controle cinemático segundo o diagrama \ref{fig:controlecinematico} 	
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[auto, node distance=2cm,>=latex']
+    % We start by placing the blocks
+    \node  [input, name=input2] {};
+    \node at (0,-1) [input, name=input] {};
+    \node [sum, right of=input] (sum) {};
+    \node [block, right of=sum] (K) {$\bm{K}$};
+    \node [sum, right of=K, node distance=2cm] (sum2) {};
+    \node [tmp, above of =sum2, node distance=1cm] (tmp1){};
+    \node [block, right of=sum2] (JA) {$\bm{J}_A^{-1}$};
+    \node [block, below of=JA] (k) {$\bm{k}(\cdot)$};
+    \node [block, right of=JA] (Integral) {$\int$};
+    \node [tmp, above of=JA, node distance=1cm] (tmp2){};
+    \node [output, right of=Integral] (output) {};
+
+    % Once the nodes are placed, connecting them is easy. 
+    \draw [draw,->] (input) -- node {$\bm{x}_d$} (sum);
+    %\draw [draw,->] (input2) -- node {$u$} (sum2);
+    \draw [draw,->] (input2) -- node [pos=0.1] {$\bm{\dot{x}}_d$} (tmp1)-| node [pos=0.8,anchor=left,left] {$+$} (sum2);
+    \draw [->] (sum) -- node {$\bm{e}$} (K);
+    \draw [->] (K) -- node {}  node[pos=0.8] {$+$} (sum2);
+    \draw [->] (sum2) -- node [name=tau]  {} (JA);
+    \draw [->] (JA) -- node [name=dtheta] {$\dot{\bm{q}}$} (Integral);
+    \draw [->] (Integral) -- node [name=x] {$\bm{q}$}(output);
+    \draw [->] (x) |- (k);
+    \draw [->] (k) -| node[pos=0.99] {$-$} node [near end] {$\bm{x}$} (sum);
+    \draw [->] (x) |- (tmp2) -| (JA);
+    %\draw [->] (output) |- (tmp1)-| node[pos=0.99] {$-$} (sum);
+\end{tikzpicture}
+\caption{Diagrama}
+\label{fig:controlecinematico}
+\end{figure}
+
+
 Se $x$ é uma representação da posição e orientação e $x_d$ o valor desejado nessa representação, seja o erro no espaço operacional:
 \begin{equation}
 \bm{e} = \bm{x}_d - \bm{x}
@@ -74,3 +185,17 @@ obtem-se a seguinte dinâmica para o erro
 \dot{\bm{e}} + \bm{K} \bm{e} = 0
 \end{equation}
 
+\section{Servo Visão}
+A tarefa proposta na Servo Visão é controlar a posição e orientação do efetuador do manipulador, em relação a um alvo, usando características visuais extraidas de uma imagem. A câmera pode ser carregada pelo manipulador (montada no efetuador) ou colocada em um ponto fixo, observando tanto o efetuador como o alvo.
+
+\subsection{Servo Visão Baseada em Posição}
+Em um sistema de servo visão baseado em posição a posição e orientação do alvo com respeito a câmera $\bm{T}_{CT}$ é estimada. O problema de estimação da posição e orientação é discutido no apêndice ?.
+Especifica-se uma posição desejada relativa ao sistema de coordenadas do alvo  $\bm{T}_{C^*T}$ e deseja-se determinar o movimento necessário para mover a câmera para a posição desejada, que chamamos de $\bm{T}_\delta$.
+
+\begin{equation}
+ \bm{T}_{CT} =  \bm{T}_\Delta \bm{T}_{C^*T}
+\end{equation}
+
+\begin{equation}
+ \bm{T}_\Delta  =   \bm{T}_{CT} \bm{T}_{C^*T}^{-1}
+\end{equation}

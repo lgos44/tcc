@@ -1,1 +1,15 @@
-\chapter{Conclusões}
+\chapter{Resultados e Discussões}
+
+\section{Respostas das Juntas}
+Para verificar se de fato são válidas as premissas assumidas na seção \ref{sec:controle_cinematico} para aplicação de uma estratégia de controle cinemático foi levantada para cada uma das juntas a resposta a uma onda quadrada tal que:
+\[ u = A \sgn(\sin( 2\pi t/f)) \]
+onde o período $T = 1/f = 1s$ e a amplitude $A = 0.5 rad/s$
+
+\newlength{\imageheight}
+\begin{figure}[!ht]
+  \centering
+  	\settoheight{\imageheight}{\includegraphics{./img/joints}}
+    \includegraphics[width=\textwidth, clip=true, trim = 0 0.5\imageheight 0 0 0 mm]{./img/joints}
+  \caption{Resposta das juntas}
+\end{figure}
+
