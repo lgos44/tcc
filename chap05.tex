@@ -13,3 +13,14 @@ onde o período $T = 1/f = 1s$ e a amplitude $A = 0.5 rad/s$
   \caption{Resposta das juntas}
 \end{figure}
 
+
+\section{Rastreamento de Trajetória}
+A trajetória a ser rastreada é dada pelas equações:
+\begin{gather}
+\bm{x_d} = \m{75 \sin(\omega_n t) + \sin (4 \omega_n t) + 500 \\ 57 \\ 75 \cos(\omega_n t) + \cos(4\omega_n t) -67 \\ \omega_n \sin(\omega_nt) }
+\qquad
+\bm{\dot{x}_d} = \m{75\omega_n \cos(t\omega_n) + 300 \omega_n \cos(4t\omega_n) \\
+0 \\
+-75 \omega_n \sin(t \omega_n) - 300 \omega_n \sin(4t\omega_n) \\
+\omega_n^2 \cos(t \omega_n)}
+\end{gather}
