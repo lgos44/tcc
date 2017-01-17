@@ -6,11 +6,92 @@
 \caption{Parametros Denavit–Hartenberg}
 \label{my-label}
 \begin{tabular}{rrrrr} \hline
-Elo & $a_i$ & $\alpha_i$ & $d_i$  & $\vartheta_i$ \\ \hline
-1   & 0     & $\pi/2$    & 0      & $\vartheta_1$ \\
-2   & $E_3$ & 0          & 0      & $\vartheta_2$ \\
-3   & $E_4$ & 0          & 0      & $\vartheta_3$ \\
-4   & $E_5$ & $-\pi/2$   & $-M_5$ & $\vartheta_4$ \\ \hline
+Elo & $a_i$ & $\alpha_i$ & $d_i$  & $\theta_i$ \\ \hline
+1   & 0     & $\pi/2$    & 0      & $\theta_1$ \\
+2   & $E_3$ & 0          & 0      & $\theta_2$ \\
+3   & $E_4$ & 0          & 0      & $\theta_3$ \\
+4   & $E_5$ & $-\pi/2$   & $-M_5$ & $\theta_4$ \\ \hline
 \end{tabular}
 \end{table}
 
+\section{Cinemática Direta}
+
+\begin{equation}
+\bm{R}_{i-1,i} = \bm{R}_z(\theta_i)\bm{R}_x(\alpha_i)
+\end{equation}
+\begin{equation}
+\bm{\vec{p}}_{i-1,i} = d_i \bm{\vec{z}}_{i-1} + a_i \bm{\vec{x}}_i
+\end{equation}
+\begin{gather}
+(\bm{\vec{p}}_{i-1,i})_{i-1} = d_i (\bm{\vec{z}}_{i-1})_{i-1} + a_i (\bm{\vec{x}}_i)_{i-1} \\
+(\bm{\vec{p}}_{i-1,i})_{i-1} = d_i (\bm{\vec{z}}_{i-1})_{i-1} + a_i \bm{R}_{i-1,i}(\bm{\vec{x}}_i)_{i} 
+\end{gather}
+
+\begin{align*}
+\bm{R}_{01} =
+\m{c_1 & 0 & s_1   \\
+   s_1 & 0 & -c_1  \\
+   0   & 1 &    0  \\} 
+& & \vec{\bm{p}}_{01} = 0
+\end{align*}
+\begin{align*}
+R_{12} = 
+\m{c_2 & -s_2 &  0  \\
+   s_2 &  c_2 &  0  \\
+   0   &    0 &  1  \\} 
+\end{align*}
+\begin{align*}
+R_{23} = 
+\m{c_3 & -s_3 &  0  \\
+   s_3 &  c_3 &  0  \\
+   0   &    0 &  1  \\} 
+\end{align*}
+\begin{align*}
+R_{34} = 
+\m{c_4 &  0 & -s_4  \\
+   s_4 &  0 &  c_4  \\
+   0   & -1 &    0  \\} 
+\end{align*}
+
+
+\begin{equation}
+\bm{R}_{04} = 
+\m{
+	c_1 c_{234} & -s_1 & -c_1 s_{234} \\
+	s_1 c_{234} & -c_1 & -s_1 s_{234} \\
+		s_{234} &    0 & 	  c_{234}
+}
+\end{equation}
+
+
+\[ \bm{T}_{01} = 
+\m{c_1 & 0 & s_1 &  0 \\
+   s_1 & 0 & -c_1 & 0 \\
+   0   & 1 &    0 & 0 \\
+   0   & 0 &    0 & 1}\]
+
+\[ \bm{T}_{12} = 
+\m{c_2 & -s_2 &  0 & E_3 c_2 \\
+   s_2 &  c_2 &  0 & E_3 s_2  \\
+   0   &    0 &  1 & 	   0  \\
+   0   &    0 &  0 &       1} \]
+
+\[ \bm{T}_{23} = 
+\m{c_3 & -s_3 &  0 & E_4 c_3 \\
+   s_3 &  c_3 &  0 & E_4 s_3  \\
+   0   &    0 &  1 & 	   0  \\
+   0   &    0 &  0 &       1} \]
+
+\[ \bm{T}_{34} = 
+\m{c_4 &    0 &  -s_4 & E_5 c_4 \\
+   s_4 &    0 &   c_4 & E_5 s_4 \\
+   0   &   -1 &     0 & 	-M_5 \\
+   0   &    0 &     0 &       1} \]
+
+\[ \bm{T}_{04} = 
+\m{
+   c_1 c_{234} & -s_1 & -c_1 s_{234} & -M_5 s_1 + E_4 c_{23}c_1 + E_3 c_1 c_2 + E_5 c_{234} c_1 \\
+   s_1 c_{234} & -c_1 & -s_1 s_{234} &   M_5 c_1+E_4 c_{23} s_1 + E_3 c_2 s_1 + E_5 c_{234} s_1 \\
+   s_{234}     &    0 &      c_{234} &					     E_4 s_{23} + E_3 s_2 + E_5 s_{234} \\
+   0   &    0 &     0 &      												   1
+} \]

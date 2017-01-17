@@ -23,14 +23,26 @@ Primeiramente define-se como Computador Base aquele que será utilizado pelo ope
 A arquitetura do RobotGUI baseia-se nos seguintes conceitos principais:
 
 \begin{itemize}
-\item Componentes: Lidam com a comunicação e processam dados no Computador Base.
+\item \textbf{Components}: Lidam com a comunicação e processam dados no Computador Base. São essencialmente \textit{Nodelets} de ROS, podendo utilizar funcionalidades como comunicação através de mensagens e serviços, utilizar parametros e bibliotecas de ROS. Permitem maior modularidade pois comonentes podem ser inicializados independentemente do \textit{RobotGUI}.
+
+\item \textbf{Tools:} São elementos gráficos da interface para o usuário. São utilizadas para interagir com o robô e visualizar informação. São criadas como \textit{plugins} para o ROS \textit{pluginlib} e independetes de qualquer biblioteca do ROS.
+
+\item \textbf{Interação entre Compontents e Tools:} Tools e Components podem se conectar, quando isso ocorre eles interagem entre si a nível de "ponteiro para objeto". Essa conecção permite que o desenvolvimento da interface através do \textit{Qt} seja quase que independente do desenvolvimento do código que lida com hardware, lógica e comunicação.
+
+\item \textbf{RobotGUI}
 \end{itemize}
 
-\section{Doris Manipulator}
 
 \section{Modos de Controle}
-\begin{itemize}
-\item Velocidade nas Juntas
-\item Posição nas Juntas
-\item Posição Espaço Operacional
-\end{itemize}
+
+\subsection{Velocidade no Espaço Operacional}
+\subsubsection{Base}
+\subsubsection{Efetuador}
+\subsection{Posição no Espaço das Juntas}
+\subsection{Posição no Espaço Operacional}
+\subsection{Rastreamento de Trajetória}
+\subsection{Servo Visão}
+\subsection{Força}
+\subsubsection{Float}
+\subsubsection{Approach}
+\subsubsection{Híbrido}
