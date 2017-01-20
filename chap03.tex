@@ -1,6 +1,14 @@
 \chapter{Tetis}
 
 \section{Parâmetros Denavit–Hartenberg}
+
+\begin{figure}[!ht]
+\centering
+  \includegraphics[width=0.9\linewidth]{./img/m2_meio_2.png}
+  \caption{Manipulador}
+  \label{fig:sub1}
+\end{figure}%
+
 \begin{table}[!ht]
 \centering
 \caption{Parametros Denavit–Hartenberg}
@@ -27,41 +35,41 @@ Elo & $a_i$ & $\alpha_i$ & $d_i$  & $\theta_i$ \\ \hline
 (\bm{\vec{p}}_{i-1,i})_{i-1} = d_i (\bm{\vec{z}}_{i-1})_{i-1} + a_i \bm{R}_{i-1,i}(\bm{\vec{x}}_i)_{i} 
 \end{gather}
 
-\begin{align*}
-\bm{R}_{01} =
-\m{c_1 & 0 & s_1   \\
-   s_1 & 0 & -c_1  \\
-   0   & 1 &    0  \\} 
-& & \vec{\bm{p}}_{01} = 0
-\end{align*}
-\begin{align*}
-R_{12} = 
-\m{c_2 & -s_2 &  0  \\
-   s_2 &  c_2 &  0  \\
-   0   &    0 &  1  \\} 
-\end{align*}
-\begin{align*}
-R_{23} = 
-\m{c_3 & -s_3 &  0  \\
-   s_3 &  c_3 &  0  \\
-   0   &    0 &  1  \\} 
-\end{align*}
-\begin{align*}
-R_{34} = 
-\m{c_4 &  0 & -s_4  \\
-   s_4 &  0 &  c_4  \\
-   0   & -1 &    0  \\} 
-\end{align*}
+%\begin{align*}
+%\bm{R}_{01} =
+%\m{c_1 & 0 & s_1   \\
+%   s_1 & 0 & -c_1  \\
+%   0   & 1 &    0  \\} 
+%& & \vec{\bm{p}}_{01} = 0
+%\end{align*}
+%\begin{align*}
+%R_{12} = 
+%\m{c_2 & -s_2 &  0  \\
+%   s_2 &  c_2 &  0  \\
+%   0   &    0 &  1  \\} 
+%\end{align*}
+%\begin{align*}
+%R_{23} = 
+%\m{c_3 & -s_3 &  0  \\
+%   s_3 &  c_3 &  0  \\
+%   0   &    0 &  1  \\} 
+%\end{align*}
+%\begin{align*}
+%R_{34} = 
+%\m{c_4 &  0 & -s_4  \\
+%   s_4 &  0 &  c_4  \\
+%   0   & -1 &    0  \\} 
+%\end{align*}
 
 
-\begin{equation}
-\bm{R}_{04} = 
-\m{
-	c_1 c_{234} & -s_1 & -c_1 s_{234} \\
-	s_1 c_{234} & -c_1 & -s_1 s_{234} \\
-		s_{234} &    0 & 	  c_{234}
-}
-\end{equation}
+%\begin{equation}
+%\bm{R}_{04} = 
+%\m{
+%	c_1 c_{234} & -s_1 & -c_1 s_{234} \\
+%	s_1 c_{234} & -c_1 & -s_1 s_{234} \\
+%		s_{234} &    0 & 	  c_{234}
+%}
+%\end{equation}
 
 
 \[ \bm{T}_{01} = 
@@ -88,7 +96,7 @@ R_{34} =
    0   &   -1 &     0 & 	-M_5 \\
    0   &    0 &     0 &       1} \]
 
-\[ \bm{T}_{04} = 
+\[ \bm{T}_{04} = \bm{T}_{01} \bm{T}_{12}  \bm{T}_{23} \bm{T}_{34} = 
 \m{
    c_1 c_{234} & -s_1 & -c_1 s_{234} & -M_5 s_1 + E_4 c_{23}c_1 + E_3 c_1 c_2 + E_5 c_{234} c_1 \\
    s_1 c_{234} & -c_1 & -s_1 s_{234} &   M_5 c_1+E_4 c_{23} s_1 + E_3 c_2 s_1 + E_5 c_{234} s_1 \\
