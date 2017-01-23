@@ -1,7 +1,7 @@
 %!TEX root = <main.tex>
-\chapter{Revisão Bibliográfica}
-
-Neste capitulo serão abordados os conceitos necessários para modelagem e controle de manipuladores robóticos.
+%\chapter{Revisão Bibliográfica}
+\chapter{Conceitos de Robótica}
+Neste capitulo serão abordados os conceitos necessários para modelagem e controle de manipuladores robóticos, focando no que foi utilizado neste trabalho para implementação no manipulador 4-DOF chamado de Tetis.
 
 \section{Cinemática Direta}
 Um manipulador robótico é composto de uma série de corpos rígidos denominados \textit{elos} conectados através de \textit{juntas}. 
@@ -52,6 +52,9 @@ Essa convenção resulta em uma definição não única do sistema de coordenada
 \item Quando a junta $i$ é prismática a direção de $z_{i-1}$ é arbitrária.
 \end{itemize}
 
+\subsection{Espaço das Juntas e Espaço Operacional}
+Para que o efetuador final de um manipulador realize alguma tarefa é necessário atribuir uma posição e orientação desejada, que  pode ser função do tempo. Surge então o problema de representar a orientação e  
+Para descrever a posição e orientação do efetuador 
 \section{Cinemática Diferencial}
 \subsection{Jacobiano Geométrico}
 
@@ -112,7 +115,7 @@ A maioria dos manipuladores possui uma malha de controle de velocidade em nível
     \draw [->] (Integral) -- node [name=x] {$x$}(output);
     \draw [->] (dtheta) |- (tmp1)-| node[pos=0.99] {$-$} (sum);
 \end{tikzpicture}
-\caption{Diagrama}
+\caption{Diagrama de Blocos: Malha de Controle de Velocidade a nível de juntas.}
 \label{fig:controlejuntas}
 \end{figure}
 
@@ -149,7 +152,7 @@ Portanto é possível implementar o controle cinemático segundo o diagrama \ref
     \draw [->] (x) |- (tmp2) -| (JA);
     %\draw [->] (output) |- (tmp1)-| node[pos=0.99] {$-$} (sum);
 \end{tikzpicture}
-\caption{Diagrama}
+\caption{Diagrama de Blocos: Controle Cinemático Proporcional com FeedForward}
 \label{fig:controlecinematico}
 \end{figure}
 
