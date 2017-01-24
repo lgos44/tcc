@@ -116,8 +116,8 @@ onde o vetor $\bm{p}_e$ descreve a posição cartesiana representada no referenc
 \begin{equation}
 \bm{p}_e = \m{x \\ y \\ z}
 \end{equation}
-e $\phi_e$ é o grau de liberdade de orientação \textit{pitch} no referencial do efetuador, dado por
-\begin{equation}
+e $\phi_e$ é o grau de liberdade de orientação \textit{pitch} no referencial do efetuador (??), dado por
+\begin{equation} \label{eq:orientacao}
 \phi_e = -(\theta_2 + \theta_3 + \theta_4)
 \end{equation}
 
@@ -128,6 +128,8 @@ O espaço das juntas é definido por
 pois todas as juntas são de revolução.
 
 \section{Cinemática Diferencial}
+
+\subsection{Jacobiano Analítico}
 A partir da cinemática direta em \eqref{eq:cine_direta} e da equação \ref{eq:jacob_pos} podemos obter o Jacobiano de Posição para o manipulador diferenciando a equação em relação as variáveis de junta.
 
 \begin{equation}
@@ -140,7 +142,7 @@ A partir da cinemática direta em \eqref{eq:cine_direta} e da equação \ref{eq:
 \end{equation}
 
 \begin{equation}
-\bm{J}_P = 
+(\bm{J}_P)_0 = 
 \m{
 	\ddfrac{\partial x}{\partial q_1} & \ddfrac{\partial x}{\partial q_2} & \ddfrac{\partial x}{\partial q_3} & \ddfrac{\partial x}{\partial q_4}  \\
 	\ddfrac{\partial y}{\partial q_1} & \ddfrac{\partial y}{\partial q_2} & \ddfrac{\partial y}{\partial q_3} & \ddfrac{\partial x}{\partial q_4}  \\
@@ -163,21 +165,35 @@ onde
 &\frac{\partial z}{\partial q_4} =& E_{5}c_{234} 
 \end{align*}
 
+A partir de \ref{eq:jacob_or} e de \ref{eq:orientacao} podemos calular o Jacobiano de Orientação
+\begin{equation}
+\bm{J}_{\phi}(\bm{q}) = \frac{\partial \phi_e}{\partial \bm{q}} = \m{0 & -1 & -1 & -1}
+\end{equation}
+ 
+Em alguns modos como controle por servo visão e no controle manual com joystick é interessante fazer o controle no referêncial do efetuador, portanto precisamos representar o Jacobiano de posição no referencial do efetuador como $(\bm{J}_P)_N = \bm{R}_{04}^T (\bm{J}_P)_0$.  
+
+\begin{equation}
+(\bm{J}_P)_N =  
+\m{
+    -M_5c_{234} & E_3s_{34}+E_4s_4 & E_4s_4 & 0 \\
+    E_4c_{23}+E_3c_2+E_5c_{234} & 0 & 0 & 0 \\
+    M_5s_{23} &  E_5+E_3c_{34}+E_4c_4 & E_5+E_4c_4 & E_5 
+}
+\end{equation}
 \section{Singularidades}
 
-\section{Modos de Controle}
 
+\section{Modos de Controle}
 \subsection{Velocidade no Espaço Operacional}
+Neste modo é uma malha aberta, onde enviamos comandos de velocidade 
 \subsubsection{Base}
 \subsubsection{Efetuador}
 \subsection{Posição no Espaço das Juntas}
 \subsection{Posição no Espaço Operacional}
 Para este modo considera-se o problema de controle de posição no espaço operacional conforme definido em \ref{eq:op_space}. 
 
-\subsubsection{Base}
-\subsubsection{Efetuador}
-
 \subsection{Rastreamento de Trajetória}
+
 \subsection{Servo Visão}
 \subsection{Força}
 \subsubsection{Float}
