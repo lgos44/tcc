@@ -53,8 +53,20 @@ Essa convenção resulta em uma definição não única do sistema de coordenada
 \end{itemize}
 
 \subsection{Espaço das Juntas e Espaço Operacional}
-Para que o efetuador final de um manipulador realize alguma tarefa é necessário atribuir uma posição e orientação desejada, que  pode ser função do tempo. Surge então o problema de representar a orientação e  
-Para descrever a posição e orientação do efetuador 
+Para que o efetuador final de um manipulador realize alguma tarefa é necessário atribuir uma posição e orientação desejada, que  pode ser função do tempo (trajetória). Surge então o problema de representar posição e orientação. 
+
+Para descrever a posição utiliza-se as coordenadas cartesianas. Para a orientação adota-se uma representação mínima (ângulos de Euler), descrevendo a rotação do efetuador em relação ao sistema de coordenadas da base. Portanto é possível descrever a \textit{pose} do efetuador através do vetor
+\begin{equation} \label{eq:op_space}
+\bm{x}_e = \m{ \bm{p}_e \\ \bm{\phi}_e}
+\end{equation}
+onde $\bm{p}_e$ descreve a posição e $\bm{\phi}_e$ a orientação.
+
+O \textit{espaço das juntas} denota o espaço em que o vetor $(n \times 1)$ das variáveis das juntas
+\begin{equation} \label{eq:joint_space}
+\bm{q} = \m{q_1 \\ \vdots \\ q_n}
+\end{equation} 
+é definido. Se a junta é de revolução utiliza-se $q_i = \theta_i$, se é prismática $q_i = d_i$.
+
 \section{Cinemática Diferencial}
 \subsection{Jacobiano Geométrico}
 
@@ -63,7 +75,7 @@ Quando a posição e orientação do efetuador são dadas em função de um núm
 Para isso utiliza-se a técnica analítica.
 
 Seja $\bm{p}_e$ a posição do sistema de coordenadas do efetuador representada no sistema de coordenadas da base. O vetor $\dot{\bm{p}}_e$ é portanto a velocidade de translação, ou linear.
-\begin{equation}
+\begin{equation} \label{eq:jacob_pos}
 \dot{\bm{p}}_e = \frac{\partial \bm{p}_e }{\partial \bm{q}} \dot{\bm{q}} = \bm{J}_P (\bm{q}) \dot{\bm{q}} 
 \end{equation}
 

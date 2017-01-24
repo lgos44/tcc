@@ -33,24 +33,3 @@ A arquitetura do RobotGUI baseia-se nos seguintes conceitos principais:
 \end{itemize}
 
 
-\section{Modos de Controle}
-
-\subsection{Velocidade no Espaço Operacional}
-\subsubsection{Base}
-\subsubsection{Efetuador}
-\subsection{Posição no Espaço das Juntas}
-\subsection{Posição no Espaço Operacional}
-\subsection{Rastreamento de Trajetória}
-\subsection{Servo Visão}
-\subsection{Força}
-\subsubsection{Float}
-\subsubsection{Approach}
-Considera-se o problema de controle de força na direção de approach para o manipulador robótico 4-DOF em questão. A realimentação de força é feita com o uso do sensor descrito em \ref{sec:sensor_forca}. O objetivo de controle é rastrear uma entrada na forma de um degrau de força, a ser aplicada em uma placa de poliestireno montada em um suporte fixado na verical como mostra a figura \ref{fig:suporte_forca}.  
-
-É possível modelar o ambiente (força de contato), ou seja, a placa de poliestireno como uma mola linear, através da \textit{Lei de Hook}: \cite{bib:toni}
-\begin{equation}
-f = -k_s (x - x_s)
-\end{equation}
-onde $x$ é o ponto de contato com a superfície e $x_s$
-\subsubsection{Híbrido}
-\subsection{Master-Slave (Omni)}
