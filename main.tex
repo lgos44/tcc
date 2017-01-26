@@ -11,7 +11,7 @@
 \newcommand\m[1]{\begin{bmatrix}#1\end{bmatrix}} 
 \DeclareMathOperator{\sgn}{sgn}
 \newcommand\ddfrac[2]{\frac{\displaystyle #1}{\displaystyle #2}}
-
+\usetikzlibrary{positioning}
 \usetikzlibrary{shapes,arrows}
 \tikzstyle{block} = [draw, fill=blue!20, rectangle, 
     minimum height=3em, minimum width=2em]
@@ -20,14 +20,15 @@
 \tikzstyle{output} = [coordinate]   
 \tikzstyle{pinstyle} = [pin edge={to-,thin,black}]
 
+\tikzstyle{blockbig} = [draw, fill=white, rectangle, 
+    minimum height=6em, minimum width=3em]
 \tikzset{
 block/.style = {draw, fill=white, rectangle, minimum height=3em, minimum width=3em},
 tmp/.style  = {coordinate}, 
 sum/.style= {draw, fill=white, circle, node distance=1cm},
 input/.style = {coordinate},
 output/.style= {coordinate},
-pinstyle/.style = {pin edge={to-,thin,black}
-}
+pinstyle/.style = {pin edge={to-,thin,black}}
 }
 
 \makelosymbols

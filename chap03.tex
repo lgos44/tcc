@@ -209,11 +209,11 @@ Este é um modo em malha aberta, onde o sinal de entrada no controlador é de ve
 
 \subsubsection{Base}
 \begin{equation}
-\bm{u} = \bm{\dot{q}}_d = \bm{J}_0^{-1} \bm{\dot{x}}_d
+\bm{u} = \bm{\dot{q}}_d = \bm{J}_0^{-1} (\bm{\dot{x}}_d)_0
 \end{equation}
 \subsubsection{Efetuador}
 \begin{equation}
-\bm{u} = \bm{\dot{q}}_d = \bm{J}_N^{-1} \bm{\dot{x}}_d
+\bm{u} = \bm{\dot{q}}_d = \bm{J}_N^{-1} (\bm{\dot{x}}_d)_N
 \end{equation}
 onde 
 \begin{equation}
@@ -228,10 +228,15 @@ onde
 Para este modo considera-se o problema de controle de posição no espaço operacional conforme definido em \ref{eq:op_space}. 
 
 \subsection{Rastreamento de Trajetória}
-Para o rastreamento de trajetória a lei de controle é dada por 
+Para o rastreamento de trajetória considera-se o problema de seguir um referência no referencial da base $\bm{x}_d(t)$ que é função do tempo, conhecidos $\bm{x}_d(t)$ e $\bm{\dot{x}}_d(t)$. Conforme mostrado em \ref{controle_cinematico}, a lei de controle dada por 
 \begin{equation}
-\bm{u} = \bm{J}_0^{-1}(\bm{q}) (\dot{\bm{x}}_d + \bm{K}_f (\bm{x_d} - \bm{x}))
+\bm{u} = \bm{J}_0^{-1}(\bm{q}) (\dot{\bm{x}}_d + \bm{K}_t (\bm{x_d} - \bm{x}))
 \end{equation} 
+é capaz de levar o erro assintoticamente a zero pois a dinâmica fica 
+\begin{equation}
+\dot{\bm{e}} + \bm{K} \bm{e} = 0
+\end{equation}
+
 
 \subsection{Servo Visão}
 \subsection{Força}
@@ -239,7 +244,7 @@ Para o rastreamento de trajetória a lei de controle é dada por
 \subsubsection{Approach}
 Considera-se o problema de controle de força na direção de approach para o manipulador robótico 4-DOF em questão. A realimentação de força é feita com o uso do sensor descrito em \ref{sec:sensor_forca}. O objetivo de controle é rastrear uma entrada na forma de um degrau de força, a ser aplicada em uma placa de poliestireno montada em um suporte fixado na verical como mostra a figura \ref{fig:suporte_forca}.  
 
-É possível modelar o ambiente (força de contato), ou seja, a placa de poliestireno, como uma mola linear, através da \textit{Lei de Hook}: \cite{bib:toni}
+É possível modelar o ambiente (força de contato), ou seja, a placa de poliestireno, como uma mola linear, através da \textit{Lei de Hooke}: \cite{bib:toni}
 \begin{equation}
 f = -k_s (x - x_s)
 \end{equation}
@@ -248,10 +253,13 @@ onde $x$ é a posição do ponto de contato com a superfície e $x_s$ um ponto n
 Foi feito um ensaio para encontrar a constante $k_s$ variando a distância $x_s$ e medindo a força resultante.
 
 
+Considerando que o controle de força seja ativado somente após a etapa de contato com o ambiente onde será aplicada a força e que o controle está de força é feito apenas na direção de approach (segundo o referencial do manipulador, na direção $x$), pode-se utilizar a malha de controle mostrada na figura \ref{fig:controle_forca}.
+
 É utilizada uma lei de controle com ação proporcional e integral:
 \begin{equation}
 u = -K_s^{-1} (K_fe_f + K_i \int_0^t e_f(\tau)d\tau)
 \end{equation}
+
 
 \begin{figure}[h!]
 \centering
@@ -261,29 +269,113 @@ u = -K_s^{-1} (K_fe_f + K_i \int_0^t e_f(\tau)d\tau)
     \node [sum, right of=input] (sum) {};
     \node [block, right of=sum] (Ks1) {$k_s^{-1}$};
     \node [block, right of=Ks1] (C) {$C(s)$};
-    \node [block, right of=C] (PWM) {PWM};
-    \node [block, right of=PWM] (Robo) {$\frac{k_s}{s}$};
+    \node [blockbig=right:C] (J) [right=1cm of C] {$J_N^{-1}$};
+    \node [block=right:J] (Integral) [right=1cm of J] {$\int$};
+    \node [blockbig, right of=Integral] (DirKine) {$\bm{k}(\cdot)$};
+
+	\node [tmp=below:J] (tmp0) [below left=-1.25cm and .7cm of J] {};
+	\node [tmp=below:J] (tmp00) [below left=-2cm and 0.7cm of J] {};
+	\node [tmp=below:J] (tmp000) [below left=-2cm and 0cm of J] {};
+
+    \node [tmp=below:J] (tmp1) [below left=-1.5cm and 0.5cm of J] {};
+    \node [tmp=below:J] (tmp2) [below left=-1.5cm and 0cm of J] {};
+
+    \node [tmp=below:J] (tmp3) [below left=-1cm and 0.5cm of J] {};
+    \node [tmp=below:J] (tmp4) [below left=-1cm and 0cm of J] {};
+
+    \node [tmp=below:J] (tmp5) [below left=-0.5cm and 0.5cm of J] {};
+    \node [tmp=below:J] (tmp6) [below left=-0.5cm and 0cm of J] {};
+
+    \node [tmp=below:J] (tmpk0) [below right=-2cm and 0cm of DirKine] {};
+	\node [tmp=below:J] (tmpk00) [below right=-2cm and 0.7cm of DirKine] {};
+	\node [tmp=below:J] (tmpk000) [below right=-1.25cm and 0.7cm of DirKine] {};
+
+    \node [tmp=below:J] (tmpk1) [below right=-1.5cm and 0.5cm of DirKine] {};
+    \node [tmp=below:J] (tmpk2) [below right=-1.5cm and 0cm of DirKine] {};
+
+    \node [tmp=below:J] (tmpk3) [below right=-1cm and 0.5cm of DirKine] {};
+    \node [tmp=below:J] (tmpk4) [below right=-1cm and 0cm of DirKine] {};
+
+    \node [tmp=below:J] (tmpk5) [below right=-0.5cm and 0.5cm of DirKine] {};
+    \node [tmp=below:J] (tmpk6) [below right=-0.5cm and 0cm of DirKine] {};
+
+
+    \node [block=right:DirKine] (ks) [right=1cm of DirKine] {$k_s$};
+    \node [output, right of=ks] (output) {};
+
+    % Once the nodes are placed, connecting them is easy. 
+    \draw [draw,->] (input) -- node {$f_d$} (sum);
+    \draw [->] (sum) -- node {$e_f$} (Ks1);
+    \draw [->] (Ks1) -- node {} (C);
+    %\draw [->] (C) -- node[name=u] {$u$} (tmp0);
+    \draw [->] (J) -- node {$\bm{\dot{q}}$} (Integral);
+    \draw [->] (Integral) -- node {$\bm{q}$} (DirKine);
+    \node [block, below of=J] (measurements) {$H(s)$};
+    %draw [->] (DirKine) -- node {} (ks);
+    \draw [->] (ks) -- node [name=x] {$f$}(output);
+    \draw [->] (x) |- (measurements);
+    \draw [->] (measurements) -| node[pos=0.99] {$-$} 
+        node[near end] {$f_m$} (sum);
+
+    \draw [->] (C) -- (tmp0) -|  (tmp00) |- node[pos=0.65] {$x$} (tmp000);
+
+    \draw [->] (tmpk0) -- node[pos=0.2] {$x$} (tmpk00) -|  (tmpk000) |-  (ks);
+    \draw [->] (tmp1) -- node[pos=0] {$y$} (tmp2);
+    \draw [->] (tmp3) -- node[pos=0] {$z$} (tmp4);
+    \draw [->] (tmp5) -- node[pos=0] {$\phi$} (tmp6);
+
+    \draw [->] (tmpk2) -- node[pos=0.3] {$y$} (tmpk1);
+    \draw [->] (tmpk4) -- node[pos=0.3] {$z$} (tmpk3);
+    \draw [->] (tmpk6) -- node[pos=0.3] {$\phi$} (tmpk5);
+    %\draw [->] (x) |- (tmp1) -| node[pos=0.9] {$-$} (sum);
+\end{tikzpicture}
+\caption{Diagrama de Blocos: Malha de Controle de Força.}
+\label{fig:controle_forca}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[auto, node distance=2cm,>=latex']
+    % We start by placing the blocks
+    \node [input, name=input] {};
+    \node [sum, right of=input] (sum) {};
+    \node [block, right of=sum] (Ks1) {$k_s^{-1}$};
+    \node [block, right of=Ks1] (C) {$C(s)$};
+    \node [block, right of=C] (PWM) {$k_s$};
+    \node [block, right of=PWM] (Robo) {$\ddfrac{1}{s}$};
     \node [tmp, below of=K] (tmp1){};
-    \node [block, below of=PWM] (measurements) {Measurements};
     \node [output, right of=Robo] (output) {};
 
     % Once the nodes are placed, connecting them is easy. 
-    \draw [draw,->] (input) -- node {$u$} (sum);
+    \draw [draw,->] (input) -- node {$f_d$} (sum);
     \draw [->] (sum) -- node {$e_f$} (Ks1);
     \draw [->] (Ks1) -- node {} (C);
-    \draw [->] (C) -- node {$v$} (PWM);
-    \draw [->] (PWM) -- node [name=tau] {$\tau$} (Robo);
+    \draw [->] (C) -- node[name=u] {$u$} (PWM);
+    \node [block, below of=u] (measurements) {$H(s)$};
+    \draw [->] (PWM) -- node [name=tau] {} (Robo);
     \draw [->] (Robo) -- node [name=x] {$f$}(output);
     \draw [->] (x) |- (measurements);
     \draw [->] (measurements) -| node[pos=0.99] {$-$} 
-        node[near end] {$y_m$} (sum);
+        node[near end] {$f_m$} (sum);
     %\draw [->] (x) |- (tmp1) -| node[pos=0.9] {$-$} (sum);
 \end{tikzpicture}
-\caption{Diagrama de Blocos: Malha de Controle de Velocidade a nível de juntas.}
-\label{fig:controlejuntas}
+\caption{Diagrama de Blocos: Malha de Controle de Força.}
+\label{fig:controle_forca}
 \end{figure}
 
 Como o sinal vindo do sensor é bastante ruidoso, utiliza-se um filtro de primeira ordem.
+\begin{equation}
+H(s) = \frac{1}{\tau s + 1}
+\end{equation}
+
+\begin{equation}
+G(s) = \frac{k_p \tau s^2 + (k_p + \tau k_i)s + k_i}{\tau s^3 + s^2 + k_p s + k_i}
+\end{equation}
+
+
+\begin{equation}
+G(s) = \frac{k_p s + k_i}{s^2 + k_p s + k_i}
+\end{equation}
 
 Especificações:
 

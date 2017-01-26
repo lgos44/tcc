@@ -52,6 +52,13 @@ Essa convenção resulta em uma definição não única do sistema de coordenada
 \item Quando a junta $i$ é prismática a direção de $z_{i-1}$ é arbitrária.
 \end{itemize}
 
+Após determinados os sistemas de coordenadas, é possível determinar a posição e orientação de um referencial em relação ao outro através dos seguintes parâmetros:
+\begin{itemize}
+\item $a_i$ distância entre $z_{i-1}$ e $z_i$ ao longo de $x_i$
+\item $\alpha_i$ ângulo entre $z_{i-1}$ e $z_i$ ao redor de $x_i$
+\item $d_i$ distância entre $x_{i-1}$ e $x_i$ ao longo de $z_{i-1}$
+\item $\theta_i$ ângulo entre $x_{i-1}$ e $x_i$ ao redor de $z_{i-1}$
+\end{itemize}
 \subsection{Espaço das Juntas e Espaço Operacional}
 Para que o efetuador final de um manipulador realize alguma tarefa é necessário atribuir uma posição e orientação desejada, que  pode ser função do tempo (trajetória). Surge então o problema de representar posição e orientação. 
 
@@ -180,7 +187,7 @@ Derivando em relação ao tempo
 \end{equation}
 podemos escrever a partir da equação \ref{eq:jacoba}:
 \begin{equation}
-\bm{\dot{e}} = \bm{\dot{x}}_d - \bm{J}_a(\bm{q})\dot{\bm{q}}
+\bm{\dot{e}} = \bm{\dot{x}}_d - \bm{J}_A(\bm{q})\dot{\bm{q}}
 \end{equation}
 Sendo $\bm{x}_d(t)$ uma trajetória desejada, deseja-se que $\bm{x}$ atinja $\bm{x}_d(t)$ em $t \to \infty$ .
 A entrada de controle para o sistema é um valor de $\bm{u} = \dot{\bm{q}}$, logo, assumindo que $\bm{J}_A(\bm{q})$ é quadrada e não singular, a escolha da lei de controle
@@ -202,6 +209,11 @@ obtem-se a seguinte dinâmica para o erro
 
 \section{Servo Visão}
 A tarefa proposta na Servo Visão é controlar a posição e orientação do efetuador do manipulador, em relação a um alvo, usando características visuais extraidas de uma imagem. A câmera pode ser carregada pelo manipulador (montada no efetuador) ou colocada em um ponto fixo, observando tanto o efetuador como o alvo.
+
+\subsection{Estimação da Pose}
+O problema de estimar a \textit{pose} consiste em determinar a posição e orientação $T{CT}$ do alvo com respeito ao sistema de coordenadas da câmera. Considera-se que a geometria do alvo é conhecida, isto é um conjunto de pontos $(x_i, y_i, z_i)$ com $i \in [1, N]$, assim como os parâmetros intrínsecos da câmera. A imagem capturada pela câmera é processada e as coordenadas no plano da imagem $(u_i, v_i)$ são determinadas utilizando algoritmos de visão computacional.
+
+
 
 \subsection{Servo Visão Baseada em Posição}
 Em um sistema de servo visão baseado em posição a posição e orientação do alvo com respeito a câmera $\bm{T}_{CT}$ é estimada. O problema de estimação da posição e orientação é discutido no apêndice ?.
