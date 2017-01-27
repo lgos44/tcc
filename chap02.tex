@@ -210,10 +210,80 @@ obtem-se a seguinte dinâmica para o erro
 \section{Servo Visão}
 A tarefa proposta na Servo Visão é controlar a posição e orientação do efetuador do manipulador, em relação a um alvo, usando características visuais extraidas de uma imagem. A câmera pode ser carregada pelo manipulador (montada no efetuador) ou colocada em um ponto fixo, observando tanto o efetuador como o alvo.
 
+Primeiramente é importante entender os princípios de formação de imagem através de câmeras. 
+
+\subsection{Transformação de Perspectiva}
+A equação elementar para descrever a formação de imagem com uma lente é a Lei das Lentes
+\begin{equation} 
+\frac{1}{z_o} + \frac{1}{z_i} = \frac{1}{f}
+\end{equation} 
+onde $z_o$ é a distância até o objeto, $z_i$ é a distância ao plano da imagem e $f$ é a distância focal da lente.
+
+Em visão computacional geralmente o modelo de perspectiva central mostrado na figura \ref{fig:lens_model}.
+Seja $\bm{P} = [X\; Y\; Z]^T$ um ponto com coordenadas expressas no referencial inercial e $\bm{p} = [x\;y]^T$ esse ponto com coorenadas projetadas no plano da imagem por
+\begin{equation}
+x = f \frac{X}{Z}, \quad y = f \frac{Y}{Z}
+\end{equation}
+
+É possivel expressar o ponto no plano da imagem em coordenadas homogêneas na forma $\tilde{\bm{p}} = [x'\; y' \; z']$ onde $x' = \frac{fX}{z'}$, $y' = \frac{fY}{z'}$ e $z' = Z$. Em forma matricial:
+
+\begin{equation}
+\bm{\tilde{p}} = 
+\m{ f & 0 & 0 \\
+	 0 & f & 0 \\
+	 0 & 0 & 1	
+}
+\m{X\\Y\\Z}
+\end{equation}
+
+Podemos retornar às coodenadas não-homogêneas com:
+\[ x = \frac{x'}{z'} \qquad y = \frac{y'}{z'}\]
+
+O ponto $\bm{P}$ no referencial inercial pode ser representado em coordenadas homogêneas como $(\bm{\tilde{P}})_C = [X \; Y \; Z \; 1]^T$
+\begin{equation}
+\bm{\tilde{p}} = 
+\m {
+	1/\rho_w & 0 & u_0 \\
+	0        & 1/\rho_h &v_0 \\
+	0 & 0 & 1 \\
+}
+\m{ f & 0 & 0 & 0\\
+	 0 & f & 0 & 0\\
+	 0 & 0 & 1 & 0	
+}
+(\tilde{\bm{P}})_C
+\end{equation}
+
+Uma imagem digital pode ser interpretada como uma matriz bidimensional de \textit{pixels}. As coordenadas de um ponto são expressas portanto em \textit{pixels} como um vetor de números inteiros $[u\; v]$. As coordenadas no plano da imagem se relacionam com as coordenadas em \textit{pixels} por
+\begin{equation}
+u = x = \frac{x}{\rho_w} + u_0 \qquad v = \frac{y}{\rho_h} + v_0
+\end{equation}
+
+
+\begin{align}\label{eq:camera_projection}
+\bm{\tilde{p}} =& 
+\m {
+	f/\rho_w & 0 & u_0 \\
+	0        & f/\rho_h &v_0 \\
+	0 & 0 & 1 \\
+}
+\m{  1 & 0 & 0 & 0\\
+	 0 & 1 & 0 & 0\\
+	 0 & 0 & 1 & 0	
+}
+\bm{T}_{0C}^{-1}\tilde{\bm{P}}\\
+=& \bm{K} \bm{P}_0 \bm{T}_{0C}^{-1} \\ 
+=& \bm{C} \bm{\tilde{P}}
+\end{align}
+
+A equação \eqref{eq:camera_projection} define a projeção na câmera. A matrix $C$ realiza a mudança de escala, tradução e projeção de perspectiva. 
+
+\subsection{Calibração da Câmera}
+
 \subsection{Estimação da Pose}
-O problema de estimar a \textit{pose} consiste em determinar a posição e orientação $T{CT}$ do alvo com respeito ao sistema de coordenadas da câmera. Considera-se que a geometria do alvo é conhecida, isto é um conjunto de pontos $(x_i, y_i, z_i)$ com $i \in [1, N]$, assim como os parâmetros intrínsecos da câmera. A imagem capturada pela câmera é processada e as coordenadas no plano da imagem $(u_i, v_i)$ são determinadas utilizando algoritmos de visão computacional.
+O problema de estimar a \textit{pose} consiste em determinar a posição e orientação $T{CT}$ do alvo com respeito ao sistema de coordenadas da câmera. Considera-se que a geometria do alvo é conhecida, isto é um conjunto de pontos $[X_i \; Y_i \; Z_i]$ com $i \in [1\; \cdots \; N]$, assim como os parâmetros intrínsecos da câmera. A imagem capturada pela câmera é processada e as coordenadas no plano da imagem $[u_i\; v_i]$ são determinadas utilizando algoritmos de visão computacional. Esse problema é conhecido como \textit{Perspective-n-Point}
 
-
+\subsection{Calibração}
 
 \subsection{Servo Visão Baseada em Posição}
 Em um sistema de servo visão baseado em posição a posição e orientação do alvo com respeito a câmera $\bm{T}_{CT}$ é estimada. O problema de estimação da posição e orientação é discutido no apêndice ?.
