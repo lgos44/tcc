@@ -6,4 +6,11 @@
 
 Para a implementação do modo de controle por Servo Visão, foi utilizada a biblioteca ViSP. A ViSP contém um módulo de visão computacional que permite computar a \textit{pose} de um objeto a ser reconhecido por meio de um padrão pre-determindado. São utilizados algoritmos robustos e fornecidos mecanismos para calibração da câmera. Esse módulo é um envoltório para a biblioteca OpenCV com algoritmos focados em aplicações de robótica.
 
+\begin{itemize}
+\item Linear Lagrange approach (test is done to switch between planar and non planar algorithm)
+\item Linear Dementhon approach (test is done to switch between planar and non planar algorithm)
+\item Lowe aproach based on a Levenberg Marquartd non linear minimization scheme that needs an initialization from Lagrange or Dementhon aproach
+\item  Non linear Lowe aproach initialized by Lagrange approach
+\end{itemize}
+
 \section{OpenCV}

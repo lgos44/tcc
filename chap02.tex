@@ -272,7 +272,7 @@ u = x = \frac{x}{\rho_w} + u_0 \qquad v = \frac{y}{\rho_h} + v_0
 	 0 & 0 & 1 & 0	
 }
 \bm{T}_{0C}^{-1}\tilde{\bm{P}}\\
-=& \bm{K} \bm{P}_0 \bm{T}_{0C}^{-1} \\ 
+=& \bm{K} \bm{P}_0 \bm{T}_{0C}^{-1} \tilde{\bm{P}} \\ 
 =& \bm{C} \bm{\tilde{P}}
 \end{align}
 
@@ -281,7 +281,11 @@ A equação \eqref{eq:camera_projection} define a projeção na câmera. A matri
 \subsection{Calibração da Câmera}
 
 \subsection{Estimação da Pose}
-O problema de estimar a \textit{pose} consiste em determinar a posição e orientação $T{CT}$ do alvo com respeito ao sistema de coordenadas da câmera. Considera-se que a geometria do alvo é conhecida, isto é um conjunto de pontos $[X_i \; Y_i \; Z_i]$ com $i \in [1\; \cdots \; N]$, assim como os parâmetros intrínsecos da câmera. A imagem capturada pela câmera é processada e as coordenadas no plano da imagem $[u_i\; v_i]$ são determinadas utilizando algoritmos de visão computacional. Esse problema é conhecido como \textit{Perspective-n-Point}
+O problema de estimar a \textit{pose} consiste em determinar a posição e orientação $\bm{T}_{CT}$ do alvo com respeito ao sistema de coordenadas da câmera. Considera-se que a geometria do alvo é conhecida, isto é um conjunto de pontos $[X_i \; Y_i \; Z_i]$ com $i \in [1\; \cdots \; N]$, assim como os parâmetros intrínsecos da câmera. A imagem capturada pela câmera é processada e as coordenadas no plano da imagem $[u_i\; v_i]$ são determinadas utilizando algoritmos de visão computacional. Esse problema é conhecido como \textit{Perspective-n-Point}. Existem diversos métodos e algoritmos. 
+
+\subsubsection{P3P: Estimação da \textit{pose} para 3 pontos}
+
+\subsubsection{PNP: Estimação da \textit{pose} para N pontos}
 
 \subsection{Calibração}
 
