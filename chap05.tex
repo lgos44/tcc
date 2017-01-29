@@ -6,22 +6,62 @@ Para verificar se de fato são válidas as premissas assumidas na seção \ref{s
 onde o período $T = 1/f = 1s$ e a amplitude $A = 0.5 rad/s$
 
 \newlength{\imageheight}
-\begin{figure}[!ht]
+\begin{figure}[H]
   \centering
   	\settoheight{\imageheight}{\includegraphics{./img/joints}}
     \includegraphics[width=\textwidth, clip=true, trim = 0 0.5\imageheight 0 0 0 mm]{./img/joints}
-  \caption{Resposta das juntas}
+  \caption{Resposta de velocidade das juntas 1 e 2}
 \end{figure}
 
-\begin{figure}[!ht]
+\begin{figure}[H]
   \centering
   	\settoheight{\imageheight}{\includegraphics{./img/joints}}
     \includegraphics[width=\textwidth, clip=true, trim = 0 0 0 0.5\imageheight 0 mm]{./img/joints}
-  \caption{Resposta das juntas}
+  \caption{Resposta de velocidade das juntas 3 e 4}
+\end{figure}
+
+
+\section{Controle de Posição no Espaço das Juntas}
+TODO 
+
+\section{Controle de Posição no Espaço Operacional}
+Neste experimento, demonstra-se o controle no espaço operacional.
+A posição inicial é $\bm{x} =[ 552.6232 \; 57.0000 \; -67.1751 \; 0.0000]^T$. 
+Ao iniciar, $\bm{x_d} =[ 550 \; 57 \; -100 \; 0]^T$. Em seguida, após os 9s a orientação é alterada para $60^o$, ou seja $\bm{x_d} =[ 550 \; 57 \; -100 \; 1.0472]^T$. Após os 15 segundos a orientação é alterada para $-60^o$, ou seja $\bm{x_d} =[ 550 \; 57 \; -100 \; -1.0472]^T$.
+\begin{figure}[H]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/position/x1.eps}
+  \caption{$x_1$, $x_{d1}$ e $e_1$}
+  \label{fig:sub1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/position/x2.eps}
+  \caption{$x_2$, $x_{d2}$ e $e_2$}
+  \label{fig:sub2}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/position/x3.eps}
+  \caption{$x_3$, $x_{d3}$ e $e_3$}
+  \label{fig:sub1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/position/x4.eps}
+  \caption{$x_4$, $x_{d4}$ e $e_4$}
+  \label{fig:sub2}
+\end{subfigure}
+\caption{Controle de Posição no Espaço das Juntas}
+\label{fig:test}
 \end{figure}
 
 
 \section{Rastreamento de Trajetória}
+
+\subsection{Trajetória 1}
 A trajetória a ser rastreada é dada pelas equações:
 \begin{gather}
 \bm{x_d} = \m{75 \sin(\omega_n t) + \sin (4 \omega_n t) + 500 \\ 57 \\ 75 \cos(\omega_n t) + \cos(4\omega_n t) -67 \\ \omega_n \sin(\omega_nt) }
@@ -34,60 +74,238 @@ A trajetória a ser rastreada é dada pelas equações:
 
 Onde $\omega_n = \pi/10$
 
-\begin{figure}[!ht]
+\subsubsection{Ganho $\bm{K}_t = \bm{I}$}
+
+\begin{figure}[H]
 \centering
-  \includegraphics[width=0.5\linewidth]{./img/trk1/trajectory.eps}
-  \caption{Trajetória}
+  \includegraphics[width=0.5\linewidth]{./img/traj_1_k1/traj.eps}
+  \caption{Trajetória 1 no plano x-z}
   \label{fig:sub1}
 \end{figure}%
 
-
-\begin{figure}[!ht]
+\begin{figure}[H]
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=\linewidth]{./img/trk1/x1.eps}
+  \includegraphics[width=\linewidth]{./img/traj_1_k1/x1.eps}
   \caption{$x_1$, $x_{d1}$ e $e_1$}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=\linewidth]{./img/trk1/x2.eps}
+  \includegraphics[width=\linewidth]{./img/traj_1_k1/x2.eps}
   \caption{$x_2$, $x_{d2}$ e $e_2$}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=\linewidth]{./img/trk1/x3.eps}
+  \includegraphics[width=\linewidth]{./img/traj_1_k1/x3.eps}
   \caption{$x_3$, $x_{d3}$ e $e_3$}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=\linewidth]{./img/trk1/x4.eps}
+  \includegraphics[width=\linewidth]{./img/traj_1_k1/x4.eps}
   \caption{$x_4$, $x_{d4}$ e $e_4$}
   \label{fig:sub2}
 \end{subfigure}
-\caption{Rastreamento de trajetória}
+\caption{Rastreamento da trajetória 1 para $\bm{K}_t = \bm{I}$}
 \label{fig:test}
 \end{figure}
 
-\begin{figure}[!ht]
+\begin{figure}[H]
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=\linewidth]{./img/trk1/erro1zoom.eps}
+  \includegraphics[width=\linewidth]{./img/traj_1_k1/error0.eps}
   \caption{$e_1$}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=\linewidth]{./img/trk1/erro3zoom.eps}
+  \includegraphics[width=\linewidth]{./img/traj_1_k1/error2.eps}
   \caption{$e_3$}
   \label{fig:sub2}
 \end{subfigure}
-\caption{Destaque para o erro $e_1$ e $e_3$ }
+\caption{Trajetória 1: Destaque para o erro $e_1$ e $e_3$ com $\bm{K}_t = \bm{I}$}
 \label{fig:erro_traj}
 \end{figure}
 
 Podem-se observar diversos picos no gráfico do erro na figura \ref{fig:erro_traj} que se devem ao fato de, por não se tratar de um sistema em tempo-real, o período de controle pode sofrer variação caso aconteça alguma interrupção no sistema operacional. Assim, o comando não seria atualizado, resultando em um erro maior na próxima iteração.
+
+
+\subsection{Trajetória 2}
+A trajetória a ser rastreada é dada pelas equações:
+\begin{gather}
+\bm{x_d} = \m{ 
+\frac{100 \cos(t)}{\sin^2(t) + 1} + 500 &
+57 &
+\frac{100\cos(t) \sin(t)}{\sin^w(t) + 1} -50 & 
+0
+} \\
+\bm{\dot{x}_d} = \m{
+\frac{100\sin(t) (\sin^w(t) -3 )}{(\sin^w(t) + 1)^2} &
+0 &
+\frac{-(300 \sin^2(t) - 100)}{(\sin^w(t) + 1)^2} &
+0}
+\end{gather}
+
+\subsubsection{Ganho $\bm{K}_t = \bm{I}$}
+\begin{figure}[H]
+\centering
+  \includegraphics[width=0.5\linewidth]{./img/traj_2_k1/traj.eps}
+  \caption{Trajetória 2 no plano x-z}
+  \label{fig:sub1}
+\end{figure}%
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/traj_2_k1/x1.eps}
+  \caption{$x_1$, $x_{d1}$ e $e_1$}
+  \label{fig:sub1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/traj_2_k1/x2.eps}
+  \caption{$x_2$, $x_{d2}$ e $e_2$}
+  \label{fig:sub2}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/traj_2_k1/x3.eps}
+  \caption{$x_3$, $x_{d3}$ e $e_3$}
+  \label{fig:sub1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/traj_2_k1/x4.eps}
+  \caption{$x_4$, $x_{d4}$ e $e_4$}
+  \label{fig:sub2}
+\end{subfigure}
+\caption{Rastreamento da trajetória 2 para $\bm{K}_t = \bm{I}$}
+\label{fig:test}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/traj_2_k1/error0.eps}
+  \caption{$e_1$}
+  \label{fig:sub1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/traj_2_k1/error2.eps}
+  \caption{$e_3$}
+  \label{fig:sub2}
+\end{subfigure}
+\caption{Destaque para o erro $e_1$ e $e_3$ com $\bm{K}_t = \bm{I}$}
+\label{fig:erro_traj}
+\end{figure}
+
+\subsubsection{Ganho $\bm{K}_t = 5\bm{I}$}
+
+\begin{figure}[H]
+\centering
+  \includegraphics[width=0.5\linewidth]{./img/traj_2_k5/traj.eps}
+  \caption{Trajetória 2 no plano x-z para $\bm{K}_t = 5\bm{I}$}
+  \label{fig:sub1}
+\end{figure}%
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/traj_2_k5/x1.eps}
+  \caption{$x_1$, $x_{d1}$ e $e_1$}
+  \label{fig:sub1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/traj_2_k5/x2.eps}
+  \caption{$x_2$, $x_{d2}$ e $e_2$}
+  \label{fig:sub2}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/traj_2_k5/x3.eps}
+  \caption{$x_3$, $x_{d3}$ e $e_3$}
+  \label{fig:sub1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/traj_2_k5/x4.eps}
+  \caption{$x_4$, $x_{d4}$ e $e_4$}
+  \label{fig:sub2}
+\end{subfigure}
+\caption{Rastreamento da trajetória 2 para $\bm{K}_t = 5\bm{I}$}
+\label{fig:test}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/traj_2_k5/error0.eps}
+  \caption{$e_1$}
+  \label{fig:sub1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/traj_2_k5/error2.eps}
+  \caption{$e_3$}
+  \label{fig:sub2}
+\end{subfigure}
+\caption{Trajetória 2: destaque para o erro $e_1$ e $e_3$}
+\label{fig:erro_traj}
+\end{figure}
+
+
+\section{Controle de Força}
+
+\subsection{Float}
+Neste experimento a referência de força é configurada para zero, logo é possível mover o efetuador aplicando forças sobre ele. O operador tentou traçar um retângulo no plano x-z.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/float/Fx.eps}
+  \caption{$Fx$}
+  \label{fig:sub1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/float/Fy.eps}
+  \caption{$Fy$}
+  \label{fig:sub2}	
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/float/Fz.eps}
+  \caption{$Fz$}
+  \label{fig:sub1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/float/xz.eps}
+  \caption{Plano $xz$}
+  \label{fig:sub2}
+\end{subfigure}
+\caption{Controle de Força: Float}
+\label{fig:test}
+\end{figure}
+
+\subsection{Approach}
+
+Foi aplicado o controle de força somente na direção de \textit{approach}, sobre uma placa de poliestireno utilizando ganho do controlador PI de $k_p = 2$ e $k_i = 0.05$. A referência de força é de $F_{xd} = 1000 mN$.
+
+ \begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\linewidth]{./img/force1000_kp2_ki005/Fx.eps}
+  \caption{Controle de força: Approach $Fx$}
+  \label{fig:sub2}
+\end{figure}

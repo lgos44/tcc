@@ -1,7 +1,8 @@
 \chapter{Tetis - Modelagem e Controle}
 
-\section{Parâmetros Denavit–Hartenberg}
 
+\section{Modelo}
+O manipulador Tetis consiste basicamente de um braço planar de três elos com uma rotação adicional ao redor do eixo do plano. Também pode ser visto como um braço antropomórfico com uma junta de revolução adicional ao final da cadeia, com o eixo paralelo às duas anteriores. O projeto mecânico faz com que a extremidade do efetuador final não esteja exatamente alinhada com as juntas, o que é levado em conta no último elo. O esquema na figura \ref{fig:modelo_tetis} ilustra o modelo de elos e juntas. 
 \begin{figure}[!ht]
 \centering
   \includegraphics[width=0.9\linewidth]{./img/m2_meio_2.png}
@@ -9,7 +10,21 @@
   \label{fig:modelo_tetis}
 \end{figure}%
 
-\begin{table}[!ht]
+\section{Cinemática Direta}
+O primeiro passo ao modelar um manipulador robótico é encontrar a cinemática direta. Será utilizada a convenção de Denavit-Hartenberg para posicionar os sistemas de coordenadas e obter os parâmetros. Seguindo os passos descritos em \ref{sec:denavit} os sistemas de coordenadas foram posicionados da seguinte forma:
+
+\begin{itemize}
+\item Eixo $z_0$ escolhido ao longo da Junta 1. Origem $O_0$ escolhida arbitrariamente de modo a coincidir com $O_1$ por simplicidade.  
+\item Eixo $z_1$ escolhido ao longo da Junta 2. Origem $O_1$ na intersecção entre $z_0$ e $z_1$. Eixo $x_1$ na direção normal ao plano definido por $z_0$ e $z_1$ pois se interceptam. O sentido foi arbitrariamente escolhido na direção de avanço da cadeia por simplicidade.
+\item Eixo $z_2$ escolhido ao longo da Junta 3. Origem $O_2$ na junta 3 pois $z_2$ e $z_1$ são paralelas. Eixo $x_2$ escolhido arbitrariamente ao longo de  $x_1$ pois a normal comum entre $z_2$ e $z_1$ não é unicamente definida.
+\item Eixo $z_3$ escolhido ao longo da Junta 4. Origem $O_3$ na junta 3 pois $z_3$ e $z_2$ são paralelas. Eixo $x_3$ escolhido arbitrariamente ao longo de  $x_2$ pois a normal comum entre $z_3$ e $z_2$ não é unicamente definida.
+\item Como não existe junta 5, eixo $z_4$ definido arbitrariamente. Origem $O_4$ na extremidade do efetuador final. Eixo $x_4$ normal ao eixo $z_3$.
+\end{itemize}
+
+A partir dos eixos posicionados conforme a figura \ref{fig:modelo_tetis} é possível obter os parâmetros na tabela \ref{tab:dh_tetis}. 
+
+
+\begin{table}[h!]
 \centering
 \caption{Parâmetros Denavit–Hartenberg para manipulatodor Tetis}
 \label{tab:dh_tetis}
@@ -22,19 +37,49 @@ Elo & $a_i$ & $\alpha_i$ & $d_i$  & $\theta_i$ \\ \hline
 \end{tabular}
 \end{table}
 
-\section{Cinemática Direta}
+
+\begin{itemize}
+\item $a_1 = 0$  e $d_1 = 0$ pois $O_0$ e $O_1$ coincidem. $\alpha_1 = \pi/2$ ângulo entre $z_0$ e $z_1$ ao redor de $x_i$.
+\item $a_2 = E_3$ é a distância entre $z_1$ e $z_2$ ao longo de $x_2$ que corresponde ao comprimento do elo 2. $z_1$ e $z_2$ são sempre paralelos logo $\alpha_2 = 0$. A distância $d_2$ entre $x_1$ e $x_2$ ao longo de $z_1$ é zero. 
+
+\item $a_3 = E_4$ é a distância entre $z_2$ e $z_3$ ao longo de $x_3$ que corresponde ao comprimento do elo 3. $z_2$ e $z_3$ são sempre paralelos logo $\alpha_3 = 0$. A distância $d_3$ entre $x_2$ e $x_3$ ao longo de $z_2$ é zero. 
+
+\item $a_4 = E_5$ é a distância entre $z_3$ e $z_4$ ao longo de $x_4$. $\alpha_4 = -\pi/2$ é o ângulo entre $z_3$ e $z_4$ ao redor de $x_4$, sendo portanto negativo. $d_4 = -M_5$ é a distância entre $x_3$ e $x_4$ ao longo de $z_3$. 
+\end{itemize}
+
+Considerando a posição inicial da figura \ref{fig:modelo_tetis} todos os ângulos $\theta_i$ são dados diretamente pelas variáveis de junta, sem \textit{offsets}. 
+
+A orientação de um sistema de coordenadas $i$ em relação ao anterior é dada por uma rotação de $\theta_i$ em torno de $z$ seguida de uma rotação em torno de $x$ de $\alpha_i$ considerando o sistema de coordenadas corrente.
 
 \begin{equation}
 \bm{R}_{i-1,i} = \bm{R}_z(\theta_i)\bm{R}_x(\alpha_i)
 \end{equation}
-\begin{equation}
-\bm{\vec{p}}_{i-1,i} = d_i \bm{\vec{z}}_{i-1} + a_i \bm{\vec{x}}_i
-\end{equation}
+
+A translação é obtida representando as distâncias no sistema de coordenadas $i-1$:
 \begin{gather}
+\bm{\vec{p}}_{i-1,i} = d_i \bm{\vec{z}}_{i-1} + a_i \bm{\vec{x}}_i \\
 (\bm{\vec{p}}_{i-1,i})_{i-1} = d_i (\bm{\vec{z}}_{i-1})_{i-1} + a_i (\bm{\vec{x}}_i)_{i-1} \\
 (\bm{\vec{p}}_{i-1,i})_{i-1} = d_i (\bm{\vec{z}}_{i-1})_{i-1} + a_i \bm{R}_{i-1,i}(\bm{\vec{x}}_i)_{i} 
 \end{gather}
 
+As duas informações podem ser representadas de uma forma mais compacta como transformação homogênea:
+\begin{equation}
+T_{i-1,i} = \m{
+	R_{i-1,i} 		&  (\bm{\vec{p}}_{i-1,i})_{i-1} \\
+	0_{1 \times 3}	&  							  1
+}
+\end{equation}
+que em função dos parâmetros fica:
+\begin{equation}
+T_{i-1,i} = \m {
+	c_{\theta_i}  & -s_{\theta_i}c_{\alpha_i}	&	s_{\theta_i}s_{\alpha_i}  &	a_i c_{\theta_i} \\ 
+	s_{\theta_i}  &	c_{\theta_i}c_{\alpha_i}	&  -c_{\theta_i}s_{\alpha_i}  & a_i s_{\theta_i} \\
+	0			  & s_{\alpha_i}				&   c_{\alpha_i}			  &	d_i				 \\
+	0			  & 0							&   0						  & 1
+}
+\end{equation}
+
+Obtemos então:
 %\begin{align*}
 %\bm{R}_{01} =
 %\m{c_1 & 0 & s_1   \\
@@ -71,30 +116,33 @@ Elo & $a_i$ & $\alpha_i$ & $d_i$  & $\theta_i$ \\ \hline
 %}
 %\end{equation}
 
-
-\[ \bm{T}_{01} = 
+\begin{align*}
+\bm{T}_{01} = 
 \m{c_1 & 0 & s_1 &  0 \\
    s_1 & 0 & -c_1 & 0 \\
    0   & 1 &    0 & 0 \\
-   0   & 0 &    0 & 1}\]
-
-\[ \bm{T}_{12} = 
-\m{c_2 & -s_2 &  0 & E_3 c_2 \\
+   0   & 0 &    0 & 1}
+& &
+\bm{T}_{12} =  \m{c_2 & -s_2 &  0 & E_3 c_2 \\
    s_2 &  c_2 &  0 & E_3 s_2  \\
    0   &    0 &  1 & 	   0  \\
-   0   &    0 &  0 &       1} \]
+   0   &    0 &  0 &       1} 
+\end{align*}
 
-\[ \bm{T}_{23} = 
+\begin{align*}
+\bm{T}_{23} = 
 \m{c_3 & -s_3 &  0 & E_4 c_3 \\
    s_3 &  c_3 &  0 & E_4 s_3  \\
    0   &    0 &  1 & 	   0  \\
-   0   &    0 &  0 &       1} \]
-
-\[ \bm{T}_{34} = 
+   0   &    0 &  0 &       1}
+& &
+\bm{T}_{34} = 
 \m{c_4 &    0 &  -s_4 & E_5 c_4 \\
    s_4 &    0 &   c_4 & E_5 s_4 \\
    0   &   -1 &     0 & 	-M_5 \\
-   0   &    0 &     0 &       1} \]
+   0   &    0 &     0 &       1}
+\end{align*}
+
 
 \begin{equation} \label{eq:cine_direta}
  \bm{T}_{04} = \bm{T}_{01} \bm{T}_{12}  \bm{T}_{23} \bm{T}_{34} = 
@@ -130,7 +178,7 @@ pois todas as juntas são de revolução.
 \section{Cinemática Diferencial}
 
 \subsection{Jacobiano Analítico}
-A partir da cinemática direta em \eqref{eq:cine_direta} e da equação \ref{eq:jacob_pos} podemos obter o Jacobiano de Posição para o manipulador diferenciando a equação em relação as variáveis de junta.
+A partir da cinemática direta em \eqref{eq:cine_direta} e da equação \ref{eq:jacob_pos} podemos obter o Jacobiano de Posição para o manipulador diferenciando a equação em relação as variáveis de junta. \cite{book-example}
 
 \begin{equation}
 \bm{p}_e = \m{x \\ y \\ z} =
@@ -170,7 +218,7 @@ A partir de \ref{eq:jacob_or} e de \ref{eq:orientacao} podemos calular o Jacobia
 \bm{J}_{\phi}(\bm{q}) = \frac{\partial \phi_e}{\partial \bm{q}} = \m{0 & -1 & -1 & -1}
 \end{equation}
  
-Em alguns modos como controle por servo visão e no controle manual com joystick é interessante fazer o controle no referêncial do efetuador, portanto precisamos representar o Jacobiano de posição no referencial do efetuador como $(\bm{J}_P)_N = \bm{R}_{04}^T (\bm{J}_P)_0$.  
+Em alguns modos como controle por servo visão e no controle manual com joystick é interessante fazer o controle no referencial do efetuador, portanto precisamos representar o Jacobiano de posição no referencial do efetuador como $(\bm{J}_P)_N = \bm{R}_{04}^T (\bm{J}_P)_0$.  
 
 \begin{equation}
 (\bm{J}_P)_N =  
@@ -181,9 +229,9 @@ Em alguns modos como controle por servo visão e no controle manual com joystick
 }
 \end{equation}
 
-A partir daqui, para simplificar a notação, sempre será referenciado o Jacobiano Analitico no referencial da base $(\bm{J}_A)_0$  como  $\bm{J}_0$ e o Jacobiano Analítico no referencial do efetuador $(\bm{J}_A)_N$ como $\bm{J}_N$
+A partir daqui, para simplificar a notação, sempre será referenciado o Jacobiano Analitico no referencial da base $(\bm{J}_A)_0$  como  $\bm{J}_0$ e o Jacobiano Analítico no referencial do efetuador $(\bm{J}_A)_N$ como $\bm{J}_N$.
 
-\section{Singularidades}
+%\section{Singularidades}
 
 \section{Modos de Controle}
 \subsection{Velocidade no Espaço Operacional}
@@ -208,10 +256,12 @@ Este é um modo em malha aberta, onde o sinal de entrada no controlador é de ve
 
 
 \subsubsection{Base}
+Quando escolhe-se o referencial da base $\bm{\dot{x}}_d$ é velocidade desejada expressa no referencial da base e utiliza-se $J_0$.
 \begin{equation}
 \bm{u} = \bm{\dot{q}}_d = \bm{J}_0^{-1} (\bm{\dot{x}}_d)_0
 \end{equation}
 \subsubsection{Efetuador}
+Quando escolhe-se o referencial da efetuador $\bm{\dot{x}}_d$ é velocidade desejada expressa no referencial do efetuador e utiliza-se $J_N$.
 \begin{equation}
 \bm{u} = \bm{\dot{q}}_d = \bm{J}_N^{-1} (\bm{\dot{x}}_d)_N
 \end{equation}
@@ -220,9 +270,46 @@ onde
 \bm{\dot{x}}_d = \m{\bm{\dot{p}}_d \\ 0}
 \end{equation}
 
-
 \subsection{Posição no Espaço das Juntas}
+O controle de posição no espaço das juntas consiste em uma realimentação com controle proporcional individual para cada junta. Considerando que as juntas sejam modeladas como integradores, o diagrama \ref{fig:pos_juntas} mostra a malha de controle.
 
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[auto, node distance=2cm,>=latex']
+    % We start by placing the blocks
+    \node [input, name=input] {};
+    \node [sum, right of=input] (sum) {};
+    \node [block, right of=sum] (controller) {$K_j$};
+    \node [block, right of=controller] (system) {$\ddfrac{1}{s}$};
+    % We draw an edge between the controller and system block to 
+    % calculate the coordinate u. We need it to place the measurement block. 
+    \draw [->] (controller) -- node[name=u] {$\bm{u}$} (system);
+    \node [output, right of=system] (output) {};
+    \node [tmp, below of=u] (tmp1) {};
+
+    % Once the nodes are placed, connecting them is easy. 
+    \draw [->] (system) -- node [name=s] {$\bm{q}$}(output);
+    \draw [draw,->] (input) -- node {$\bm{q_d}$} (sum);
+    \draw [->] (sum) -- node {$\bm{e}$} (controller);
+    \draw [->] (s) |- (tmp1)-| node[pos=0.99] {$-$} node [near end] {$\bm{q}$} (sum);
+       %\draw [->] (measurements) -| node[pos=0.99] {$-$} 
+       % node [near end] {$\bm{q}_m$} (sum);
+\end{tikzpicture}
+\caption{Diagrama de Blocos: Modo de Posição no Espaço das Juntas}
+\label{fig:pos_juntas}
+\end{figure}
+
+A lei de controle é dada por 
+\begin{equation}
+\bm{u} = \bm{K}_j (\bm{q}_d - \bm{q})
+\end{equation}
+onde 
+\[ K_j = \m {
+	k_j & 0 & 0 \\ 
+	0 & k_j & 0 \\ 
+	0 &  0  & k_j
+}
+\]
 
 \subsection{Posição no Espaço Operacional}
 Para este modo considera-se o problema de controle de posição no espaço operacional conforme definido em \ref{eq:op_space}. 
@@ -239,10 +326,13 @@ Para o rastreamento de trajetória considera-se o problema de seguir um referên
 
 
 \subsection{Servo Visão}
+
+
 \subsection{Força}
 \subsubsection{Float}
+
 \subsubsection{Approach}
-Considera-se o problema de controle de força na direção de approach para o manipulador robótico 4-DOF em questão. A realimentação de força é feita com o uso do sensor descrito em \ref{sec:sensor_forca}. O objetivo de controle é rastrear uma entrada na forma de um degrau de força, a ser aplicada em uma placa de poliestireno montada em um suporte fixado na verical como mostra a figura \ref{fig:suporte_forca}.  
+Considera-se o problema de controle de força na direção de \textit{approach} para o manipulador robótico 4-DOF em questão. A realimentação de força é feita com o uso do sensor descrito em \ref{sec:sensor_forca}. O objetivo de controle é rastrear uma entrada na forma de um degrau de força, a ser aplicada em uma placa de poliestireno montada em um suporte fixado na vertical como mostra a figura \ref{fig:suporte_forca}.  
 
 É possível modelar o ambiente (força de contato), ou seja, a placa de poliestireno, como uma mola linear, através da \textit{Lei de Hooke}: \cite{bib:toni}
 \begin{equation}
@@ -250,10 +340,17 @@ f = -k_s (x - x_s)
 \end{equation}
 onde $x$ é a posição do ponto de contato com a superfície e $x_s$ um ponto na superfície.
 
-Foi feito um ensaio para encontrar a constante $k_s$ variando a distância $x_s$ e medindo a força resultante.
+Foi feito um ensaio para encontrar a constante $k_s$ variando a distância $x_s$ e medindo a força resultante. Os dados experimentais e a regressão linear pode ser vista na figura \ref{fig:ks_linreg}. A constante encontrada foi $k_s = 379.7642 N/m$.
+
+\begin{figure}[!ht]
+\centering
+  \includegraphics[width=0.5\linewidth]{./img/ks_estimation.eps}
+  \caption{Trajetória}
+  \label{fig:ks_linreg}
+\end{figure}%
 
 
-Considerando que o controle de força seja ativado somente após a etapa de contato com o ambiente onde será aplicada a força e que o controle está de força é feito apenas na direção de approach (segundo o referencial do manipulador, na direção $x$), pode-se utilizar a malha de controle mostrada na figura \ref{fig:controle_forca}.
+Considerando que o controle de força seja ativado somente após a etapa de contato com o ambiente onde será aplicada a força e que o controle de força é feito apenas na direção de approach (segundo o referencial do manipulador, na direção $x$), pode-se utilizar a malha de controle mostrada na figura \ref{fig:controle_forca}.
 
 É utilizada uma lei de controle com ação proporcional e integral:
 \begin{equation}
@@ -333,6 +430,8 @@ u = -K_s^{-1} (K_fe_f + K_i \int_0^t e_f(\tau)d\tau)
 \label{fig:controle_forca}
 \end{figure}
 
+O diagrama \ref{fig:controle_forca} pode ser simplificado se abstrairmos as outras dimensões que não a de approach, resultando em \ref{fig:controle_forca_simples}.
+
 \begin{figure}[h!]
 \centering
 \begin{tikzpicture}[auto, node distance=2cm,>=latex']
@@ -359,26 +458,33 @@ u = -K_s^{-1} (K_fe_f + K_i \int_0^t e_f(\tau)d\tau)
         node[near end] {$f_m$} (sum);
     %\draw [->] (x) |- (tmp1) -| node[pos=0.9] {$-$} (sum);
 \end{tikzpicture}
-\caption{Diagrama de Blocos: Malha de Controle de Força.}
-\label{fig:controle_forca}
+\caption{Diagrama de Blocos: Malha de Controle de Força Simplificada.}
+\label{fig:controle_forca_simples}
 \end{figure}
 
-Como o sinal vindo do sensor é bastante ruidoso, utiliza-se um filtro de primeira ordem.
+Considerando $H(s) = 1$
+\begin{equation}
+G(s) = \frac{k_p s + k_i}{s^2 + k_p s + k_i}
+\end{equation}
+
+Como o sinal vindo do sensor é bastante ruidoso, utiliza-se um filtro de primeira ordem com $f_c = 1$.
 \begin{equation}
 H(s) = \frac{1}{\tau s + 1}
 \end{equation}
+onde $\tau = 1/(2 \pi f_c) = 0.159154943$.
 
 \begin{equation}
 G(s) = \frac{k_p \tau s^2 + (k_p + \tau k_i)s + k_i}{\tau s^3 + s^2 + k_p s + k_i}
 \end{equation}
 
+%Especificações:
 
-\begin{equation}
-G(s) = \frac{k_p s + k_i}{s^2 + k_p s + k_i}
-\end{equation}
-
-Especificações:
 
 \subsubsection{Híbrido}
+Considerando o diagrama \ref{fig:controle_forca}, é possível suprir os graus de liberdade não controlados $y$, $z$ e $\phi$ com outra lei de controle, como por exemplo o um Proporcional com Feedforward de modo a aplicar uma força na direção de approach e traçar uma trajetória de na superfície em que a força está sendo aplicada. 
+
 
 \subsection{Master-Slave (Omni)}
+TODO
+
+% TODO: TABELA COM LEIS DE CONTROLE E FONTE DOS DADOS 
