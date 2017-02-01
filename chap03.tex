@@ -178,8 +178,7 @@ pois todas as juntas são de revolução.
 \section{Cinemática Diferencial}
 
 \subsection{Jacobiano Analítico}
-A partir da cinemática direta em \eqref{eq:cine_direta} e da equação \ref{eq:jacob_pos} podemos obter o Jacobiano de Posição para o manipulador diferenciando a equação em relação as variáveis de junta. \cite{book-example}
-
+A partir da cinemática direta em \eqref{eq:cine_direta} e da equação \ref{eq:jacob_pos} podemos obter o Jacobiano de Posição para o manipulador diferenciando a equação em relação as variáveis de junta. 
 \begin{equation}
 \bm{p}_e = \m{x \\ y \\ z} =
 \m{
@@ -326,9 +325,52 @@ Para o rastreamento de trajetória considera-se o problema de seguir um referên
 
 
 \subsection{Servo Visão}
+A matriz $\bm{K}$ da equação \eqref{eq:camera_projection} obtida através da calibração é:
 
+\begin{equation}
+\bm{K} = \m {
+	f/\rho_w & 0 & u_0 \\
+	0        & f/\rho_h &v_0 \\
+	0 & 0 & 1 \\
+}
+=
+\m{
+	877.62136 & 0.00000 & 306.53916 \\
+	0.00000   & 880.32069 & 210.12821 \\
+	0.00000   & 0.00000 & 1.00000 \\	
+}	
+\end{equation}
+
+Observando que o referêncial da câmera e do efetuador são dados pela figura \ref{fig:camera_ref}, podemos chegar a seguinte 
+
+\begin{equation}
+\bm{T}_{EC} = \m{
+	0 & 0 & 1 & -30 \\
+	0 & -1 & 0 & 101 \\
+	1 &  0 & 0 & -43 \\
+	0 &  0 & 0 &  1
+}
+\end{equation}
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=0.8\linewidth]{./img/camera.png}
+  \caption{Sistemas de coordenadas da câmera e do efetuador}
+  \label{fig:camera_ref}
+\end{figure}
+
+\begin{align}
+(\bm{p}_t)_e &= (\bm{p}_c)_e + (\bm{p}_t)_e \\
+(\bm{p}_t)_e &= (\bm{p}_c)_e + \bm{R}_{ec} (\bm{p}_t)_c 
+\end{align}
+
+\begin{align}
+\bm{e} = 
+\bar{u} = \bm{K}_v \bm{e}
+\end{align}
 
 \subsection{Força}
+
 \subsubsection{Float}
 
 \subsubsection{Approach}

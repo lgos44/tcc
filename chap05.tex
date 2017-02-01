@@ -27,7 +27,9 @@ TODO
 \section{Controle de Posição no Espaço Operacional}
 Neste experimento, demonstra-se o controle no espaço operacional.
 A posição inicial é $\bm{x} =[ 552.6232 \; 57.0000 \; -67.1751 \; 0.0000]^T$. 
-Ao iniciar, $\bm{x_d} =[ 550 \; 57 \; -100 \; 0]^T$. Em seguida, após os 9s a orientação é alterada para $60^o$, ou seja $\bm{x_d} =[ 550 \; 57 \; -100 \; 1.0472]^T$. Após os 15 segundos a orientação é alterada para $-60^o$, ou seja $\bm{x_d} =[ 550 \; 57 \; -100 \; -1.0472]^T$.
+Ao iniciar, $\bm{x_d} =[ 550 \; 57 \; -100 \; 0]^T$. Em seguida, após os 9s a orientação é alterada para $60^o$, ou seja $\bm{x_d} =[ 550 \; 57 \; -100 \; 1.0472]^T$. Após os 15 segundos a orientação é alterada para $-60^o$, ou seja $\bm{x_d} =[ 550 \; 57 \; -100 \; -1.0472]^T$. 
+
+% È $\begin{bsmallmatrix} 552.6232 & 57.0000 & -67.1751 & 0.0000 \end{bsmallmatrix}^T$ ou $\vect{552.6232, 57.0000, -67.1751, 0.0000}$
 \begin{figure}[H]
 \centering
 \begin{subfigure}{.5\textwidth}
@@ -136,19 +138,19 @@ Podem-se observar diversos picos no gráfico do erro na figura \ref{fig:erro_tra
 
 \subsection{Trajetória 2}
 A trajetória a ser rastreada é dada pelas equações:
-\begin{gather}
-\bm{x_d} = \m{ 
-\frac{100 \cos(t)}{\sin^2(t) + 1} + 500 &
+\begin{align}
+\bm{x_d} &= \m{ 
+\ddfrac{100 \cos(t)}{\sin^2(t) + 1} + 500 &
 57 &
-\frac{100\cos(t) \sin(t)}{\sin^w(t) + 1} -50 & 
+\ddfrac{100\cos(t) \sin(t)}{\sin^2(t) + 1} -50 & 
 0
-} \\
-\bm{\dot{x}_d} = \m{
-\frac{100\sin(t) (\sin^w(t) -3 )}{(\sin^w(t) + 1)^2} &
+}^T \\
+\bm{\dot{x}_d} &= \m{
+\ddfrac{100\sin(t) (\sin^2(t) -3 )}{(\sin^2(t) + 1)^2} &
 0 &
-\frac{-(300 \sin^2(t) - 100)}{(\sin^w(t) + 1)^2} &
-0}
-\end{gather}
+\ddfrac{-(300 \sin^2(t) - 100)}{(\sin^2(t) + 1)^2} &
+0}^T
+\end{align}
 
 \subsubsection{Ganho $\bm{K}_t = \bm{I}$}
 \begin{figure}[H]
