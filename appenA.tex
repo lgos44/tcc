@@ -3,14 +3,18 @@
 \chapter{Estimação da \textit{pose} em tempo real}  \label{chap:pose_est}
 \section{ViSP - Visual Servoing Platform}
 
-Para a implementação do modo de controle por Servo Visão, foi utilizada a biblioteca ViSP. A ViSP contém um módulo de visão computacional que permite computar a \textit{pose} de um objeto a ser reconhecido por meio de um padrão pre-determindado. São utilizados algoritmos robustos e fornecidos mecanismos para calibração da câmera. Esse módulo é um envoltório para a biblioteca OpenCV com algoritmos focados em aplicações de robótica.
+Para a implementação do modo de controle por Servo Visão, foi utilizada a biblioteca ViSP. A ViSP contém um módulo de visão computacional que permite computar a \textit{pose} de um objeto a ser reconhecido por meio de um padrão pre-determindado. São utilizados algoritmos robustos e fornecidos mecanismos para calibração da câmera. Esse módulo em alguns casos funciona como um envoltório para a biblioteca OpenCV, de modo a facilitar sua aplicação em problemas de robótica. 
 
+As seguintes abordagens ao problema PnP estão disponíveis
 \begin{itemize}
 \item Abordagem Linear Lagrange. É realizado um teste para verificar aplicação da versão planar ou não-planar do algoritmo. 
-\item Abordagem Linear Dementhon  É realizado um teste para verificar aplicação da versão planar ou não-planar do algoritmo. 
+\item Abordagem Linear Dementhon \cite{dementhon1995model} \cite{oberkampf1996iterative}  É realizado um teste para verificar aplicação da versão planar ou não-planar do algoritmo. 
 \item Abordagem Lowe baseada em um esquema de minimização não linear de Levenberg Marquartd. Precisa de inicialização por meio de Lagrange ou Dementhon.
 \item  Abordagem de Lowe Não Linear inicializada pela aboradagem de Lagrange.
 \end{itemize}
 
 \section{OpenCV}
 TODO
+
+
+\section{visp\_auto\_tracker}

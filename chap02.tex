@@ -1,7 +1,7 @@
 %!TEX root = <main.tex>
 %\chapter{Revisão Bibliográfica}
 \chapter{Conceitos de Robótica}
-Neste capitulo serão abordados os conceitos necessários para modelagem e controle de manipuladores robóticos, focando no que foi utilizado nesse projeto, para implementação no manipulador 4-DOF chamado de Tetis.
+Neste capitulo serão abordados os conceitos necessários para modelagem e controle de manipuladores robóticos, focando no que foi utilizado nesse projeto, para implementação no manipulador 4-DOF chamado de TETIS.
 
 \section{Cinemática Direta}
 Um manipulador robótico é composto de uma série de corpos rígidos denominados \textit{elos} conectados através de \textit{juntas} \cite{siciliano}. 
@@ -285,7 +285,7 @@ TODO
 \subsection{Estimação da Pose}
 O problema de estimar a \textit{pose} consiste em determinar a posição e orientação $\bm{T}_{CT}$ do alvo com respeito ao sistema de coordenadas da câmera. Considera-se que a geometria do alvo é conhecida, isto é um conjunto de pontos característicos $[X_i \; Y_i \; Z_i]$ com $i \in [1\; \cdots \; N]$, assim como os parâmetros intrínsecos da câmera. A imagem capturada pela câmera é processada e as coordenadas no plano da imagem $[u_i\; v_i]$ são determinadas utilizando algoritmos de visão computacional. Esse problema é conhecido como \textit{Perspective-n-Point}.
 
-Existem diversas abordagens para solucionar esse problema. Aqui será destacado o caso simples com 3 pontos e a abordagem de Dementhon para N pontos pois essa abordagem foi utilizada na implementação desse projeto. Maiores detalhes sobre implementações disponíveis em código aberto podem ser encontradas no apêndice \ref{chap:pose_est}. 
+Existem diversas abordagens para solucionar esse problema. Aqui será destacado o caso simples com 3 pontos e comentada a abordagem de Dementhon para N pontos pois essa abordagem foi utilizada na implementação desse projeto. Maiores detalhes sobre implementações disponíveis em código aberto podem ser encontradas no apêndice \ref{chap:pose_est}. 
 
 \subsubsection{P3P: Estimação da \textit{pose} com 3 pontos}
 Para entender o problema, considera-se o caso mais simples, com 3 pontos, já que, teoricamente como a \textit{pose} pode ser representada por 6 parametros independentes, três pontos seriam capazes de resolver o problema \cite{marchand2016pose}. Sejam $\bm{P_i} = [X_i \; Y_i \; Z_i ]^T$ onde $i = 1 \dots 3$ três pontos com coordenadas representadas no referencial da câmera. 
@@ -295,7 +295,7 @@ Primeiramente, é feita uma estimativa da coordenada de profundidade $Z_i$ de ca
 \begin{equation}
 d_{ij}^2 = w_i^2 + w_j^2 -2 w_i w_j \cos \theta_{ij}
 \end{equation}
-onde $d_{ij} = ||P_i - P_j||$, $w_i = ||P_i - C||$ e $w_j = ||P_j - C||$. Cada restrição pode ser escrita como 
+onde $d_{ij} = ||\bm{P}_i - \bm{P}_j||$, $w_i = ||\bm{P}_i - C||$ e $w_j = ||\bm{P}_j - \bm{C}||$. Cada restrição pode ser escrita como 
 \begin{equation}
 f_{ij}(w_i, w_j) = w_i^2 + w_j^2 - 2w_i w_j \cos \theta_{ij} - d_{ij}^2 = 0
 \end{equation}
@@ -315,7 +315,7 @@ g(x) = a_5 w^4 + a_4 w^3 + a_3 w^2 + a_2 w + a_1 = 0
 
 Essa equação possui solução fechada e como $w_i > 0$, então $w_1 = \sqrt{q}$. Logo, $w_1$ e $w_2$ são determinados unicamente a partir de $w_1$. Para obter solução única é preciso adicionar um quarto ponto, o que gera um sistema com mais restrições do que incógnitas. Uma possível abordagem é resolver o problema para subconjuntos de três pontos e encontrar a solução comum. No entanto isso não aumenta a precisão do resultado e se houver ruido pode ser difícil encontrar a solução comum. 
 
-Conhecidas as distâncias dos pontos do mundo a projeção no plano da imagem ... TODO ... obter transformação de similaridade.
+Conhecidas as distâncias $w_i$ dos pontos do mundo à câmera, essas distâncias são convertidas em coordenadas tridimensionais centradas na camera através de $\bm{P'}_i = w_i \bm{K}^{-1} \bm{p}_i$, onde $\bm{K}$ é a matriz de calibração da câmera. O último passo é determinar a orientação, uma transformação de similaridade pode ser obtida através de dois pares de pontos $\bm{P'}_i \leftrightarrow \bm{P}_i$. A solução pode ser obtida através de mínimos utilizando quaternions. A partir da estimativa da rotação a obtenção da translação e da escala seguem trivialmente. 
 
 Esse método é didático, porém não é robusto e é pouco preciso, além de que os dados redundantes (quarto ponto) não aumentam a precisão do resultado. Portanto, outros algoritmos foram propostos.
 

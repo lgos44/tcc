@@ -2,19 +2,34 @@
 
 Desde a década de 60, robôs tem sido utilizados em ambientes indústriais. Manipuladores robóticos foram capazes de aumentar a produtividade, a eficiência e garantir um maior controle de qualidade dos processos. Além de serem capazes de realizar tarefas repetitivas em uma linha de montagem, muitos manipuladores o fazem com maior precisão e rapidez que um ser humano.
 
-Recentemente além de linhas de produção da industria, a robótica tem encontrado aplicação em instalações \textit{offshore} de óleo e gás. Muitas empresas já tem utilizado soluções automatizadas tanto em ambientes submersos quanto acima do nível do mar. Braços robóticos tem sido de grande importância para executar tarefas que exigem interação mais complexa com o ambiente. Com isso em mente, foi desenvolvido um manipulador leve para o DORIS, robô guiado por trilhos para monitoração, inspeção e supervisão de ambientes não submersos de plataformas de petróleo.
+Recentemente além de linhas de produção da industria, a robótica tem encontrado aplicação em instalações \textit{offshore} de óleo e gás. Muitas empresas já tem utilizado soluções automatizadas tanto em ambientes submersos quanto acima do nível do mar. Braços robóticos tem sido de grande importância para executar tarefas que exigem interação mais complexa com o ambiente. Com isso em mente, foi desenvolvido um manipulador leve para o DORIS, robô guiado por trilhos para monitoração, inspeção e supervisão de ambientes não submersos de plataformas de petróleo \cite{xaud2016doris}.
 
 \section{DORIS}
 O uso de robôs em uma instalação de óleo e gás tem diversas vantagens. Pode reduzir o custo com manutenção de diversos sensores ao longo instalação e substituir humanos na realização de tarefas repetitivas, especialmente aquelas realizadas em ambientes perigosos, confinados ou prejudiciais a saúde. 
 
-O projeto DORIS, desenvolvido pela Universidade Federal do Rio de Janeiro, introduz um sistema robótico onde vagões guiados por trilhos carregam diversas câmeras, sensores e dispositivos para monitorar e inspecionar diferentes áreas e equipamento na parte \textit{topside} de plataformas.
+O projeto DORIS, desenvolvido pelo laboratório LEAD-GSCAR, da Universidade Federal do Rio de Janeiro, introduz um sistema robótico onde vagões guiados por trilhos carregam diversas câmeras, sensores e dispositivos para monitorar e inspecionar diferentes áreas e equipamento na parte \textit{topside} de plataformas.
 
 As tarefas desse robô consistem principalemente em: monitorar perfis de temperatura utilizando câmeras térmicas infravermelhas, supervisão de pessoal não autorizado, detecção de anomalias sonoras utilizando microfones, detecção de vasamentos de gás com sensores de hidrocarbonetos, inspeção de padrões de vibração de maquinário crítico, interação com interfaces touchscreen na plataforma, processamento de dados coletados, armazenamento e transmissão de áudio e vídeo em tempo real.
 
+A interação com o robô é feita através de um software, também desenvolvido pela equipe do LEAD-GSCAR. Através dele o operador é capaz de visualizar dados dos diversos sensores, reproduzir a transmissão de áudio e vídeo, enviar comandos de controle e configurar parâmetros, tudo através de uma interface gráfica customizável. A filosofia Software modular, genérico.
 
 \section{Manipulador DORIS}
-Algumas das tarefas 
+Considerando as tarefas mencionadas foi proposta a adição de um manipulador leve, de modo a extender o espaço de trabalho do robô. Com esse manipulador, pretende-se solucionar os problemas de
+\begin{itemize}
+\item mover uma câmera de modo a posicioná-la melhor ao longo da instalação
+\item posicionar um sensor de vibração corretamente sobre a superfície de um equipamento na plataforma
+\item interagir com \textit{touchscreens}
+\end{itemize}
 
+Foi dado a esse manipulador o nome TETIS. 
 
 \section{Motivação}
+Com o projeto mecânico do manipulador finalizado, segue a etapa de modelagem e implementação de estratégias de controle. Nesse contexto, insere-se esse trabalho. 
 
+Realizar a integração com a interface gráfica. 
+
+Utilizar a câmera para controle por servo visão onde o alvo pode ser um marcador em algum ponto de interesse como por exemplo uma máquina a ser inspecionada. 
+
+\section{Organização do trabalho}
+
+No primeiro capítulo o trabalho foi contextualizado, descrevendo os objetivos do projeto DORIS e de seu manipulador TETIS. No segundo capítulo são mostrados conceitos de robótica necessários para a modelagem e controle de manipuladores robóticos. No capítulo 3 esses conceitos são aplicados ao manipulador TETIS. No capítulo 4 são abordados detalhes das ferramentas e da arquitetura utilizada para a implementação do software. No capítulo 5, são mostrados e discutidos os resultados dos testes dos diferentes modos de controle implementados. 

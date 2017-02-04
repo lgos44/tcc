@@ -1,4 +1,4 @@
-\chapter{Tetis - Modelagem e Controle}
+\chapter{TETIS - Modelagem e Controle}
 
 
 \section{Modelo}
@@ -278,7 +278,7 @@ O controle de posição no espaço das juntas consiste em uma realimentação co
     % We start by placing the blocks
     \node [input, name=input] {};
     \node [sum, right of=input] (sum) {};
-    \node [block, right of=sum] (controller) {$K_j$};
+    \node [block, right of=sum] (controller) {$\bm{K}_j$};
     \node [block, right of=controller] (system) {$\ddfrac{1}{s}$};
     % We draw an edge between the controller and system block to 
     % calculate the coordinate u. We need it to place the measurement block. 
@@ -303,7 +303,7 @@ A lei de controle é dada por
 \bm{u} = \bm{K}_j (\bm{q}_d - \bm{q})
 \end{equation}
 onde 
-\[ K_j = \m {
+\[ \bm{K}_j = \m {
 	k_j & 0 & 0 \\ 
 	0 & k_j & 0 \\ 
 	0 &  0  & k_j
@@ -312,9 +312,12 @@ onde
 
 \subsection{Posição no Espaço Operacional}
 Para este modo considera-se o problema de controle de posição no espaço operacional conforme definido em \ref{eq:op_space}. 
+\begin{equation} \label{eq:lei_posicao}
+\bm{u} = \bm{J}_0^{-1}(\bm{q})  \bm{K}_t (\bm{x_d} - \bm{x})
+\end{equation}
 
 \subsection{Rastreamento de Trajetória}
-Para o rastreamento de trajetória considera-se o problema de seguir um referência no referencial da base $\bm{x}_d(t)$ que é função do tempo, conhecidos $\bm{x}_d(t)$ e $\bm{\dot{x}}_d(t)$. Conforme mostrado em \ref{controle_cinematico}, a lei de controle dada por 
+Para o rastreamento de trajetória considera-se o problema de seguir um referência no referencial da base $\bm{x}_d(t)$ que é função do tempo, conhecidos $\bm{x}_d(t)$ e $\bm{\dot{x}}_d(t)$. Para levar o erro assintoticament a zero, utiliza-se uma lei de controle proporcional com \textit{feedforward} utilizando oa inversa do Jacobiano Analítico. Conforme mostrado em \ref{controle_cinematico}, a lei de controle dada por 
 \begin{equation}
 \bm{u} = \bm{J}_0^{-1}(\bm{q}) (\dot{\bm{x}}_d + \bm{K}_t (\bm{x_d} - \bm{x}))
 \end{equation} 
@@ -325,7 +328,31 @@ Para o rastreamento de trajetória considera-se o problema de seguir um referên
 
 
 \subsection{Servo Visão}
-A matriz $\bm{K}$ da equação \eqref{eq:camera_projection} obtida através da calibração é:
+O controle por servo visão no manipulador TETIS é feito através de uma configuração \textit{eye-in-hand}, onde a câmera é montada no efetuador final do manipulador, utilizando a abordagem de Servo Visão Baseada em Posição (PBVS). A figura \ref{fig:efet_minoru} mostra a câmera utilizada e o efetuador com a câmera montada.
+A câmera em questão é uma \textit{Minoru 3D Webcam}, que possui dois sensores VGA CMOS, no entanto será utilizada apenas o da direita.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/manip_zoom.png}
+  \caption{Efetuador com câmera}
+  \label{fig:efetuador}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=0.8\linewidth]{./img/minoru.jpg}
+  \caption{Minoru Camera}
+  \label{fig:minoru}
+\end{subfigure}
+\label{fig:efet_minoru}
+\caption{Efetuador e câmera Minoru}
+\end{figure}
+
+
+O objetivo é deste modo de controle é rastrear um alvo, que é representado por um QR code como o da figura. Deseja-se que o efetuador rastreie sempre a orientação normal ao plano do alvo.
+
+A matriz de calibração $\bm{K}$ da equação \eqref{eq:camera_projection} obtida através do processo descrito em \cite{calibration_tutorial} é:
 
 \begin{equation}
 \bm{K} = \m {
@@ -341,9 +368,9 @@ A matriz $\bm{K}$ da equação \eqref{eq:camera_projection} obtida através da c
 }	
 \end{equation}
 
-Observando que o referêncial da câmera e do efetuador são dados pela figura \ref{fig:camera_ref}, podemos chegar a seguinte 
+Observando que o referêncial da câmera e do efetuador são dados pela figura \ref{fig:camera_ref}, podemos chegar a seguinte transformação homogênea
 
-\begin{equation}
+\begin{equation} \label{eq:tec}
 \bm{T}_{EC} = \m{
 	0 & 0 & 1 & -30 \\
 	0 & -1 & 0 & 101 \\
@@ -359,24 +386,86 @@ Observando que o referêncial da câmera e do efetuador são dados pela figura \
   \label{fig:camera_ref}
 \end{figure}
 
-\begin{align}
-(\bm{p}_t)_e &= (\bm{p}_c)_e + (\bm{p}_t)_e \\
-(\bm{p}_t)_e &= (\bm{p}_c)_e + \bm{R}_{ec} (\bm{p}_t)_c 
-\end{align}
+Para a servo visão baseada em posição, utiliza-se a seguinte lei de controle
+\begin{equation} \label{eq:lei_posicao}
+\bm{u} = \bm{J}_N^{-1}(\bm{q})  \bm{K}_t (\bm{x}_t - \bm{x})
+\end{equation}
+onde $\bm{x}_t$ e $\bm{x}$ estão representados no referencial do efetuador. Portanto precisamos saber a posição e orientação $\bm{x}_t$ do alvo em relação ao efetuador
+\begin{equation}
+\bm{T}_{ET} = \bm{T}_{EC} \bm{T}_{CT}
+\end{equation}
+onde $\bm{T}_{EC}$ é dado por \eqref{eq:tec} e $\bm{T}_{CT}$ obtemos através de algoritmos de estimação de posição e orientação a partir de visão computacional. 
 
+\begin{equation}
+\bm{x}_t = \m{ (\bm{p}_t)_e \\ \phi_t }
+\end{equation}
+onde $(\bm{p}_t)_e$ é o vetor de translação que pode ser obtido diretamente de $\bm{T}_{EC}$ e  $\phi_t$ é a orientação, que pode ser obtido de duas formas.
+
+A primeira alternativa é obter a rotação em torno de $x$ (\textit{pitch}) em relação ao referencial do efetuador, extraído de $\bm{T}_{ET}$. No entanto essa opção não permite que o alvo seja rotacionado em torno de $\bm{z}_c$, pois a rotação em torno de $\bm{x}_c$ não mais representará a inclinação do plano do alvo em relação a posição inicial, que faz o efetuador rastrear a direção normal ao alvo.
+
+Portanto, optou-se pela segunda alternativa. Projeta-se o eixo do alvo $(\bm{z}_t)_c$, representado do referencial da câmera, no plano $(\bm{z}_{t_0})_c \times (\bm{x}_{t_0})_c$, onde $(\bm{z}_{t0})_c$ indica o eixo de coordenadas do alvo $z_t$ em sua posição inicial conforme a figura \ref{fig:sist_coord}. Em seguida encontra-se o ângulo entre os vetores $(\bm{z}_{t_0})_c$ e $(\bm{z}_{t_0})_c$. 
+
+Dada a matriz de rotação $\bm{R}_{CT_0}$, da câmera à posição inicial
+\begin{equation}
+\bm{R}_{CT_0} = \m{ (\bm{x}_{t_0})_c & (\bm{y}_{t_0})_c  & (\bm{z}_{t_0})_c} = 
+\m{
+	0 & 1 & 0 \\
+	1 & 0 & 0 \\
+	0 & 0 & -1
+}
+\end{equation}
+é conhecida a normal ao plano do alvo é $\bm{n} = \bm{x}_{t_0} \times \bm{z}_{t_0} =  \bm{y}_{t_0} $. A matrix de projeção linear \cite{strang} de um vetor em um plano é dada por
+\begin{equation}
+P = \mathcal{I} - \bm{n} \bm{n}^T,
+\end{equation}
+logo para $\bm{n} = \bm{y}_{t_0}$ temos 
+\begin{equation}
+\bm{P} =  \m{
+	 0  &   0  &   0 \\
+     0  &   1  &   0 \\
+     0  &   0  &   1
+}.
+\end{equation}
+
+O vetor projetado no plano é dado por
+\begin{equation}
+\bm{z'}_{t} = \bm{P} \bm{z}_{t},
+\end{equation}
+assim basta apenas encontrar o ângulo entre os vetores $\bm{z'}_{t}$ e $\bm{z}_{t_0}$, que pode ser calculado pela fórmula do Cosseno \cite{strang} 
+\begin{equation}
+\phi_t = \cos^{-1} \left( \frac{\bm{z'}^T_{t} \bm{z}_{t_0} } {||\bm{z'}_{t}|| ||\bm{z}_{t_0}||} \right)
+\end{equation}
+
+
+%\begin{align}
+%(\bm{p}_t)_e &= (\bm{p}_c)_e + (\bm{p}_t)_e \\
+%(\bm{p}_t)_e &= (\bm{p}_c)_e + \bm{R}_{ec} (\bm{p}_t)_c 
+%\end{align}
+
+
+O algoritmo de controle pode ser resumido por:
 \begin{align}
-\bm{e} = 
-\bar{u} = \bm{K}_v \bm{e}
+\bm{e} &= \bm{x}_t - \bm{x} \\
+\bm{\bar{u}} &= \bm{K}_v \bm{e}  \\
+\bm{u} &= \bm{J}_N^{-1} \bm{e}
 \end{align}
 
 \subsection{Força}
+No efetuador do manipulador TETIS há um sensor de força da \textit{OptoForce Kft.}, modelo OMD-20-FE-200N. Os sensores Optoforce 3D medem a magnitude e direção de forças $F_x$, $F_y$ e $F_z$ utilizando principios ópticos \cite{optoforce}. O sensor utiliza uma interface USB. 
+
+\begin{figure}[!ht]
+\centering
+  \includegraphics[width=\linewidth]{./img/optoforce.png}
+  \caption{Optoforce OMD-20-FE-200N \cite{optoforce}}
+  \label{fig:optoforce}
+\end{figure}%
 
 \subsubsection{Float}
 
 \subsubsection{Approach}
 Considera-se o problema de controle de força na direção de \textit{approach} para o manipulador robótico 4-DOF em questão. A realimentação de força é feita com o uso do sensor descrito em \ref{sec:sensor_forca}. O objetivo de controle é rastrear uma entrada na forma de um degrau de força, a ser aplicada em uma placa de poliestireno montada em um suporte fixado na vertical como mostra a figura \ref{fig:suporte_forca}.  
 
-É possível modelar o ambiente (força de contato), ou seja, a placa de poliestireno, como uma mola linear, através da \textit{Lei de Hooke}: \cite{bib:toni}
+É possível modelar o ambiente (força de contato), ou seja, a placa de poliestireno, como uma mola linear, através da \textit{Lei de Hooke}: \cite{toni}
 \begin{equation}
 f = -k_s (x - x_s)
 \end{equation}

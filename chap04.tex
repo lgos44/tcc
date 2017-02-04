@@ -1,6 +1,8 @@
 \chapter{Implementação}
 A implementação dos algoritmos de controle detalhados nos capítulos anteriores for feita como extensão ao software RobotGUI desenvolvido pela equipe do LEAD-GSCAR, idealizado por Alex F. Neves Msc. 
 
+Proporciona uma infraestrutura para carregar componentes modulares de software para robôs, juntamente com classes altamente reutilizáveis. Esses sistema permite inicializar módulos de software com uma interface gráfica associada, de modo a interagir com eles. Por exemplo, ao iniciar componente que obtem dados de um sensor, é iniciada na interface gráfica uma \textit{Tool} que permite visualizar os dados e configurar parâmetros. Essa conexão é dinâmica, permitindo que componentes sejam iniciados de forma independente e até mesmo em momentos diferentes.  
+
 %\section{Motivação} 
 %Modular, genérico, ...
 
@@ -15,21 +17,61 @@ Os seguintes softwares e \textit{frameworks} foram utilizados:
 \end{itemize}
 
 \section{ROS}
+Escrever software para robôs tem se tornado particularmente difícil conforme a escala e o escopo dos projetos de robótica continua a crescer. Robôs podem ser de diferentes tipos e ter hardware completamente distinto, o que torna a reutilização de código difícil. Além disso, a quantidade de código necessário para um projeto de robótica pode ser intimidadora, indo desde software a nível de \textit{driver} até percepção e raciocício, por exemplo. Como o nível de conhecimento e experiência necessário é maior do que um pesquisador sozinho pode ter, arquiteturas de software para robótica devem suportar integração. 
 
-\section{Conceitos}
+Em \cite{quigley2009ros} é descrito o framework ROS, que busca enfrentar esses desafios. A enfase dada a projetos integrados de grande escala é útil em uma variedade de aspectos conforme sistemas robóticos tornam-se mais complexos. Os objetivos de projeto do ROS podem ser resumidos como: 
+\begin{itemize}
+\item \textbf{Peer-to-peer ou ponto-a-ponto:} Um sistema construido utilizando ROS consiste de um conjunto de processos, potencialmente em diferentes máquinas hospedeiras e conectados entre si em uma topologia ponto-a-ponto. Tipicamente existe um ou mais computadores embarcados conectados via \textit{ethernet}, que se comunicam via rede \textit{wireless} com máquinas com maior poder computacional, capazes de realizar tarefas como visão computacional e reconhecimento de fala. 
+
+\item \textbf{Multi-Linguagem:} Muitos possuem preferência em relação a determinadas linguagens de programação devido a fatores como tempo para escrita do código, facilidade de \textit{debugging}, sintaxe ou eficiência de execução. ROS suporta as linguagens C++, Python, Octave e LISP. O ROS faz uma especificação a nível de mensagens. A configuração e negociação da conexão ponto a ponto ocorre através de XML-RPC \footnote{RPC, do inglês, Remote Procedure Call é um termo da computação distribuída usado para quando um programa de computador causa a execução de um procedimento (subrotina) em outro espaço de endereçamento (outro computador na mesma rede).}, para o qual existem implementações na maioria das linguagens.   
+
+É utilizada uma linguagem de definição de interface (IDL) que descreve as mensagens enviadas entre módulos. Código nativo de cada linguagem é gerado a partir dessas mensagens. 
+
+
+\item \textbf{Baseado em ferramentas:} Para dar conta da complexidade do ROS seus desenvolvedores optaram por um design \textit{microkernel}, em contraste a um design monolítico. Essas ferramentas cumprem tarefas como navegar pela árvore de código fonte, configurar parâmetros, visualizar a topologia dos nós, publicar e exibir mensagens, entre outros.
+
+\item \textbf{Fino:} Muitos projetos de software para robótica possuem drivers e algoritmos que poderiam ser reutilizados mas estão altamente "amarrados" ao software em questão, de modo que é difícil extrair e reutilizar essas funcionalidades.
+
+No ROS, encoraja-se a encapsular todos os drivers e algoritmos em bibliotecas independentes. 
+
+
+\item \textbf{Gratuito e código aberto:} Todo o código fonte do ROS está disponível publicamente. Isso é critico para facilitar a descoberta e correção de erros. É distribuido sob os termos da licença BSD.  
+
+\end{itemize}
+
+\subsection{Conceitos Básicos}
+Esta seção se baseia em \cite{ros_concepts}. 
+
+\subsection{Nível de Sistema de Arquivos}
+
+\subsection{Nível de Grafo de Computação}
+Os conceitos a nível de grafo de computação descrevem elementos da rede ponto-a-ponto de processos ROS que estão em execução juntos. Esses elementos são descritos abaixo com seus nomes mantidos em inglês por fidelidade ao original.
+\begin{description}
+\item[Nodes:] Nós são processos que executam algum tipo de computação. ROS foi projetado para ser modular, assim um sistema de controle de um robô geralmente tem múltiplos nós. 
+\item[Master:] Devido a topologia ponto-a-ponto é necessário um mecanismo de busca que os processos se encontrem. O mestre é um servidor de nomes, ou seja, provê registro e busca de nomes.
+\item[Parameter Server:] O servidor de parâmetros permite que dados sejam armazendados em uma localização central. Faz parte do \textit{Master}.
+\item[Messages:] Nós comunicam entre si passando mensagens. Uma mensagen consistem apenas de uma estrutura de dados. Mensagens suportam tipos primitivos, \textit{arrays} de tipos primitivos er outras estruturas aninhadas. 
+\item[Topics:]
+\item[Services:]
+\end{description}
+
+\subsection{Nível de Comunidade}
+
+\section{Arquitetura do RobotGUI}
 
 Primeiramente define-se como Computador Base aquele que será utilizado pelo operador para controlar e visualizar dados do robô. Define-se Computador Embarcado, ou do Robô aquele que está no robô conectado a todos os equipamentos, sensores e atuadores. O software executa módulos diferentes no robô e na base.
 
-A arquitetura do RobotGUI baseia-se nos seguintes conceitos principais:
+A arquitetura do RobotGUI baseia-se nos seguintes conceitos principais \cite{doris_software_architecture}:
 
 \begin{itemize}
 \item \textbf{Components}: Lidam com a comunicação e processam dados no Computador Base. São essencialmente \textit{Nodelets} de ROS, podendo utilizar funcionalidades como comunicação através de mensagens e serviços, utilizar parâmetros e bibliotecas de ROS. Permitem maior modularidade pois componentes podem ser inicializados independentemente do \textit{RobotGUI}.
 
 \item \textbf{Tools:} São elementos gráficos da interface para o usuário. São utilizadas para interagir com o robô e visualizar informação. São criadas como \textit{plugins} para o ROS \textit{pluginlib} e independetes de qualquer biblioteca do ROS.
 
-\item \textbf{Interação entre Compontents e Tools:} Tools e Components podem se conectar, quando isso ocorre eles interagem entre si a nível de "ponteiro para objeto". Essa conexão permite que o desenvolvimento da interface através do \textit{Qt} seja quase que independente do desenvolvimento do código que lida com hardware, lógica e comunicação.
+\item \textbf{Interação entre Compontents e Tools:} Tools e Components podem se conectar, quando isso ocorre eles interagem entre si a nível de "ponteiro para objeto"s. Essa conexão permite que o desenvolvimento da interface através do \textit{Qt} seja quase que independente do desenvolvimento do código que lida com hardware, lógica e comunicação.
 
-\item \textbf{RobotGUI}
+\item \textbf{RobotGUI:} É uma GUI \footnote{Guided User Interface} em nó de ROS. Permite que múltiplas janelas sejam criadas. O usuário pode decidir o que é exibido. Ao clicar nos \textit{toolbuttons}, uma janela referente a \textit{Tool} aparece. Essa janela pode ser encaixada na janela principal. 
 \end{itemize}
 
 
+\section{ManipulatorController}
