@@ -219,7 +219,15 @@ A equação elementar para descrever a formação de imagem com uma lente é a L
 \end{equation} 
 onde $z_o$ é a distância até o objeto, $z_i$ é a distância ao plano da imagem e $f$ é a distância focal da lente.
 
-Em visão computacional geralmente o modelo de perspectiva central mostrado na figura \ref{fig:lens_model}.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.8\linewidth]{./img/camera_model2.png}
+  \caption{}
+\label{fig:camera_model}
+\caption{Modelo da câmera (disponível em \cite{opencvCameraCalibration})}
+\end{figure}
+
+Em visão computacional geralmente é utilizado o modelo de perspectiva central mostrado na figura \ref{fig:camera_model}.
 Seja $\bm{P} = [X\; Y\; Z]^T$ as coordenadas de um ponto do mundo e $\bm{p} = [x\;y]^T$ as coordenadas projetadas no plano da imagem por
 \begin{equation}
 x = f \frac{X}{Z}, \quad y = f \frac{Y}{Z}
@@ -239,9 +247,25 @@ x = f \frac{X}{Z}, \quad y = f \frac{Y}{Z}
 Podemos retornar às coordenadas não-homogêneas com:
 \[ x = \frac{x'}{z'} \qquad y = \frac{y'}{z'}\]
 
-O ponto $\bm{P}$ do mundo pode ser representado em coordenadas homogêneas como $(\bm{\tilde{P}})_C = [X \; Y \; Z \; 1]^T$ no referencial da câmera.
+O ponto $\bm{P}$ do mundo pode ser representado em coordenadas homogêneas como $(\bm{\tilde{P}})_C = [X \; Y \; Z \; 1]^T$no referencial da câmera. A projeção de perspectiva é escrita em forma linear por 
 
+\begin{equation} \label{eq:projpersp}
+\tilde{\bm{p}} = \m{
+    f & 0 & 0 & 0 \\
+    0 & f & 0 & 0 \\
+    0 & 0 & 1 & 0
+} (\tilde{\bm{P}})_C
+\end{equation}
+
+
+Uma imagem digital pode ser interpretada como uma matriz bidimensional de \textit{pixels}. As coordenadas de um ponto são expressas, portanto, em \textit{pixels} como um vetor de números inteiros $[u\; v]$. As coordenadas no plano da imagem se relacionam com as coordenadas em \textit{pixels} por
 \begin{equation}
+u =  \frac{x}{\rho_w} + u_0 \qquad v = \frac{y}{\rho_h} + v_0
+\end{equation}
+
+Reescrevendo a equação \eqref{eq:projpersp} adicionando uma matriz $\bm{K}$ de parâmetros
+
+\begin{equation} \label{eq:camera_parameter}
 \bm{\tilde{p}} = 
 \m {
 	1/\rho_w & 0 & u_0 \\
@@ -255,11 +279,7 @@ O ponto $\bm{P}$ do mundo pode ser representado em coordenadas homogêneas como 
 (\tilde{\bm{P}})_C
 \end{equation}
 
-Uma imagem digital pode ser interpretada como uma matriz bidimensional de \textit{pixels}. As coordenadas de um ponto são expressas, portanto, em \textit{pixels} como um vetor de números inteiros $[u\; v]$. As coordenadas no plano da imagem se relacionam com as coordenadas em \textit{pixels} por
-\begin{equation}
-u =  \frac{x}{\rho_w} + u_0 \qquad v = \frac{y}{\rho_h} + v_0
-\end{equation}
-
+A câmera possui uma posição arbitrária com respeito ao sistema de coordenadas inercial, logo a posição do ponto com respeito a câmera é dada por  $(\bm{P})_C = \bm{T}_{0C}^{-1} \bm{P}$. Utilizando a equação \eqref{eq:camera_parameter} podemos escrever a projeção da câmera na sua forma geral como
 
 \begin{align}\label{eq:camera_projection}
 \bm{\tilde{p}} =& 
@@ -336,3 +356,24 @@ Especifica-se uma posição desejada relativa ao sistema de coordenadas do alvo 
 \begin{equation}
  \bm{T}_\Delta  =   \bm{T}_{CT} \bm{T}_{C^*T}^{-1}
 \end{equation}
+
+Com isso é possível aplicar uma estratégia de controle cinemático de posição no referencial do efetuador de modo a atingir a posição e orientação desejada. A lei de controle
+\begin{equation}
+\bm{u} = (\bm{J}_A)_N^{-1}(\bm{q})\bm{K}_v[(\bm{x}_t)_N - (\bm{x})_N]
+\end{equation}
+é capaz de fazer $\bm{e}(t) \rightarrow 0$ quando $t \rightarrow \infty$ se $\dot{\bm{x}}_t = 0$.
+
+\section{Controle de Força}
+
+Em \cite{leite2011servo} utiliza-se o controle de força com base em uma abordagem de controle cinemático. Considerando o problema em que o objetivo de controle é seguir uma força desejada variante no tempo $f_d(t)$ a partir da força de contato $f$ ao longo da superfície de restrição, medida com um sensor de força montado no punho do robô:
+\begin{equation} \label{eq:problema_ctrl_forca}
+f \rightarrow f_d(t), \qquad e_f = f_d(t) - f \rightarrow 0
+\end{equation}
+
+A força de contato pode ser modelada como uma mola linear, através da Lei de Hooke:
+\begin{equation} \label{eq:hooke_mat}
+\bm{f} = -\bm{K}_s (\bm{p} - \bm{d}_s)
+\end{equation}
+onde $\bm{p}$ é a posição do ponto de contato e $\bm{d}_s$ é um ponto da superfície, $\bm{K}_s = k_s I$ é a matriz de rigidez e $k_s > 0$ é o coeficiente de rigidez da superfície.
+
+Derivando \eqref{eq:problema_ctrl_forca} e \eqref{eq:hooke_mat} em relação ao tempo

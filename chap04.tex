@@ -14,6 +14,7 @@ Os seguintes softwares e \textit{frameworks} foram utilizados:
 \item C++ como linguagem de programação
 \item ROS como \textit{framework} principal utilizado o RobotGUI, fornecendo comunicação entre nós através de mensagens e serviços. Será descrito mais detalhadamente na próxima seção.
 \item Qt como \textit{framework} para elaboração da interface gráfica. 
+\item Julia Language como linguagem auxiliar na elaboração de algoritmos de controle modificáveis em tempo de execução
 \end{itemize}
 
 \section{ROS}
@@ -40,22 +41,35 @@ No ROS, encoraja-se a encapsular todos os drivers e algoritmos em bibliotecas in
 \end{itemize}
 
 \subsection{Conceitos Básicos}
-Esta seção se baseia em \cite{ros_concepts}. 
+Esta seção se baseia em \cite{ros_concepts} e busca detalhar conceitos do funcionamento e arquitetura do ROS necessários ao entendimento do software desenvolvido nesse trabalho. 
 
-\subsection{Nível de Sistema de Arquivos}
+%\subsection{Nível de Sistema de Arquivos}
 
 \subsection{Nível de Grafo de Computação}
 Os conceitos a nível de grafo de computação descrevem elementos da rede ponto-a-ponto de processos ROS que estão em execução juntos. Esses elementos são descritos abaixo com seus nomes mantidos em inglês por fidelidade ao original.
 \begin{description}
 \item[Nodes:] Nós são processos que executam algum tipo de computação. ROS foi projetado para ser modular, assim um sistema de controle de um robô geralmente tem múltiplos nós. 
+
 \item[Master:] Devido a topologia ponto-a-ponto é necessário um mecanismo de busca que os processos se encontrem. O mestre é um servidor de nomes, ou seja, provê registro e busca de nomes.
+
 \item[Parameter Server:] O servidor de parâmetros permite que dados sejam armazendados em uma localização central. Faz parte do \textit{Master}.
-\item[Messages:] Nós comunicam entre si passando mensagens. Uma mensagen consistem apenas de uma estrutura de dados. Mensagens suportam tipos primitivos, \textit{arrays} de tipos primitivos er outras estruturas aninhadas. 
-\item[Topics:]
-\item[Services:]
+
+\item[Messages:] Nós comunicam entre si passando mensagens. Uma mensagen consistem apenas de uma estrutura de dados. Mensagens suportam tipos primitivos, \textit{arrays} de tipos primitivos ou outras estruturas aninhadas. 
+
+\item[Topics:] Um nó envia uma mensagem publicando a um dado tópico. O nome do tópico é utilizado para identificar o conteúdo da mensagem. Um outro nó que esteja interessado nesse conteúdo pode subscrever ao tópico. Podem existir múltiplos \textit{publishers} e \textit{subscribers} para o mesmo tópico e um nó pode publicar e/ou subscrever a multiplos tópicos. 
+
+\item[Services:] Em muitos casos é necessário ter um mecanismo de comunicação um para um de modo a lidar com interações do tipo pedido/resposta. Isso é feito através de serviços, que são definidos por um par de estruturas como as mensagens, uma para o pedido e outra para a resposta. Um nó oferece um serviço sob um nome e um cliente utiliza o serviço mandando um mensagem de pedido e esperando uma resposta. As bibliotecas do ROS apresentam essa interação na forma de um chamada de procedimento remoto (RPC).
+
+\item[Bags:] Bags são um formato para salvar e reproduzir dados de mensagens de ROS ao longo do tempo. São úteis para salvar dados de sensores, por exemplo, que são difíceis de coletar mas necessários para o desenvolvimento de algoritmos. 
 \end{description}
 
-\subsection{Nível de Comunidade}
+O \textit{ROS Master} funciona como um servidor de nomes. Ele armazena informação de registro para os nós, que se comunicam com o Master para reportar sua informação de registro. Conforme os nós se comunicam com o \textit{Master}, eles podem receber informação sobre outros nós registrados e fazer as conexões apropriadas. \textit{Master} 
+
+Nós conectam-se diretamente a outros nós, o \textit{Master} somente fornece informação de busca, como um servidor DNS. Nós que subscrevem a um tópico vão solicitar conexão aos nós que publicam naquele tópico e irão estabelecer a conexão de acordo com um protocolo de conexão concordado. O protocolo mais comum é chamado de TCPROS, que utiliza sockets TCP/IP padrão.
+
+Essa arquitetura permite uma operação desacoplada. Nós, tópicos, serviços e parametros possuem nomes. Por meio deles sistemas maiores e mais complexos podem ser construídos. É possível remapear nomes, de modo que um programa compilado  pode ser reconfigurado para operar com uma topologia diferente. 
+
+%\subsection{Nível de Comunidade}
 
 \section{Arquitetura do RobotGUI}
 

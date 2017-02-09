@@ -22,44 +22,107 @@ onde o período $T = 1/f = 1s$ e a amplitude $A = 0.5 rad/s$
 
 
 \section{Controle de Posição no Espaço das Juntas}
-TODO 
 
-\section{Controle de Posição no Espaço Operacional}
-Neste experimento, demonstra-se o controle no espaço operacional.
-A posição inicial é $\bm{x} =[ 552.6232 \; 57.0000 \; -67.1751 \; 0.0000]^T$. 
-Ao iniciar, $\bm{x_d} =[ 550 \; 57 \; -100 \; 0]^T$. Em seguida, após os 9s a orientação é alterada para $60^o$, ou seja $\bm{x_d} =[ 550 \; 57 \; -100 \; 1.0472]^T$. Após os 15 segundos a orientação é alterada para $-60^o$, ou seja $\bm{x_d} =[ 550 \; 57 \; -100 \; -1.0472]^T$. 
-
-% È $\begin{bsmallmatrix} 552.6232 & 57.0000 & -67.1751 & 0.0000 \end{bsmallmatrix}^T$ ou $\vect{552.6232, 57.0000, -67.1751, 0.0000}$
+Neste experimento foi testado controle de posição no espaço das juntas, partindo da posição $\bm{q} =[ 0 \;\; -\pi/2 \;\; 0 \;\; 0]^T$, deseja-se atinjir a posição $\bm{q} =[ 0 \;\; -\pi/4 \;\; \pi/2  \;\; -\pi/4]^T$
 \begin{figure}[H]
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=\linewidth]{./img/position/x1.eps}
-  \caption{$x_1$, $x_{d1}$ e $e_1$}
+  \includegraphics[width=\linewidth]{./img/joint_test1/q1.eps}
+  \caption{Junta 1}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=\linewidth]{./img/position/x2.eps}
-  \caption{$x_2$, $x_{d2}$ e $e_2$}
+  \includegraphics[width=\linewidth]{./img/joint_test1/q2.eps}
+  \caption{Junta 2}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=\linewidth]{./img/position/x3.eps}
-  \caption{$x_3$, $x_{d3}$ e $e_3$}
+  \includegraphics[width=\linewidth]{./img/joint_test1/q3.eps}
+  \caption{Junta 3}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=\linewidth]{./img/position/x4.eps}
-  \caption{$x_4$, $x_{d4}$ e $e_4$}
+  \includegraphics[width=\linewidth]{./img/joint_test1/q4.eps}
+  \caption{Junta 4}
   \label{fig:sub2}
 \end{subfigure}
 \caption{Controle de Posição no Espaço das Juntas}
 \label{fig:test}
 \end{figure}
 
+
+\section{Controle de Posição no Espaço Operacional}
+
+\subsection{Experimento 1}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/position1/x1.eps}
+  \caption{$x$}
+  \label{fig:sub1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/position1/x2.eps}
+  \caption{$y$}
+  \label{fig:sub2}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/position1/x3.eps}
+  \caption{$z$}
+  \label{fig:sub1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/position1/x4.eps}
+  \caption{$\phi$}
+  \label{fig:sub2}
+\end{subfigure}
+\caption{Controle de Posição no Espaço Operacional}
+\label{fig:test}
+\end{figure}
+
+\subsection{Experimento 2}
+
+Neste experimento, demonstra-se o controle no espaço operacional.
+A posição inicial é $\bm{x} =[ 550 \; 57 \; -100 \; 0]^T$. O gráfico \ref{fig:pos_exp2_phi} a orientação é alterada para $60^o$, ou seja $\bm{x_d} =[ 550 \; 57 \; -100 \; 1.0472]^T$. Em seguida, a orientação é alterada para $-60^o$, ou seja $\bm{x_d} =[ 550 \; 57 \; -100 \; -1.0472]^T$. 
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/position2/x1.eps}
+  \caption{$x$}
+  \label{fig:sub1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/position2/x2.eps}
+  \caption{$y$}
+  \label{fig:sub2}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/position2/x3.eps}
+  \caption{$z$}
+  \label{fig:sub1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/position2/x4.eps}
+  \caption{$\phi$}
+  \label{fig:pos_exp2_phi}
+\end{subfigure}
+\caption{Controle de Posição no Espaço Operacional}
+\label{fig:test}
+\end{figure}
 
 \section{Rastreamento de Trajetória}
 
@@ -119,14 +182,14 @@ Onde $\omega_n = \pi/10$
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=\linewidth]{./img/traj_1_k1/error0.eps}
-  \caption{$e_1$}
+  \includegraphics[width=\linewidth]{./img/traj_1_k1/error.eps}
+  \caption{$e_1$ e $e_3$}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=\linewidth]{./img/traj_1_k1/error2.eps}
-  \caption{$e_3$}
+  \includegraphics[width=\linewidth]{./img/traj_1_k1/u.eps}
+  \caption{$\bm{u}(t)$}
   \label{fig:sub2}
 \end{subfigure}
 \caption{Trajetória 1: Destaque para o erro $e_1$ e $e_3$ com $\bm{K}_t = \bm{I}$}
@@ -138,17 +201,19 @@ Podem-se observar diversos picos no gráfico do erro na figura \ref{fig:erro_tra
 
 \subsection{Trajetória 2}
 A trajetória a ser rastreada é dada pelas equações:
+
+
 \begin{align}
 \bm{x_d} &= \m{ 
-\ddfrac{100 \cos(t)}{\sin^2(t) + 1} + 500 &
-57 &
-\ddfrac{100\cos(t) \sin(t)}{\sin^2(t) + 1} -50 & 
+\ddfrac{100 \cos(t)}{\sin^2(t) + 1} + 500 \\
+57 \\
+\ddfrac{100\cos(t) \sin(t)}{\sin^2(t) + 1} -50 \\
 0
-}^T \\
+}^T  &&
 \bm{\dot{x}_d} &= \m{
-\ddfrac{100\sin(t) (\sin^2(t) -3 )}{(\sin^2(t) + 1)^2} &
-0 &
-\ddfrac{-(300 \sin^2(t) - 100)}{(\sin^2(t) + 1)^2} &
+\ddfrac{100\sin(t) (\sin^2(t) -3 )}{(\sin^2(t) + 1)^2} \\
+0 \\
+\ddfrac{-(300 \sin^2(t) - 100)}{(\sin^2(t) + 1)^2} \\
 0}^T
 \end{align}
 
@@ -251,13 +316,13 @@ A trajetória a ser rastreada é dada pelas equações:
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=\linewidth]{./img/traj_2_k5/error0.eps}
+  \includegraphics[width=\linewidth]{./img/traj_2_k5/error.eps}
   \caption{$e_1$}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=\linewidth]{./img/traj_2_k5/error2.eps}
+  \includegraphics[width=\linewidth]{./img/traj_2_k5/u.eps}
   \caption{$e_3$}
   \label{fig:sub2}
 \end{subfigure}
@@ -275,25 +340,25 @@ Neste experimento a referência de força é configurada para zero, logo é poss
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=\linewidth]{./img/float/Fx.eps}
-  \caption{$Fx$}
+  \includegraphics[width=\linewidth]{./img/float2/Fx.eps}
+  \caption{$F_x$}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=\linewidth]{./img/float/Fy.eps}
-  \caption{$Fy$}
+  \includegraphics[width=\linewidth]{./img/float2/Fy.eps}
+  \caption{$F_y$}
   \label{fig:sub2}	
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=\linewidth]{./img/float/Fz.eps}
-  \caption{$Fz$}
+  \includegraphics[width=\linewidth]{./img/float2/Fz.eps}
+  \caption{$F_z$}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=\linewidth]{./img/float/xz.eps}
+  \includegraphics[width=\linewidth]{./img/float2/xz.eps}
   \caption{Plano $xz$}
   \label{fig:sub2}
 \end{subfigure}
