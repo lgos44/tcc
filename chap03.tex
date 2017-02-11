@@ -318,7 +318,7 @@ Para este modo considera-se o problema de controle de posição no espaço opera
 é capaz de levar o $\bm{e} \rightarrow 0$ quando $t \rightarrow \infty$.
 
 \subsection{Rastreamento de Trajetória}
-Para o rastreamento de trajetória considera-se o problema de seguir um referência no referencial da base $\bm{x}_d(t)$ que é função do tempo, conhecidos $\bm{x}_d(t)$ e $\bm{\dot{x}}_d(t)$. Para levar o erro assintoticament a zero, utiliza-se uma lei de controle proporcional com \textit{feedforward} utilizando oa inversa do Jacobiano Analítico. Conforme mostrado em \ref{controle_cinematico}, a lei de controle dada por 
+Para o rastreamento de trajetória considera-se o problema de seguir um referência no referencial da base $\bm{x}_d(t)$ que é função do tempo, conhecidos $\bm{x}_d(t)$ e $\bm{\dot{x}}_d(t)$. Para levar o erro assintoticamente a zero, utiliza-se uma lei de controle proporcional com \textit{feedforward} utilizando a inversa do Jacobiano Analítico. Conforme mostrado em \ref{controle_cinematico}, a lei de controle dada por 
 \begin{equation}
 \bm{u} = \bm{J}_0^{-1}(\bm{q}) (\dot{\bm{x}}_d + \bm{K}_t (\bm{x_d} - \bm{x}))
 \end{equation} 
@@ -369,7 +369,7 @@ A matriz de calibração $\bm{K}$ da equação \eqref{eq:camera_projection} obti
 }	
 \end{equation}
 
-Observando que o referêncial da câmera e do efetuador são dados pela figura \ref{fig:camera_ref}, podemos chegar a seguinte transformação homogênea
+Observando que o referencial da câmera e do efetuador são dados pela figura \ref{fig:camera_ref}, podemos chegar a seguinte transformação homogênea
 
 \begin{equation} \label{eq:tec}
 \bm{T}_{EC} = \m{
@@ -382,10 +382,18 @@ Observando que o referêncial da câmera e do efetuador são dados pela figura \
 
 \begin{figure}[!h]
   \centering
-  \includegraphics[width=0.8\linewidth]{./img/camera.png}
+  \includegraphics[width=0.8\linewidth]{./img/effector2}
   \caption{Sistemas de coordenadas da câmera e do efetuador}
   \label{fig:camera_ref}
 \end{figure}
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=0.8\linewidth]{./img/camera_target}
+  \caption{Sistemas de coordenadas da câmera e do alvo}
+  \label{fig:camera_target}
+\end{figure}
+
 
 Para a servo visão baseada em posição, utiliza-se a seguinte lei de controle
 \begin{equation} \label{eq:lei_posicao}
@@ -402,9 +410,17 @@ onde $\bm{T}_{EC}$ é dado por \eqref{eq:tec} e $\bm{T}_{CT}$ obtemos através d
 \end{equation}
 onde $(\bm{p}_t)_e$ é o vetor de translação que pode ser obtido diretamente de $\bm{T}_{EC}$ e  $\phi_t$ é a orientação, que pode ser obtido de duas formas.
 
-A primeira alternativa é obter a rotação em torno de $x$ (\textit{pitch}) em relação ao referencial do efetuador, extraído de $\bm{T}_{ET}$. No entanto essa opção não permite que o alvo seja rotacionado em torno de $\bm{z}_c$, pois a rotação em torno de $\bm{x}_c$ não mais representará a inclinação do plano do alvo em relação a posição inicial, que faz o efetuador rastrear a direção normal ao alvo.
+A primeira alternativa é obter a rotação em torno de $x$ (\textit{pitch}) em relação ao referencial do efetuador, extraído de $\bm{T}_{ET}$. No entanto essa opção não permite que o alvo seja rotacionado em torno de $\bm{z}_c$, pois a rotação em torno de $\bm{x}_c$ não mais representará a inclinação do plano do alvo em relação a posição inicial, que faz o efetuador rastrear a direção normal ao alvo. A figura \ref{fig:projection} ilustra isso. 
 
-Portanto, optou-se pela segunda alternativa. Projeta-se o eixo do alvo $(\bm{z}_t)_c$, representado do referencial da câmera, no plano $(\bm{z}_{t_0})_c \times (\bm{x}_{t_0})_c$, onde $(\bm{z}_{t0})_c$ indica o eixo de coordenadas do alvo $z_t$ em sua posição inicial conforme a figura \ref{fig:sist_coord}. Em seguida encontra-se o ângulo entre os vetores $(\bm{z}_{t_0})_c$ e $(\bm{z}_{t_0})_c$. 
+Portanto, optou-se pela segunda alternativa. Projeta-se o eixo do alvo $(\bm{z}_t)_c$, representado do referencial da câmera, no plano $(\bm{z}_{t_0})_c \times (\bm{x}_{t_0})_c$, onde $(\bm{z}_{t0})_c$ indica o eixo de coordenadas do alvo $z_t$ em sua posição inicial conforme a figura \ref{fig:camera_target}. Em seguida encontra-se o ângulo entre os vetores $(\bm{z}_{t_0})_c$ e $(\bm{z}_{t_0})_c$. 
+
+\begin{figure}[!ht]
+\centering
+  \includegraphics[width=0.3\linewidth]{./img/projection.eps}
+  \caption{Caso em que a rotação em torno de $\bm{x}_c$ não representa a inclinação do plano do alvo.}
+  \label{fig:projection}
+\end{figure}%
+
 
 Dada a matriz de rotação $\bm{R}_{CT_0}$, da câmera à posição inicial
 \begin{equation}
@@ -415,7 +431,7 @@ Dada a matriz de rotação $\bm{R}_{CT_0}$, da câmera à posição inicial
 	0 & 0 & -1
 }
 \end{equation}
-é conhecida a normal ao plano do alvo é $\bm{n} = \bm{x}_{t_0} \times \bm{z}_{t_0} =  \bm{y}_{t_0} $. A matrix de projeção linear \cite{strang} de um vetor em um plano é dada por
+é conhecida a normal ao plano do alvo é $\bm{n} = \bm{x}_{t_0} \times \bm{z}_{t_0} =  \bm{y}_{t_0} $. A matriz de projeção linear \cite{strang} de um vetor em um plano é dada por
 \begin{equation}
 P = \mathcal{I} - \bm{n} \bm{n}^T,
 \end{equation}
@@ -452,7 +468,7 @@ O algoritmo de controle pode ser resumido por:
 \end{align}
 
 \subsection{Força}
-No efetuador do manipulador TETIS há um sensor de força da \textit{OptoForce Kft.}, modelo OMD-20-FE-200N. Os sensores Optoforce 3D medem a magnitude e direção de forças $F_x$, $F_y$ e $F_z$ utilizando principios ópticos \cite{optoforce}. O sensor utiliza uma interface USB. 
+No efetuador do manipulador TETIS há um sensor de força da \textit{OptoForce Kft.}, modelo OMD-20-FE-200N. Os sensores Optoforce 3D medem a magnitude e direção de forças $F_x$, $F_y$ e $F_z$ utilizando princípios ópticos \cite{optoforce}. O sensor utiliza uma interface USB. 
 
 \begin{figure}[!ht]
 \centering

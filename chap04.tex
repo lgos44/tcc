@@ -1,7 +1,7 @@
 \chapter{Implementação}
 A implementação dos algoritmos de controle detalhados nos capítulos anteriores for feita como extensão ao software RobotGUI desenvolvido pela equipe do LEAD-GSCAR, idealizado por Alex F. Neves Msc. 
 
-Proporciona uma infraestrutura para carregar componentes modulares de software para robôs, juntamente com classes altamente reutilizáveis. Esses sistema permite inicializar módulos de software com uma interface gráfica associada, de modo a interagir com eles. Por exemplo, ao iniciar componente que obtem dados de um sensor, é iniciada na interface gráfica uma \textit{Tool} que permite visualizar os dados e configurar parâmetros. Essa conexão é dinâmica, permitindo que componentes sejam iniciados de forma independente e até mesmo em momentos diferentes.  
+Proporciona uma infraestrutura para carregar componentes modulares de software para robôs, juntamente com classes altamente reutilizáveis. Esses sistema permite inicializar módulos de software com uma interface gráfica associada, de modo a interagir com eles. Por exemplo, ao iniciar componente que obtêm dados de um sensor, é iniciada na interface gráfica uma \textit{Tool} que permite visualizar os dados e configurar parâmetros. Essa conexão é dinâmica, permitindo que componentes sejam iniciados de forma independente e até mesmo em momentos diferentes.  
 
 %\section{Motivação} 
 %Modular, genérico, ...
@@ -18,11 +18,11 @@ Os seguintes softwares e \textit{frameworks} foram utilizados:
 \end{itemize}
 
 \section{ROS}
-Escrever software para robôs tem se tornado particularmente difícil conforme a escala e o escopo dos projetos de robótica continua a crescer. Robôs podem ser de diferentes tipos e ter hardware completamente distinto, o que torna a reutilização de código difícil. Além disso, a quantidade de código necessário para um projeto de robótica pode ser intimidadora, indo desde software a nível de \textit{driver} até percepção e raciocício, por exemplo. Como o nível de conhecimento e experiência necessário é maior do que um pesquisador sozinho pode ter, arquiteturas de software para robótica devem suportar integração. 
+Escrever software para robôs tem se tornado particularmente difícil conforme a escala e o escopo dos projetos de robótica continua a crescer. Robôs podem ser de diferentes tipos e ter hardware completamente distinto, o que torna a reutilização de código difícil. Além disso, a quantidade de código necessário para um projeto de robótica pode ser intimidadora, indo desde software a nível de \textit{driver} até percepção e raciocínio, por exemplo. Como o nível de conhecimento e experiência necessário é maior do que um pesquisador sozinho pode ter, arquiteturas de software para robótica devem suportar integração. 
 
 Em \cite{quigley2009ros} é descrito o framework ROS, que busca enfrentar esses desafios. A enfase dada a projetos integrados de grande escala é útil em uma variedade de aspectos conforme sistemas robóticos tornam-se mais complexos. Os objetivos de projeto do ROS podem ser resumidos como: 
 \begin{itemize}
-\item \textbf{Peer-to-peer ou ponto-a-ponto:} Um sistema construido utilizando ROS consiste de um conjunto de processos, potencialmente em diferentes máquinas hospedeiras e conectados entre si em uma topologia ponto-a-ponto. Tipicamente existe um ou mais computadores embarcados conectados via \textit{ethernet}, que se comunicam via rede \textit{wireless} com máquinas com maior poder computacional, capazes de realizar tarefas como visão computacional e reconhecimento de fala. 
+\item \textbf{Peer-to-peer ou ponto-a-ponto:} Um sistema construído utilizando ROS consiste de um conjunto de processos, potencialmente em diferentes máquinas hospedeiras e conectados entre si em uma topologia ponto-a-ponto. Tipicamente existe um ou mais computadores embarcados conectados via \textit{ethernet}, que se comunicam via rede \textit{wireless} com máquinas com maior poder computacional, capazes de realizar tarefas como visão computacional e reconhecimento de fala. 
 
 \item \textbf{Multi-Linguagem:} Muitos possuem preferência em relação a determinadas linguagens de programação devido a fatores como tempo para escrita do código, facilidade de \textit{debugging}, sintaxe ou eficiência de execução. ROS suporta as linguagens C++, Python, Octave e LISP. O ROS faz uma especificação a nível de mensagens. A configuração e negociação da conexão ponto a ponto ocorre através de XML-RPC \footnote{RPC, do inglês, Remote Procedure Call é um termo da computação distribuída usado para quando um programa de computador causa a execução de um procedimento (subrotina) em outro espaço de endereçamento (outro computador na mesma rede).}, para o qual existem implementações na maioria das linguagens.   
 
@@ -36,7 +36,7 @@ Em \cite{quigley2009ros} é descrito o framework ROS, que busca enfrentar esses 
 No ROS, encoraja-se a encapsular todos os drivers e algoritmos em bibliotecas independentes. 
 
 
-\item \textbf{Gratuito e código aberto:} Todo o código fonte do ROS está disponível publicamente. Isso é critico para facilitar a descoberta e correção de erros. É distribuido sob os termos da licença BSD.  
+\item \textbf{Gratuito e código aberto:} Todo o código fonte do ROS está disponível publicamente. Isso é critico para facilitar a descoberta e correção de erros. É distribuído sob os termos da licença BSD.  
 
 \end{itemize}
 
@@ -52,11 +52,11 @@ Os conceitos a nível de grafo de computação descrevem elementos da rede ponto
 
 \item[Master:] Devido a topologia ponto-a-ponto é necessário um mecanismo de busca que os processos se encontrem. O mestre é um servidor de nomes, ou seja, provê registro e busca de nomes.
 
-\item[Parameter Server:] O servidor de parâmetros permite que dados sejam armazendados em uma localização central. Faz parte do \textit{Master}.
+\item[Parameter Server:] O servidor de parâmetros permite que dados sejam armazenados em uma localização central. Faz parte do \textit{Master}.
 
-\item[Messages:] Nós comunicam entre si passando mensagens. Uma mensagen consistem apenas de uma estrutura de dados. Mensagens suportam tipos primitivos, \textit{arrays} de tipos primitivos ou outras estruturas aninhadas. 
+\item[Messages:] Nós comunicam entre si passando mensagens. Uma mensagem consiste apenas de uma estrutura de dados. Mensagens suportam tipos primitivos, \textit{arrays} de tipos primitivos ou outras estruturas aninhadas. 
 
-\item[Topics:] Um nó envia uma mensagem publicando a um dado tópico. O nome do tópico é utilizado para identificar o conteúdo da mensagem. Um outro nó que esteja interessado nesse conteúdo pode subscrever ao tópico. Podem existir múltiplos \textit{publishers} e \textit{subscribers} para o mesmo tópico e um nó pode publicar e/ou subscrever a multiplos tópicos. 
+\item[Topics:] Um nó envia uma mensagem publicando a um dado tópico. O nome do tópico é utilizado para identificar o conteúdo da mensagem. Um outro nó que esteja interessado nesse conteúdo pode subscrever ao tópico. Podem existir múltiplos \textit{publishers} e \textit{subscribers} para o mesmo tópico e um nó pode publicar e/ou subscrever a múltiplos tópicos. 
 
 \item[Services:] Em muitos casos é necessário ter um mecanismo de comunicação um para um de modo a lidar com interações do tipo pedido/resposta. Isso é feito através de serviços, que são definidos por um par de estruturas como as mensagens, uma para o pedido e outra para a resposta. Um nó oferece um serviço sob um nome e um cliente utiliza o serviço mandando um mensagem de pedido e esperando uma resposta. As bibliotecas do ROS apresentam essa interação na forma de um chamada de procedimento remoto (RPC).
 
@@ -67,7 +67,7 @@ O \textit{ROS Master} funciona como um servidor de nomes. Ele armazena informaç
 
 Nós conectam-se diretamente a outros nós, o \textit{Master} somente fornece informação de busca, como um servidor DNS. Nós que subscrevem a um tópico vão solicitar conexão aos nós que publicam naquele tópico e irão estabelecer a conexão de acordo com um protocolo de conexão concordado. O protocolo mais comum é chamado de TCPROS, que utiliza sockets TCP/IP padrão.
 
-Essa arquitetura permite uma operação desacoplada. Nós, tópicos, serviços e parametros possuem nomes. Por meio deles sistemas maiores e mais complexos podem ser construídos. É possível remapear nomes, de modo que um programa compilado  pode ser reconfigurado para operar com uma topologia diferente. 
+Essa arquitetura permite uma operação desacoplada. Nós, tópicos, serviços e parâmetros possuem nomes. Por meio deles sistemas maiores e mais complexos podem ser construídos. É possível remapear nomes, de modo que um programa compilado  pode ser reconfigurado para operar com uma topologia diferente. 
 
 %\subsection{Nível de Comunidade}
 
@@ -84,8 +84,24 @@ A arquitetura do RobotGUI baseia-se nos seguintes conceitos principais \cite{dor
 
 \item \textbf{Interação entre Compontents e Tools:} Tools e Components podem se conectar, quando isso ocorre eles interagem entre si a nível de "ponteiro para objeto"s. Essa conexão permite que o desenvolvimento da interface através do \textit{Qt} seja quase que independente do desenvolvimento do código que lida com hardware, lógica e comunicação.
 
-\item \textbf{RobotGUI:} É uma GUI \footnote{Guided User Interface} em nó de ROS. Permite que múltiplas janelas sejam criadas. O usuário pode decidir o que é exibido. Ao clicar nos \textit{toolbuttons}, uma janela referente a \textit{Tool} aparece. Essa janela pode ser encaixada na janela principal. 
+\item \textbf{RobotGUI:} É uma GUI \footnote{Guided User Interface} em nó de ROS. Permite que múltiplas janelas sejam criadas. O usuário pode decidir o que é exibido. Ao clicar nos \textit{toolbuttons}, uma janela referente a \textit{Tool} aparece. Essa janela pode ser encaixada na janela principal. O RobotGUI executa \textit{roslaunch}'s, nós incluídos pelo \textit{roslaunch} em questão podem ser \textit{Components}. Se esse for o caso, a \textit{Tool} correspondente (se houver) será carregada. 
 \end{itemize}
 
 
-\section{ManipulatorController}
+\section{Topologia}
+
+No diagrama da figura \ref{fig:ros_nodes} são mostados os nós executados pelo programa para utilizar o manipulador e como se comunicam. Elipses representam nós (ou Nodelets), retângulos representam tópicos. Os retângulos que contém outros elementos representam os pacotes aos quais aqueles nós pertencem. 
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth]{./img/ros_nodes}
+  \caption{ROS Nodes}
+  \label{fig:ros_nodes}
+\end{figure}
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth]{./img/classes}
+  \caption{Classes}
+  \label{fig:classes}
+\end{figure}

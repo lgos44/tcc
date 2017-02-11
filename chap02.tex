@@ -308,7 +308,7 @@ O problema de estimar a \textit{pose} consiste em determinar a posição e orien
 Existem diversas abordagens para solucionar esse problema. Aqui será destacado o caso simples com 3 pontos e comentada a abordagem de Dementhon para N pontos pois essa abordagem foi utilizada na implementação desse projeto. Maiores detalhes sobre implementações disponíveis em código aberto podem ser encontradas no apêndice \ref{chap:pose_est}. 
 
 \subsubsection{P3P: Estimação da \textit{pose} com 3 pontos}
-Para entender o problema, considera-se o caso mais simples, com 3 pontos, já que, teoricamente como a \textit{pose} pode ser representada por 6 parametros independentes, três pontos seriam capazes de resolver o problema \cite{marchand2016pose}. Sejam $\bm{P_i} = [X_i \; Y_i \; Z_i ]^T$ onde $i = 1 \dots 3$ três pontos com coordenadas representadas no referencial da câmera. 
+Para entender o problema, considera-se o caso mais simples, com 3 pontos, já que, teoricamente como a \textit{pose} pode ser representada por 6 parâmetros independentes, três pontos seriam capazes de resolver o problema \cite{marchand2016pose}. Sejam $\bm{P_i} = [X_i \; Y_i \; Z_i ]^T$ onde $i = 1 \dots 3$ três pontos com coordenadas representadas no referencial da câmera. 
 
 Primeiramente, é feita uma estimativa da coordenada de profundidade $Z_i$ de cada ponto utilizando a lei dos cossenos no triângulo dado por $\bm{C} \bm{P}_i \bm{P}_j$ onde $\bm{C}$ é o ponto onde a câmera está posicionada. Para cada par de correspondências $P_i \leftrightarrow p_i$ e $P_j \leftrightarrow p_j$ podemos escrever \cite{quan1999linear} 
 %A distâncias entre $\bm{P}_i$ e $\bm{P}_j$ e $\bm{P}_i$ e $\bm{P}_j$  é conhecida.
@@ -328,19 +328,19 @@ f_{23}(w_2, w_3) = 0
 \end{cases}
 \end{align*}
 
-Este sistema possui 8 soluções, no entanto como não possui termos lineares as soluções ocorrem em 4 pares. É possivel manipular as equações de modo a chegar em uma polinomial de oitavo grau em $w_1$ somente com termos pares, isto é, uma polinomial de quarto grau em $w = w_1^2$.
+Este sistema possui 8 soluções, no entanto como não possui termos lineares as soluções ocorrem em 4 pares. É possível manipular as equações de modo a chegar em uma polinomial de oitavo grau em $w_1$ somente com termos pares, isto é, uma polinomial de quarto grau em $w = w_1^2$.
 \begin{equation}
 g(x) = a_5 w^4 + a_4 w^3 + a_3 w^2 + a_2 w + a_1 = 0
 \end{equation}
 
 Essa equação possui solução fechada e como $w_i > 0$, então $w_1 = \sqrt{q}$. Logo, $w_1$ e $w_2$ são determinados unicamente a partir de $w_1$. Para obter solução única é preciso adicionar um quarto ponto, o que gera um sistema com mais restrições do que incógnitas. Uma possível abordagem é resolver o problema para subconjuntos de três pontos e encontrar a solução comum. No entanto isso não aumenta a precisão do resultado e se houver ruido pode ser difícil encontrar a solução comum. 
 
-Conhecidas as distâncias $w_i$ dos pontos do mundo à câmera, essas distâncias são convertidas em coordenadas tridimensionais centradas na camera através de $\bm{P'}_i = w_i \bm{K}^{-1} \bm{p}_i$, onde $\bm{K}$ é a matriz de calibração da câmera. O último passo é determinar a orientação, uma transformação de similaridade pode ser obtida através de dois pares de pontos $\bm{P'}_i \leftrightarrow \bm{P}_i$. A solução pode ser obtida através de mínimos utilizando quaternions. A partir da estimativa da rotação a obtenção da translação e da escala seguem trivialmente. 
+Conhecidas as distâncias $w_i$ dos pontos do mundo à câmera, essas distâncias são convertidas em coordenadas tridimensionais centradas na câmera através de $\bm{P'}_i = w_i \bm{K}^{-1} \bm{p}_i$, onde $\bm{K}$ é a matriz de calibração da câmera. O último passo é determinar a orientação, uma transformação de similaridade pode ser obtida através de dois pares de pontos $\bm{P'}_i \leftrightarrow \bm{P}_i$. A solução pode ser obtida através de mínimos utilizando quatérnions. A partir da estimativa da rotação a obtenção da translação e da escala seguem trivialmente. 
 
 Esse método é didático, porém não é robusto e é pouco preciso, além de que os dados redundantes (quarto ponto) não aumentam a precisão do resultado. Portanto, outros algoritmos foram propostos.
 
 \subsubsection{PNP: Estimação da \textit{pose} com N pontos}
-Em \cite{dementhon1995model} DeMenthon propoe combinar dois algoritmos. O primeiro \textit{POS (Pose from Orthography and Scaling)} aproxima a projeção de perspectiva com uma projeção ortográfica (e de escala) e encontra a matriz de rotação e o vetor de translação do objeto resolvendo um sistema linear. O segundo algoritmo \textit{POSIT (POS with ITerations)}, usa a \textit{pose} aproximada pelo \textit{POS} em um \textit{loop} para computar melhores projeções ortográficas (e de escala) dos pontos característicos \cite{note}. Então o \textit{POS} é aplicado a essas projeções, invés de às projeções da imagem original. O \textit{POSIT} converge para medidas precisas em poucas iterações e pode utilizar mais pontos para insensibilidade a erros de medição e ruido. 
+Em \cite{dementhon1995model} DeMenthon propõe combinar dois algoritmos. O primeiro \textit{POS (Pose from Orthography and Scaling)} aproxima a projeção de perspectiva com uma projeção ortográfica (e de escala) e encontra a matriz de rotação e o vetor de translação do objeto resolvendo um sistema linear. O segundo algoritmo \textit{POSIT (POS with ITerations)}, usa a \textit{pose} aproximada pelo \textit{POS} em um \textit{loop} para computar melhores projeções ortográficas (e de escala) dos pontos característicos \cite{note}. Então o \textit{POS} é aplicado a essas projeções, invés de às projeções da imagem original. O \textit{POSIT} converge para medidas precisas em poucas iterações e pode utilizar mais pontos para insensibilidade a erros de medição e ruido. 
 
 Uma desvantagem do \textit{POSIT} é que ele não é diretamente aplicável a pontos coplanares \cite{marchand2016pose}. No entanto, em \cite{oberkampf1996iterative} uma extensão ao \textit{POSIT} foi proposta, resolvendo o problema para 4 ou mais pontos coplanares. 
 
@@ -365,9 +365,9 @@ Com isso é possível aplicar uma estratégia de controle cinemático de posiç�
 
 \section{Controle de Força}
 
-Em \cite{leite2011servo} utiliza-se o controle de força com base em uma abordagem de controle cinemático. Considerando o problema em que o objetivo de controle é seguir uma força desejada variante no tempo $f_d(t)$ a partir da força de contato $f$ ao longo da superfície de restrição, medida com um sensor de força montado no punho do robô:
+Em \cite{leite2011servo} aplica-se o controle de força com base em uma abordagem de controle cinemático. Considerando o problema em que o objetivo de controle é seguir uma força desejada variante no tempo $f_d(t)$ a partir da força de contato $f$ ao longo da superfície de restrição, medida com um sensor de força montado no punho do robô:
 \begin{equation} \label{eq:problema_ctrl_forca}
-f \rightarrow f_d(t), \qquad e_f = f_d(t) - f \rightarrow 0
+\bm{f} \rightarrow \bm{f}_d(t), \qquad \bm{e}_f = \bm{f}_d(t) - f \rightarrow 0
 \end{equation}
 
 A força de contato pode ser modelada como uma mola linear, através da Lei de Hooke:
@@ -376,4 +376,12 @@ A força de contato pode ser modelada como uma mola linear, através da Lei de H
 \end{equation}
 onde $\bm{p}$ é a posição do ponto de contato e $\bm{d}_s$ é um ponto da superfície, $\bm{K}_s = k_s I$ é a matriz de rigidez e $k_s > 0$ é o coeficiente de rigidez da superfície.
 
-Derivando \eqref{eq:problema_ctrl_forca} e \eqref{eq:hooke_mat} em relação ao tempo
+Derivando \eqref{eq:problema_ctrl_forca} e \eqref{eq:hooke_mat} em relação ao tempo com respeito ao tempo, a equação do erro de força é dada por $\dot{\bm{e}}_f = \dot{\bm{f}}_d + \bm{K}_s \dot{\bm{p}}$. Considerando uma lei de controle de força com ação \textit{feedforward} e proporcional
+\begin{equation}
+\bm{u}_f = -\bm{K}_s^{-1} (\dot{\bm{f}}_d + \bm{K}_d\bm{e}_f)
+\end{equation}
+onde $\bm{K}_f = k_f \bm{I}$, a dinâmica do erro é governada por
+\begin{equation}
+\dot{\bm{e}}_f + \bm{K}_f \bm{e}_f = 0.
+\end{equation}
+Portanto escolhendo $k_f$ como uma constante positiva, o sistema em malha fechada é exponencialmente estável. 
