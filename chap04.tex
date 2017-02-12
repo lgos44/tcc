@@ -1,5 +1,5 @@
-\chapter{Implementação}
-A implementação dos algoritmos de controle detalhados nos capítulos anteriores for feita como extensão ao software RobotGUI desenvolvido pela equipe do LEAD-GSCAR, idealizado por Alex F. Neves Msc. 
+\chapter{Implementação de Software para Controle de Sistemas Robóticos}
+A implementação dos algoritmos de controle detalhados nos capítulos anteriores for feita como extensão ao software RobotGUI desenvolvido pela equipe do LEAD-GSCAR.
 
 Proporciona uma infraestrutura para carregar componentes modulares de software para robôs, juntamente com classes altamente reutilizáveis. Esses sistema permite inicializar módulos de software com uma interface gráfica associada, de modo a interagir com eles. Por exemplo, ao iniciar componente que obtêm dados de um sensor, é iniciada na interface gráfica uma \textit{Tool} que permite visualizar os dados e configurar parâmetros. Essa conexão é dinâmica, permitindo que componentes sejam iniciados de forma independente e até mesmo em momentos diferentes.  
 
@@ -71,9 +71,12 @@ Essa arquitetura permite uma operação desacoplada. Nós, tópicos, serviços e
 
 %\subsection{Nível de Comunidade}
 
+\subsection{Nodelets}
+O pacote Nodelet foi projetado de forma a permitir a execução de múltiplos algoritmos no mesmo processo sem \textit{overhead} \footnote{Processamento ou armazenamento em excesso, seja de tempo de computação, de memória, de largura de banda ou qualquer outro recurso que seja gasto para executar uma determinada tarefa.}, devido a comunicação entre nós (não há custo de cópia). Esse pacote fornece a classe Nodelet, utilizada para implementar um nodelet e a classe nodelet::Loader utilizada para instanciar nodelets. 
+
 \section{Arquitetura do RobotGUI}
 
-Primeiramente define-se como Computador Base aquele que será utilizado pelo operador para controlar e visualizar dados do robô. Define-se Computador Embarcado, ou do Robô aquele que está no robô conectado a todos os equipamentos, sensores e atuadores. O software executa módulos diferentes no robô e na base.
+Primeiramente define-se como Computador Base aquele que será utilizado pelo operador para controlar e visualizar dados do robô. Define-se Computador Embarcado, ou do Robô aquele que está no robô conectado a todos os equipamentos, sensores e atuadores. O software executa nós diferentes no robô e na base.
 
 A arquitetura do RobotGUI baseia-se nos seguintes conceitos principais \cite{doris_software_architecture}:
 
@@ -82,22 +85,77 @@ A arquitetura do RobotGUI baseia-se nos seguintes conceitos principais \cite{dor
 
 \item \textbf{Tools:} São elementos gráficos da interface para o usuário. São utilizadas para interagir com o robô e visualizar informação. São criadas como \textit{plugins} para o ROS \textit{pluginlib} e independetes de qualquer biblioteca do ROS.
 
-\item \textbf{Interação entre Compontents e Tools:} Tools e Components podem se conectar, quando isso ocorre eles interagem entre si a nível de "ponteiro para objeto"s. Essa conexão permite que o desenvolvimento da interface através do \textit{Qt} seja quase que independente do desenvolvimento do código que lida com hardware, lógica e comunicação.
+\item \textbf{Devices:} São \textit{Components} utilizados para representar um dispositivo do robô. Utilizam o mecanismo de \textit{Item} e \textit{Variable} e se conectam a \textit{Tools} padrão fornecidas pelo RobotGUI, que são \textit{DataTable}, \textit{Device Management} e \textit{Plotter}. 
 
-\item \textbf{RobotGUI:} É uma GUI \footnote{Guided User Interface} em nó de ROS. Permite que múltiplas janelas sejam criadas. O usuário pode decidir o que é exibido. Ao clicar nos \textit{toolbuttons}, uma janela referente a \textit{Tool} aparece. Essa janela pode ser encaixada na janela principal. O RobotGUI executa \textit{roslaunch}'s, nós incluídos pelo \textit{roslaunch} em questão podem ser \textit{Components}. Se esse for o caso, a \textit{Tool} correspondente (se houver) será carregada. 
+\item \textbf{Item e Variable:} \textit{Variables} contém valores de interesse, sempre guardando um valor desejado e um valor real. Por exemplo em uma variável controlada o valor desejado será a referência dada pelo operador e o valor real é obtido de algum sensor. Para mostrar esses valores na interface utiliza-se \textit{Items}. Uma \textit{Variable} pode estar associada a diversos \textit{Items}, de forma que através desse mecanismo o valor exibido em todos eles é atualizado. 
+
+\item \textbf{Interação entre Compontents e Tools:} Tools e Components podem se conectar, quando isso ocorre eles interagem entre si a nível de "ponteiro para objeto". Essa conexão permite que o desenvolvimento da interface através do \textit{Qt} seja quase que independente do desenvolvimento do código que lida com hardware, lógica e comunicação. Essas classes disponibilizam uma estrutura para conectar \textit{Components} e \textit{Tools} de tal forma que quano um \textit{Component} é iniciado ele busca por \textit{Tools} associadas a ele que estejam em execução e vice versa. Quando um \textit{Component} é 
+
+\item \textbf{RobotGUI:} É uma GUI \footnote{Guided User Interface} em nó de ROS. Permite que múltiplas janelas sejam criadas. O usuário pode decidir o que é exibido. Ao clicar nos \textit{toolbuttons}, uma janela referente a \textit{Tool} aparece. Essa janela pode ser encaixada na janela principal. O RobotGUI executa \textit{roslaunch}'s, nós incluídos pelo \textit{roslaunch} em questão podem ser \textit{Components}. 
+
+item \textbf{NodeletManager e RobotGUI:} o RobotGUI é um Nodelet Manager com pequenas modificações. Um NodeletManager utiliza a classe nodelet::Loader para instanciar nodelets. Utilizando uma versão modificada dessa classe é possível verificar se um Nodelet a ser carregado é um \textit{Component}. Se esse for o caso, a \textit{Tool} correspondente será carregada e as conexões são feitas. Quando um componente é descarregado, a conexão com as \textit{Tools} associadas a ele é encerrada.
 \end{itemize}
 
 
-\section{Topologia}
+\subsection{Topologia}
 
-No diagrama da figura \ref{fig:ros_nodes} são mostados os nós executados pelo programa para utilizar o manipulador e como se comunicam. Elipses representam nós (ou Nodelets), retângulos representam tópicos. Os retângulos que contém outros elementos representam os pacotes aos quais aqueles nós pertencem. 
+No diagrama da figura \ref{fig:ros_nodes} são mostados os nós executados pelo programa para utilizar o manipulador e como se comunicam. Elipses representam nós (ou Nodelets), retângulos representam tópicos. Os retângulos que contém outros elementos representam os pacotes aos quais aqueles nós pertencem. Neste diagrama, são omitidos os tópicos de configuração de parâmetros.
 
 \begin{figure}[!h]
   \centering
-  \includegraphics[width=\linewidth]{./img/ros_nodes}
+  \includegraphics[width=\linewidth]{./img/node_diagram}
   \caption{ROS Nodes}
   \label{fig:ros_nodes}
 \end{figure}
+
+
+\subsection{ManipulatorControllerDevice}
+
+A classe ManipulatorControllerDevice deriva de Device. Possui as \textit{Variables} mostradas na tabela \ref{tab:variables}.
+
+
+\begin{table}[h!]
+\centering
+\caption{\textit{Variables} do \textit{ManipulatorControllerDevice}}
+\label{tab:variables}
+\begin{tabular}{rl} \hline
+Variable & Descrição \\ \hline
+\verb|coast| & 				Comando de parar o controle das juntas. \\
+\verb|home| &  				Comando de ir para posição inicial. \\
+\verb|record|& 				Comando de iniciar a gravação de Logs.\\
+\verb|zeroForce|& 			Comando de \textit{reset} do sensor de Força.\\
+\verb|ktGain|&				Ganho $K_t$ para rastreamento de trajetória. \\
+\verb|kjGain|&				Ganho $K_j$ para controle no espaço das juntas.\\
+\verb|kvGain|&				Ganho $K_v$ para controle por servo visão.\\
+\verb|kfGain|&				Ganho $K_f$ para controle de força.\\
+\verb|pidParameters|&		Parâmetros do controlador PID para controle de força.\\
+\verb|x|&					Vetor $\bm{x_e}$ conforme definido em \ref{eq:operational_space}.\\				
+\verb|error|&				Erro conforme definido em \\
+\verb|output|&				Saída $\bm{u}$ do controlador.\\
+\verb|controlMode|&			Modo de controle selecionado (detalhes em \ref{sec:ctrlmodes}). \\
+\verb|individualMode|&		Modo de controle individual selecionado (detalhes em \ref{sec:ctrlmodes}).\\
+\verb|positionValue|&		Valor de posição cartesiana (refererência/medido). \\
+\verb|forceValue|&			Valor de força (refererência/medido).\\
+\verb|individualValue|&		Valores para controle individual.  \\
+\verb|openLoopVelocityEfct|&Valores para malha aberta de velocidade em $E_e$. \\
+\verb|openLoopVelocityBase|&Valores para malha aberta de velocidade em $E_b$. \\
+\verb|qValue|&				Valor de $\bm{q}_d$ e $\bm{q}$ para controle no espaço das juntas.	\\
+\verb|trajectory|&			Trajetória na forma de código em \textit{Julia Language}\\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{DorisManipulatorController}
+
+A classe DorisManipulatorController deriva da classe Controller, que implementa a estrutura necessária para a criação de um controlador. Ela permite que o controle seja executado com um período fixo, em uma \textit{thread} interna, ou que o ciclo de controle seja executado por uma chamada externa. Nesse caso é utilizada a primeira opção. Possui a funcionalidade de receber entradas de múltiplas fontes. Por exemplo, o manipulador pode ser controlado por uma janela na interface e por um \textit{joystick}. O Controller está pronto para lidar com isso, quando uma fonte fica inativa, outra é capaz de controlar. 
+
+A entrada do Controller é uma mensagem de controle com a seguinte forma.
+
+\begin{lstlisting}
+uint8 originId
+uint8[] modes
+float64[] data
+\end{lstlisting}
 
 \begin{figure}[!h]
   \centering
@@ -105,3 +163,6 @@ No diagrama da figura \ref{fig:ros_nodes} são mostados os nós executados pelo 
   \caption{Classes}
   \label{fig:classes}
 \end{figure}
+
+\subsection{Modos de controle}
+

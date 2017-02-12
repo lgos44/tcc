@@ -78,6 +78,7 @@ T_{i-1,i} = \m {
 	0			  & 0							&   0						  & 1
 }
 \end{equation}
+onde utiliza-se a notação $s_i$ para $\sin \theta_i$ e $c_i$ para $\cos \theta_i$. No caso de $s_{ij}$ denota $\sin (\theta_i + \theta_j$.
 
 Obtemos então:
 %\begin{align*}
@@ -157,7 +158,7 @@ Obtemos então:
 \section{Espaço das Juntas e Operacional}
 Antes de tratar de estratégias de controle é necessário definir o espaço operacional e o espaço das juntas,  sob os quais serão aplicadas as leis de controle. 
 Como trata-se de um manipulador 4-DOF de temos que o vetor do espaço operacional tem dimensão $(4 \times 1)$ dado por 
-\begin{equation}
+\begin{equation} \label{eq:operational_space}
 \bm{x_e} = \m{\bm{p}_e \\ \phi_e}
 \end{equation}
 onde o vetor $\bm{p}_e$ descreve a posição cartesiana representada no referencial da base:
@@ -228,12 +229,12 @@ Em alguns modos como controle por servo visão e no controle manual com joystick
 }
 \end{equation}
 
+
 A partir daqui, para simplificar a notação, sempre será referenciado o Jacobiano Analitico no referencial da base $(\bm{J}_A)_0$  como  $\bm{J}_0$ e o Jacobiano Analítico no referencial do efetuador $(\bm{J}_A)_N$ como $\bm{J}_N$.
 
 %\section{Singularidades}
 
-\section{Modos de Controle}
-\subsection{Velocidade no Espaço Operacional}
+\section{Malha Aberta no Espaço Operacional}
 Este é um modo em malha aberta, onde o sinal de entrada no controlador é de velocidade no referencial da base ou do efetuador, ou seja a velocidade linear $\bm{\dot{p}}_d$. Utiliza-se a equação \eqref{eq:jacob_pos} para calcular a velocidade de cada junta. 
 
 \begin{figure}[h!]
@@ -254,12 +255,12 @@ Este é um modo em malha aberta, onde o sinal de entrada no controlador é de ve
 \end{figure}
 
 
-\subsubsection{Base}
+\subsection{Referencial Base}
 Quando escolhe-se o referencial da base $\bm{\dot{x}}_d$ é velocidade desejada expressa no referencial da base e utiliza-se $J_0$.
 \begin{equation}
 \bm{u} = \bm{\dot{q}}_d = \bm{J}_0^{-1} (\bm{\dot{x}}_d)_0
 \end{equation}
-\subsubsection{Efetuador}
+\subsection{Referencial Efetuador}
 Quando escolhe-se o referencial da efetuador $\bm{\dot{x}}_d$ é velocidade desejada expressa no referencial do efetuador e utiliza-se $J_N$.
 \begin{equation}
 \bm{u} = \bm{\dot{q}}_d = \bm{J}_N^{-1} (\bm{\dot{x}}_d)_N
@@ -269,7 +270,7 @@ onde
 \bm{\dot{x}}_d = \m{\bm{\dot{p}}_d \\ 0}
 \end{equation}
 
-\subsection{Posição no Espaço das Juntas}
+\section{Controle de Posição no Espaço das Juntas}
 O controle de posição no espaço das juntas consiste em uma realimentação com controle proporcional individual para cada junta. Considerando que as juntas sejam modeladas como integradores, o diagrama \ref{fig:pos_juntas} mostra a malha de controle.
 
 \begin{figure}[h!]
@@ -302,22 +303,16 @@ A lei de controle é dada por
 \begin{equation}
 \bm{u} = \bm{K}_j (\bm{q}_d - \bm{q})
 \end{equation}
-onde 
-\[ \bm{K}_j = \m {
-	k_j & 0 & 0 \\ 
-	0 & k_j & 0 \\ 
-	0 &  0  & k_j
-}
-\]
+onde $\bm{K_j} = k_j \bm{I}$.
 
-\subsection{Posição no Espaço Operacional}
+\section{Controle de Posição no Espaço Operacional}
 Para este modo considera-se o problema de controle de posição no espaço operacional conforme definido em \ref{eq:op_space}. Para referências na forma de degrau, ou seja, quando $\dot{\bm{x}}_d = 0$ a lei de controle dada por
 \begin{equation} \label{eq:lei_posicao}
-\bm{u} = \bm{J}_0^{-1}(\bm{q})  \bm{K}_t (\bm{x_d} - \bm{x})
+\bm{u} = \bm{J}_0^{-1}(\bm{q})  \bm{K}_p (\bm{x_d} - \bm{x})
 \end{equation}
 é capaz de levar o $\bm{e} \rightarrow 0$ quando $t \rightarrow \infty$.
 
-\subsection{Rastreamento de Trajetória}
+\section{Controle Proporcional com Feedforward}
 Para o rastreamento de trajetória considera-se o problema de seguir um referência no referencial da base $\bm{x}_d(t)$ que é função do tempo, conhecidos $\bm{x}_d(t)$ e $\bm{\dot{x}}_d(t)$. Para levar o erro assintoticamente a zero, utiliza-se uma lei de controle proporcional com \textit{feedforward} utilizando a inversa do Jacobiano Analítico. Conforme mostrado em \ref{controle_cinematico}, a lei de controle dada por 
 \begin{equation}
 \bm{u} = \bm{J}_0^{-1}(\bm{q}) (\dot{\bm{x}}_d + \bm{K}_t (\bm{x_d} - \bm{x}))
@@ -328,27 +323,26 @@ Para o rastreamento de trajetória considera-se o problema de seguir um referên
 \end{equation}
 
 
-\subsection{Servo Visão}
-O controle por servo visão no manipulador TETIS é feito através de uma configuração \textit{eye-in-hand}, onde a câmera é montada no efetuador final do manipulador, utilizando a abordagem de Servo Visão Baseada em Posição (PBVS). A figura \ref{fig:efet_minoru} mostra a câmera utilizada e o efetuador com a câmera montada.
-A câmera em questão é uma \textit{Minoru 3D Webcam}, que possui dois sensores VGA CMOS, no entanto será utilizada apenas o da direita.
+\section{Controle por Servo Visão}
+O controle por servo visão no manipulador TETIS é feito através de uma configuração \textit{eye-in-hand}, onde a câmera é montada no efetuador final do manipulador, utilizando a abordagem de Servo Visão Baseada em Posição (PBVS). Na seção \ref{sec:minoru} é descrita a câmera utilizada. Trata-se de uma câmera estereoscópica, no entanto será utilizada apenas um dos sensores.
 
-\begin{figure}[H]
-\centering
-\begin{subfigure}{.5\textwidth}
-  \centering
-  \includegraphics[width=\linewidth]{./img/manip_zoom.png}
-  \caption{Efetuador com câmera}
-  \label{fig:efetuador}
-\end{subfigure}%
-\begin{subfigure}{.5\textwidth}
-  \centering
-  \includegraphics[width=0.8\linewidth]{./img/minoru.jpg}
-  \caption{Minoru Camera}
-  \label{fig:minoru}
-\end{subfigure}
-\label{fig:efet_minoru}
-\caption{Efetuador e câmera Minoru}
-\end{figure}
+%\begin{figure}[H]
+%\centering
+%\begin{subfigure}{.5\textwidth}
+%  \centering
+%  \includegraphics[width=\linewidth]{./img/manip_zoom.png}
+%  \caption{Efetuador com câmera}
+%  \label{fig:efetuador}
+%\end{subfigure}%
+%\begin{subfigure}{.5\textwidth}
+%  \centering
+%  \includegraphics[width=0.8\linewidth]{./img/minoru.jpg}
+%  \caption{Minoru Camera}
+%  \label{fig:minoru}
+%\end{subfigure}
+%\label{fig:efet_minoru}
+%\caption{Efetuador e câmera Minoru}
+%\end{figure}
 
 
 O objetivo é deste modo de controle é rastrear um alvo, que é representado por um QR code como o da figura. Deseja-se que o efetuador rastreie sempre a orientação normal ao plano do alvo.
@@ -363,9 +357,9 @@ A matriz de calibração $\bm{K}$ da equação \eqref{eq:camera_projection} obti
 }
 =
 \m{
-	877.62136 & 0.00000 & 306.53916 \\
-	0.00000   & 880.32069 & 210.12821 \\
-	0.00000   & 0.00000 & 1.00000 \\	
+	877.62 	& 0 		& 306.53 \\
+	0  		& 880.32 	& 210.12 \\
+	0   	& 0 		& 1 \\	
 }	
 \end{equation}
 
@@ -467,15 +461,9 @@ O algoritmo de controle pode ser resumido por:
 \bm{u} &= \bm{J}_N^{-1} \bm{e}
 \end{align}
 
-\subsection{Força}
-No efetuador do manipulador TETIS há um sensor de força da \textit{OptoForce Kft.}, modelo OMD-20-FE-200N. Os sensores Optoforce 3D medem a magnitude e direção de forças $F_x$, $F_y$ e $F_z$ utilizando princípios ópticos \cite{optoforce}. O sensor utiliza uma interface USB. 
+\section{Controle de Força}
 
-\begin{figure}[!ht]
-\centering
-  \includegraphics[width=\linewidth]{./img/optoforce.png}
-  \caption{Optoforce OMD-20-FE-200N \cite{optoforce}}
-  \label{fig:optoforce}
-\end{figure}%
+Utilizando o sensor de força montado no efetuador final do manipulador, deseja-se fazer o controle da força aplicada sobre uma superfície. 
 
 A matriz de rotação do referencial do sensor para o referencial do efetuador, como definido em \ref{fig:modelo_tetis} é dada por
 
@@ -487,9 +475,9 @@ R_{es} = \m{
 }
 \end{equation}
 
-\subsubsection{Float}
+\subsection{Float}
 
-\subsubsection{Approach}
+\subsection{Approach}
 Considera-se o problema de controle de força na direção de \textit{approach} para o manipulador robótico 4-DOF em questão. O objetivo de controle é rastrear uma entrada na forma de um degrau de força, a ser aplicada em uma placa de poliestireno montada em um suporte fixado na vertical como mostra a figura \ref{fig:suporte_forca}.  
 
 É possível modelar o ambiente (força de contato), ou seja, a placa de poliestireno, como uma mola linear, através da \textit{Lei de Hooke}\cite{leite2011servo}: 
@@ -638,11 +626,11 @@ G(s) = \frac{k_p \tau s^2 + (k_p + \tau k_i)s + k_i}{\tau s^3 + s^2 + k_p s + k_
 %Especificações:
 
 
-\subsubsection{Híbrido}
+\section{Controle Híbrido}
 Considerando o diagrama \ref{fig:controle_forca}, é possível suprir os graus de liberdade não controlados $y$, $z$ e $\phi$ com outra lei de controle, como por exemplo o um Proporcional com Feedforward de modo a aplicar uma força na direção de approach e traçar uma trajetória de na superfície em que a força está sendo aplicada. 
 
 
-\subsection{Master-Slave (Omni)}
+\section{Master-Slave (Omni)}
 TODO
 
 % TODO: TABELA COM LEIS DE CONTROLE E FONTE DOS DADOS 

@@ -1,6 +1,6 @@
 %!TEX root = <main.tex>
 %\chapter{Revisão Bibliográfica}
-\chapter{Conceitos de Robótica}
+\chapter{Modelagem e Controle Cinemático}
 Neste capitulo serão abordados os conceitos necessários para modelagem e controle de manipuladores robóticos, focando no que foi utilizado nesse projeto, para implementação no manipulador 4-DOF chamado de TETIS.
 
 \section{Cinemática Direta}
@@ -109,7 +109,8 @@ O estratégia de controle cinemático pode ser aplicada quando considera-se que 
 \end{itemize}
 
 A maioria dos manipuladores possui uma malha de controle de velocidade em nível de juntas como na figura \ref{fig:controlejuntas}. Logo, para um controle de alto ganho temos que:
-\[ u \approx \dot{\theta}\]
+\[ \bm{u} \approx \dot{\bm{q}}\]
+
 \begin{figure}[h!]
 \centering
 \begin{tikzpicture}[auto, node distance=2cm,>=latex']
@@ -129,7 +130,7 @@ A maioria dos manipuladores possui uma malha de controle de velocidade em nível
     \draw [->] (sum) -- node {$e$} (K);
     \draw [->] (K) -- node {$v$} (PWM);
     \draw [->] (PWM) -- node [name=tau] {$\tau$} (Robo);
-    \draw [->] (Robo) -- node [name=dtheta] {$\dot{\theta}$} (JA);
+    \draw [->] (Robo) -- node [name=dtheta] {$\dot{q}$} (JA);
     \draw [->] (JA) -- node {$\dot{x}$} (Integral);
     \draw [->] (Integral) -- node [name=x] {$x$}(output);
     \draw [->] (dtheta) |- (tmp1)-| node[pos=0.99] {$-$} (sum);
@@ -176,7 +177,7 @@ Portanto é possível implementar o controle cinemático segundo o diagrama \ref
 \end{figure}
 
 
-Se $x$ é uma representação da posição e orientação e $x_d$ o valor desejado nessa representação, seja o erro no espaço operacional:
+Se $\bm{x}$ é uma representação da posição e orientação e $\bm{x}_d$ o valor desejado nessa representação, seja o erro no espaço operacional:
 \begin{equation}
 \bm{e} = \bm{x}_d - \bm{x}
 \end{equation}
