@@ -1,4 +1,4 @@
-\documentclass[grad,numbers]{coppe}
+\documentclass[grad]{coppe}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb}
 \usepackage{xparse,mathtools}
@@ -10,6 +10,17 @@
 \usepackage{subcaption}
 \usepackage{float}
 \usepackage{listings}
+\usepackage{fancyvrb}
+\usepackage[chapter]{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+
+\lstset{
+  basicstyle=\ttfamily,
+  columns=fullflexible,
+  keepspaces=true,
+  frame=single
+}
 
 \ExplSyntaxOn
 
@@ -102,7 +113,7 @@ pinstyle/.style = {pin edge={to-,thin,black}}
 
   
   \backmatter
-  \bibliographystyle{coppe-unsrt}
+  \bibliographystyle{agsm}
   \bibliography{thesis}
 
   \appendix

@@ -1,14 +1,14 @@
 %!TEX root = <main.tex>
 %\chapter{Revisão Bibliográfica}
 \chapter{Modelagem e Controle Cinemático}
-Neste capitulo serão abordados os conceitos necessários para modelagem e controle de manipuladores robóticos, focando no que foi utilizado nesse projeto, para implementação no manipulador 4-DOF chamado de TETIS.
+Neste capitulo serão abordados os conceitos necessários para modelagem e controle de manipuladores robóticos, focando no que foi utilizado nesse projeto, para implementação no manipulador 4-DOF chamado de TETIS. Os tópicos tratados aqui podem ser encontrados em \cite{siciliano} e \cite{petercorke}.
 
 \section{Cinemática Direta}
-Um manipulador robótico é composto de uma série de corpos rígidos denominados \textit{elos} conectados através de \textit{juntas} \cite{siciliano}. 
+Um manipulador robótico é composto de uma série de corpos rígidos denominados \textit{elos} conectados através de \textit{juntas}. 
 Juntas podem ser:
 \begin{itemize} 
-\item Revolução: 
-\item Prismática:
+\item Revolução
+\item Prismática
 \end{itemize}
 
 Essa estrutura é chamada de cadeia cinemática.
@@ -26,7 +26,7 @@ Uma cadeia cinemática aberta é constituída por $n+1$ elos numerados de $0$ a 
 onde $\bm{T}_{i-1,i}(q_i)$ denota a transformação homogênea do sistema de coordenadas solidário ao elo $i-1$ àquele solidário ao elo $i$.
 
 Logo a transformação homogênea do efetuador final com respeito a base é dada por
-\begin{equation}
+\begin{equation} \label{eq:base_efetuador}
 \bm{T}_{be}(\bm{q}) = \bm{T}_{b0} \bm{T}_{0n}(\bm{q}) \bm{T}_{ne} 
 \end{equation}
 
@@ -75,8 +75,8 @@ O \textit{espaço das juntas} denota o espaço em que o vetor $(n \times 1)$ das
 é definido. Se a junta é de revolução utiliza-se $q_i = \theta_i$, se é prismática $q_i = d_i$.
 
 \section{Cinemática Diferencial}
-\subsection{Jacobiano Geométrico}
-TODO
+%\subsection{Jacobiano Geométrico}
+%TODO
 \subsection{Jacobiano Analítico}
 Quando a posição e orientação do efetuador são dadas em função de um número mínimos de parâmetros no espaço operacional é possível computar o Jacobiano pela diferenciação das equações da cinemática direta em função das variáveis das juntas.
 Para isso utiliza-se a técnica analítica.
@@ -99,8 +99,7 @@ Sob essas premissas a cinemática diferencial pode ser obtida como:
 \end{equation}
 
  
-\section{Controle Cinemático}
-\label{sec:controle_cinematico}
+\section{Controle Cinemático} \label{sec:controle_cinematico}
 O estratégia de controle cinemático pode ser aplicada quando considera-se que a dinâmica do manipulador pode ser desprezada. Essa hipótese se sustenta quando as seguintes premissas são válidas:
 \begin{itemize}
 \item Elevados fatores de redução nas juntas
@@ -300,8 +299,8 @@ A câmera possui uma posição arbitrária com respeito ao sistema de coordenada
 
 A equação \eqref{eq:camera_projection} define a projeção na câmera. A matriz $C$ realiza a mudança de escala, tradução e projeção de perspectiva. 
 
-\subsection{Calibração da Câmera}
-TODO
+%\subsection{Calibração da Câmera}
+%TODO
 
 \subsection{Estimação da Pose}
 O problema de estimar a \textit{pose} consiste em determinar a posição e orientação $\bm{T}_{CT}$ do alvo com respeito ao sistema de coordenadas da câmera. Considera-se que a geometria do alvo é conhecida, isto é um conjunto de pontos característicos $[X_i \; Y_i \; Z_i]$ com $i \in [1\; \cdots \; N]$, assim como os parâmetros intrínsecos da câmera. A imagem capturada pela câmera é processada e as coordenadas no plano da imagem $[u_i\; v_i]$ são determinadas utilizando algoritmos de visão computacional. Esse problema é conhecido como \textit{Perspective-n-Point}.
@@ -365,10 +364,11 @@ Com isso é possível aplicar uma estratégia de controle cinemático de posiç�
 é capaz de fazer $\bm{e}(t) \rightarrow 0$ quando $t \rightarrow \infty$ se $\dot{\bm{x}}_t = 0$.
 
 \section{Controle de Força}
+Considera-se o problema de controle cinemático de força, para um manipulador já em contato com uma superfície, assumindo que a força de contato pode ser medida com um sensor acoplado ao efetuador. 
 
-Em \cite{leite2011servo} aplica-se o controle de força com base em uma abordagem de controle cinemático. Considerando o problema em que o objetivo de controle é seguir uma força desejada variante no tempo $f_d(t)$ a partir da força de contato $f$ ao longo da superfície de restrição, medida com um sensor de força montado no punho do robô:
+Em \citep{leite2011servo} aplica-se o controle de força com base em uma abordagem de controle cinemático. O objetivo de controle é seguir uma força desejada variante no tempo $\bm{f}_d(t)$ a partir da força de contato $\bm{f}$ ao longo da superfície de restrição, medida com um sensor de força:
 \begin{equation} \label{eq:problema_ctrl_forca}
-\bm{f} \rightarrow \bm{f}_d(t), \qquad \bm{e}_f = \bm{f}_d(t) - f \rightarrow 0
+\bm{f} \rightarrow \bm{f}_d(t), \qquad \bm{e}_f = \bm{f}_d(t) - \bm{f} \rightarrow 0
 \end{equation}
 
 A força de contato pode ser modelada como uma mola linear, através da Lei de Hooke:
@@ -379,10 +379,23 @@ onde $\bm{p}$ é a posição do ponto de contato e $\bm{d}_s$ é um ponto da sup
 
 Derivando \eqref{eq:problema_ctrl_forca} e \eqref{eq:hooke_mat} em relação ao tempo com respeito ao tempo, a equação do erro de força é dada por $\dot{\bm{e}}_f = \dot{\bm{f}}_d + \bm{K}_s \dot{\bm{p}}$. Considerando uma lei de controle de força com ação \textit{feedforward} e proporcional
 \begin{equation}
-\bm{u}_f = -\bm{K}_s^{-1} (\dot{\bm{f}}_d + \bm{K}_d\bm{e}_f)
+\bm{\bar{u}}_f = -\bm{K}_s^{-1} (\dot{\bm{f}}_d + \bm{K}_d\bm{e}_f)
 \end{equation}
 onde $\bm{K}_f = k_f \bm{I}$, a dinâmica do erro é governada por
 \begin{equation}
 \dot{\bm{e}}_f + \bm{K}_f \bm{e}_f = 0.
 \end{equation}
 Portanto escolhendo $k_f$ como uma constante positiva, o sistema em malha fechada é exponencialmente estável. 
+
+\section{Controle Híbrido de Força e Posição}
+
+É chamado de controle híbrido a estratégia que envolve o uso de restrições artificiais para especificar alvos do sistema e controlar somente as variáveis que não estão sujeitas às restrições naturais. Dessa forma as variáveis que não estão restritas pelo ambiente não são afetadas pela lei de controle.
+
+Considerando que força e posição estão em sub-espaços de trabalho complementares é possível dividir o controle de força em duas malhas que não se interferem. Essa separação é feita pela matriz de seleção $\bm{S}$. O controlador híbrido utiliza a matriz $\bm{S}$ para dividir as malhas de  força e a posição  que atuam sobre o erro computado no sistema de coordenadas $\bar{E}_s$ da superfície de restrição. A lei de controle híbrido é definida como:
+
+\begin{equation}
+\bar{u}_h = \bar{u}_{hf} + \bar{u}_{hp}
+\end{equation}
+onde $u_{hf}$ e $u_{hp}$ são os sinais de controle atuando sobre os subespaços de força e posição respectivamente. 
+
+Suponha que deseja-se aplicar controle de posição em $x_s$, $y_s$ e controle de força em $z_s$, normal a superfície de contato. A matriz de seleção de força é dada por

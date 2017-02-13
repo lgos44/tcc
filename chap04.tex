@@ -1,23 +1,21 @@
 \chapter{Implementação de Software para Controle de Sistemas Robóticos}
-A implementação dos algoritmos de controle detalhados nos capítulos anteriores for feita como extensão ao software RobotGUI desenvolvido pela equipe do LEAD-GSCAR.
+A implementação dos algoritmos de controle detalhados nos capítulos anteriores for feita como extensão ao software RobotGUI desenvolvido pela equipe do LEAD-GSCAR \citep{nunes2013doris}.
 
 Proporciona uma infraestrutura para carregar componentes modulares de software para robôs, juntamente com classes altamente reutilizáveis. Esses sistema permite inicializar módulos de software com uma interface gráfica associada, de modo a interagir com eles. Por exemplo, ao iniciar componente que obtêm dados de um sensor, é iniciada na interface gráfica uma \textit{Tool} que permite visualizar os dados e configurar parâmetros. Essa conexão é dinâmica, permitindo que componentes sejam iniciados de forma independente e até mesmo em momentos diferentes.  
 
-%\section{Motivação} 
-%Modular, genérico, ...
 
 \section{Ferramentas}
 Os seguintes softwares e \textit{frameworks} foram utilizados:
 
 \begin{itemize}
-\item Linux (Ubuntu) como Sistema Operacional
+\item Linux (Ubuntu 14.04/16.04) como Sistema Operacional
 \item C++ como linguagem de programação
-\item ROS como \textit{framework} principal utilizado o RobotGUI, fornecendo comunicação entre nós através de mensagens e serviços. Será descrito mais detalhadamente na próxima seção.
-\item Qt como \textit{framework} para elaboração da interface gráfica. 
+\item Robot Operating System \citep{quigley2009ros} como \textit{framework} principal utilizado pelo RobotGUI, fornecendo comunicação entre nós através de mensagens e serviços. Será descrito mais detalhadamente na próxima seção.
+\item Qt \citep{qtcompany} como \textit{framework} para elaboração da interface gráfica. 
 \item Julia Language como linguagem auxiliar na elaboração de algoritmos de controle modificáveis em tempo de execução
 \end{itemize}
 
-\section{ROS}
+\section{Robot Operating System (ROS)}
 Escrever software para robôs tem se tornado particularmente difícil conforme a escala e o escopo dos projetos de robótica continua a crescer. Robôs podem ser de diferentes tipos e ter hardware completamente distinto, o que torna a reutilização de código difícil. Além disso, a quantidade de código necessário para um projeto de robótica pode ser intimidadora, indo desde software a nível de \textit{driver} até percepção e raciocínio, por exemplo. Como o nível de conhecimento e experiência necessário é maior do que um pesquisador sozinho pode ter, arquiteturas de software para robótica devem suportar integração. 
 
 Em \cite{quigley2009ros} é descrito o framework ROS, que busca enfrentar esses desafios. A enfase dada a projetos integrados de grande escala é útil em uma variedade de aspectos conforme sistemas robóticos tornam-se mais complexos. Os objetivos de projeto do ROS podem ser resumidos como: 
@@ -76,7 +74,7 @@ O pacote Nodelet foi projetado de forma a permitir a execução de múltiplos al
 
 \section{Arquitetura do RobotGUI}
 
-Primeiramente define-se como Computador Base aquele que será utilizado pelo operador para controlar e visualizar dados do robô. Define-se Computador Embarcado, ou do Robô aquele que está no robô conectado a todos os equipamentos, sensores e atuadores. O software executa nós diferentes no robô e na base.
+Primeiramente define-se como computador base aquele que será utilizado pelo operador para controlar e visualizar dados do robô. Define-se computador embarcado, ou do robô, o computador especificação PCIe/104, descrito no capítulo \ref{chap:descricao_hard}. O software executa nós diferentes no robô e na base.
 
 A arquitetura do RobotGUI baseia-se nos seguintes conceitos principais \cite{doris_software_architecture}:
 
@@ -108,10 +106,11 @@ No diagrama da figura \ref{fig:ros_nodes} são mostados os nós executados pelo 
   \label{fig:ros_nodes}
 \end{figure}
 
+Os \textit{ROS Nodes} \verb|manipulator_controller| e \verb|usb_cam| são executados no computador embarcado. Os nós \textit{Nodes} \verb|robot_gui|, \verb|visp_auto_tracker| são executados no computador base. Os \textit{Nodelets} \verb|manipulator_controller_device| e os \verb|eposX_device| são carregados pelo \verb|robot_gui|, que é um \textit{Nodelet Manager}. 
 
 \subsection{ManipulatorControllerDevice}
 
-A classe ManipulatorControllerDevice deriva de Device. Possui as \textit{Variables} mostradas na tabela \ref{tab:variables}.
+A classe ManipulatorControllerDevice deriva de Device. Possui as \textit{Variables} mostradas na tabela \ref{tab:variables}. Essa classe faz a interface entre \textit{Tools} e os tópicos de ROS. Ao receber uma mensagem de ROS, um \textit{callback} referente ao tópico em questão é executado atualizando a variável associada àquela informação. A atualização da variável resulta na atualização do \textit{Item}.
 
 
 \begin{table}[h!]
@@ -151,18 +150,67 @@ A classe DorisManipulatorController deriva da classe Controller, que implementa 
 
 A entrada do Controller é uma mensagem de controle com a seguinte forma.
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=Control.msg]
 uint8 originId
 uint8[] modes
 float64[] data
 \end{lstlisting}
 
+O primeiro campo identifica a fonte da mensagem. O segundo é um \textit{array} de modos de cotrole. O primeiro elemento é o modo principal, enquando os demais, se existirem, são submodos. O terceiro elemento \verb|data| é um \textit{array} de elementos em ponto flutuante que contém a referência de controle. Pode ser vazio caso o modo de controle seja autônomo ou receba dados de outra fonte.
+
 \begin{figure}[!h]
   \centering
-  \includegraphics[width=\linewidth]{./img/classes}
-  \caption{Classes}
+  \includegraphics[width=0.9\linewidth]{./img/class_diagram}
+  \caption{Diagrama de classes para o DorisManipulatorController}
   \label{fig:classes}
 \end{figure}
 
+Seguindo os princípios do ROS, busca-se separar em classes a interação com ROS de algoritmos de controle. As classes com terminação em \textit{Nodelet} herdam dessa classe e, portanto, implementam toda a comunicação (mensagens, serviços, etc.). A classe DorisManipulatorController implementa o ciclo de controle, chaveamento entre modos de controle, assim como os algoritmos de controle. OptoforceDAQ é uma classe utilizada para fazer a aquisição de dados do sensor de força Optoforce descrito na seção \ref{sec:optoforce}. A classe TetisData encapsula dados específicos do manipulador TETIS como dimensões dos elos e ângulos de juntas. A classe TimeLog é uma utilidade para salvar dados e gerar logs de forma automatizada. 
+
 \subsection{Modos de controle}
+
+\begin{itemize}
+\item NotControlled
+\item Brake
+\item OperationalSpace
+\item Vision
+\item VelocityTool
+\item VelocityBase
+\item PplusFF
+\item Force
+\item JointSpace
+\item MasterSlave
+\item Individual
+	\begin{itemize}
+	\item NotControlledI
+	\item BrakeI
+	\item Constant
+	\item Square
+	\item Pulse
+	\item Sine
+	\end{itemize}
+\item MasterSlave
+	\begin{itemize}
+	\item JointSpaceMS
+	\item VelocityToolMS
+	\end{itemize}
+\end{itemize}
+
+\subsection{DorisManipulatorTool}
+Para interagir com o manipulador é utilizada a \textit{Tool} chamada DorisManipulatorTool. Ela permite alternar entre os modos de controle listados acima, ajustar parâmetros e ganhos dos controladores e alterar referências. A imagem \ref{fig:screenshot1} mostra a interface com DorisManipulatorTool a direita,  Plotter no canto esquerdo superior, e DeviceManagement no canto esquerdo inferior.
+ 
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth]{./img/screenshot/sc1.png}
+  \caption{ŔobotGUI com três \textit{Tools}: DorisManipulatorTool, Plotter e DeviceManagement}
+  \label{fig:screenshot1}
+\end{figure}
+
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth]{./img/screenshot/sc2.png}
+  \caption{ŔobotGUI com DorisManipulatorTool e DeviceManagement}
+  \label{fig:screenshot2}
+\end{figure}
 

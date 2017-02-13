@@ -1,27 +1,96 @@
-\chapter{Resultados se Simulação e Experimentais}
+\chapter{Resultados de Simulação e Experimentais}
+
+\section{Simulação}
+Utilizando a Robotics Toolbox \citep{petercorke} para MATLAB, foram feitas simulações para o controle cinemático utilizando controle proporcional com feedforward. 
+
+\begin{gather}
+\bm{x_d} = \m{75 \sin(\omega_n t) + \sin (4 \omega_n t) + 500 \\ 57 \\ 75 \cos(\omega_n t) + \cos(4\omega_n t) -67 \\ \omega_n \sin(\omega_nt) }
+\qquad
+\bm{\dot{x}_d} = \m{75\omega_n \cos(t\omega_n) + 300 \omega_n \cos(4t\omega_n) \\
+0 \\
+-75 \omega_n \sin(t \omega_n) - 300 \omega_n \sin(4t\omega_n) \\
+\omega_n^2 \cos(t \omega_n)}
+\end{gather}
+
+
+\begin{figure}[H]
+\centering
+  \includegraphics[width=0.5\linewidth]{./img/simul_delay_zoh1/traj.eps}
+  \caption{Trajetória 1 no plano x-z}
+  \label{fig:sub1}
+\end{figure}%
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/simul_delay_zoh1/x1.eps}
+  \caption{$x_1$, $x_{d1}$ e $e_1$}
+  \label{fig:sub1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/simul_delay_zoh1/x2.eps}
+  \caption{$x_2$, $x_{d2}$ e $e_2$}
+  \label{fig:sub2}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/simul_delay_zoh1/x3.eps}
+  \caption{$x_3$, $x_{d3}$ e $e_3$}
+  \label{fig:sub1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/simul_delay_zoh1/x4.eps}
+  \caption{$x_4$, $x_{d4}$ e $e_4$}
+  \label{fig:sub2}
+\end{subfigure}
+\caption{Rastreamento da trajetória 1 para $\bm{K}_t = \bm{I}$}
+\label{fig:test}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/simul_delay_zoh1/error.eps}
+  \caption{$e_1$ e $e_3$}
+  \label{fig:sub1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/simul_delay_zoh1/u.eps}
+  \caption{$\bm{u}(t)$}
+  \label{fig:sub2}
+\end{subfigure}
+\caption{Trajetória 1: Destaque para o erro $e_1$ e $e_3$ com $\bm{K}_t = \bm{I}$}
+\label{fig:erro_traj}
+\end{figure}
+
 
 \section{Análise da Malha de Controle a nível de Juntas}
-Para verificar se de fato são válidas as premissas assumidas na seção \ref{sec:controle_cinematico} para aplicação de uma estratégia de controle cinemático foi levantada para cada uma das juntas a resposta a uma onda quadrada tal que:
+Para verificar se de fato são válidas as premissas assumidas na seção \ref{sec:controle_cinematico}para aplicação de uma estratégia de controle cinemático foi levantada para cada uma das juntas a resposta a uma onda quadrada tal que:
 \[ u = A \sgn(\sin( 2\pi t/f)) \]
 onde o período $T = 1/f = 1s$ e a amplitude $A = 0.5 rad/s$
 
 \newlength{\imageheight}
 \begin{figure}[H]
   \centering
-  	\settoheight{\imageheight}{\includegraphics{./img/joints}}
-    \includegraphics[width=\textwidth, clip=true, trim = 0 0.5\imageheight 0 0 0 mm]{./img/joints}
+  	\settoheight{\imageheight}{\includegraphics{./img/internal_loop}}
+    \includegraphics[width=\textwidth, clip=true, trim = 0 0.5\imageheight 0 0 0 mm]{./img/internal_loop}
   \caption{Resposta de velocidade das juntas 1 e 2}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  	\settoheight{\imageheight}{\includegraphics{./img/joints}}
-    \includegraphics[width=\textwidth, clip=true, trim = 0 0 0 0.5\imageheight 0 mm]{./img/joints}
+  	\settoheight{\imageheight}{\includegraphics{./img/internal_loop}}
+    \includegraphics[width=\textwidth, clip=true, trim = 0 0 0 0.5\imageheight 0 mm]{./img/internal_loop}
   \caption{Resposta de velocidade das juntas 3 e 4}
 \end{figure}
 
 
-Observa-se que para as juntas 1, 3 e 4 a resposta é de primeira ordem, enquanto que para a junta 2 ocorreram algumas oscilações. No entanto, para todas as juntas fica claro que existe um atraso significativo. 
+Observa-se que para as juntas 1, 3 e 4 a resposta é de primeira ordem, enquanto que para a junta 2 observa-se que existe uma dinâmica.
 	
 
 \section{Controle de Posição no Espaço das Juntas}

@@ -1,21 +1,27 @@
-\chapter{Descrição do Hardware}
+\chapter{Descrição do Hardware} \label{chap:descricao_hard}
 
-Nesse capítulo serão descritos elementos do hardware associados ao funcionamento do manipulador TETIS. A descrição completa dos dispositivos do robô DORIS, pode ser obtida em \cite{xaud2016doris}.
+Nesse capítulo serão descritos elementos do hardware do robô DORIS associados ao funcionamento do manipulador TETIS. A descrição completa dos dispositivos do DORIS, pode ser obtida em \citep{xaud2016doris, nunes2013doris, freitas2015embedded, galassi2014doris}.
 
-\section{Sistema Elétrico}
+\section{Eletrônica Embarcada}
 
-Rede Local \textit{Gigabit Ethernet}. È responsável pela comunicação de alta largura de banda entre o DORIS e seus diversos periféricos. A essa rede estão conectados o computador embarcado, cameras \textit{Ethernet}, access points Wi-Fi, roteadores, o \textit{Vehicle Support System} (VSS).
+A eletrônica embarcada é composta de um computador central e subsistemas de comunicação, atuação, aquisição de dados e o \textit{Vehicle Suport System (VSS)} \citep{freitas2015embedded}. 
 
-Sistema de atuação. É responsável pela atuação dos motores do DORIS. É composto pelo subsistema de tração e pelo subsistema do manipulador. 
+No projeto do DORIS, o computador consite em um módulo PCIe/104 com Intel\circledR Core i7\texttrademark e disco de estado sólido (SSD). Atualmente ele está operando com um módulo PCIe/104 Intel\circledR Atom D525. 
 
-\textit{Controller Area Network (CAN)} É responsável pelo controle em tempo real do sistema de atuação através de uma rede robusta. A rede CAN integra os drivers do sistema de atuação e os computadores embarcados em uma topologia de rede em barramento. 
+O sistema de comunicação trata do tráfego de dados entre o robô e a base remota. É composto de:
 
-Rede de computadores: O projeto inicial do DORIS incluia dois módulos PCIe/104 com Intel \texttrademark Core i7 e discos de estado sólido (SSD). Atualmente ele está operando com um módulo PCIe/104 Intel Atom D525. 
+\begin{itemize}
+\item Rede Local \textit{Gigabit Ethernet}. È responsável pela comunicação de alta largura de banda entre o DORIS e seus diversos periféricos. A essa rede estão conectados o computador embarcado, cameras \textit{Ethernet}, access points Wi-Fi, roteadores, o \textit{Vehicle Support System} (VSS).
+\item \textit{Controller Area Network (CAN)}. É responsável pelo controle em tempo real do sistema de atuação através de uma rede robusta. A rede CAN integra os drivers do sistema de atuação e os computadores embarcados em uma topologia de rede em barramento. 
 
+\item Tecnologias sem fio: O DORIS pode ser remotamento operado por meio de rede \textit{Wi-Fi IEEE 802.11m} ou através de um rádio 2.4/5.0 GHz caso ocorra alguma falha na conexão.
+\end{itemize}
+
+O sistema de aquisição de dados coleta imagem, video e áudio do ambiente. É composto de uma camera fixa, uma câmera térmica, uma câmera \textit{fish-eye}, duas câmeras estereoscópicas e uma unidade de medição inercial (IMU).
 
 \section{Atuadores e Drivers}
 
-As juntas de revolução do TETIS necessitam de atuadores com as seguintes características:
+O sistema de atuação é responsável pela atuação dos motores do DORIS. É composto pelo subsistema de tração e pelo subsistema do manipulador. As juntas de revolução do TETIS necessitam de atuadores com as seguintes características:
 
 \begin{itemize}
 \item Alto taxa de redução, para permitir controle a nível de velocidade nas juntas.
@@ -24,11 +30,35 @@ As juntas de revolução do TETIS necessitam de atuadores com as seguintes carac
 \item Alta acurácia e repetibilidade
 \end{itemize}
 
-A tecnologia \textit{Harmonic gear}, registrada pela \textit{Harmonic Drive}, consiste em engrenagens do tipo \textit{strain wave}. Esse mecanismo melhora certas características em comparação com sistemas de transmissão tradicionais como engrenagens helicoidais, ou planetárias. As vantagens incluem a inexistência de folgas, mais compacto, leve, altas taxas de redução, excelente resolução e repetibilidade, alto torque.
+A tecnologia \textit{Harmonic gear}, registrada pela \textit{Harmonic Drive}, consiste em engrenagens do tipo \textit{strain wave}. Esse mecanismo melhora certas características em comparação com sistemas de transmissão tradicionais como engrenagens helicoidais, ou planetárias. As vantagens incluem a inexistência de folgas, mais compacto, leve, altas taxas de redução, excelente resolução e repetibilidade e alto torque.
 
-O manipulador TETIS se baseia nos atuadores \textit{FHA Mini Servo} da \textit{Harmonic Drive AG}, mostrados na figura \ref{fig:harmonic_drive}. Esse atuador cumpre os requisitos acima. Ele conta também com \textit{encoder}, montado no eixo do motor antes da redução, e sensores \textit{hall} para os três enrolamentos. Com base nos requisitos de torque, para as duas primeiras juntas é utilizado o modelo FHA-11C-100-D200-EKMI, enquanto que para as duas úlimas o modelo FHA-8C-100-D200-EKMI.
+As juntas do manipulador TETIS utilizam atuadores \textit{FHA Mini Servo} da \textit{Harmonic Drive AG}, mostrados na figura \ref{fig:harmonic_drive}. Segundo o estudo em \citep{xaud2016doris}, esse atuador cumpre os requisitos acima. Ele conta também com \textit{encoder}, montado no eixo do motor, antes da redução, e sensores \textit{hall} para os três enrolamentos. Com base nos requisitos de torque, para as duas primeiras juntas é utilizado o modelo FHA-11C-100-D200-EKMI, enquanto que para as duas últimas o modelo FHA-8C-100-D200-EKMI.
 
-Para atinjir um controle satisfatório a nível de junta, são utilizados drivers da Maxon Motor, compatíveis com o barramento CAN. Cada junta é controlada por um driver modelo Maxon Motor EPOS2 70/10 P/N 375711, mostrado na figura \ref{fig:harmonic_drive}.
+\newlength{\twosubht}
+\newsavebox{\twosubbox}
+
+\begin{figure}[htp]
+% preliminary
+\sbox\twosubbox{%
+  \resizebox{\dimexpr.9\textwidth-1em}{!}{%
+    \includegraphics[height=3cm]{./img/fha-c_mini.jpg}%
+    \includegraphics[height=3cm]{./img/epos2-70-10.png}%
+  }%
+}
+\setlength{\twosubht}{\ht\twosubbox}
+% typeset
+\centering
+\subcaptionbox{Harmonic Drive FHA Mini Servo\label{f}}{%
+  \includegraphics[height=\twosubht]{./img/fha-c_mini.jpg}%
+}\quad
+\subcaptionbox{Maxon Motor EPOS2 70/10\label{s}}{%
+  \includegraphics[height=\twosubht]{./img/epos2-70-10.png}%
+}
+\caption{Atuadores e Drivers}
+\end{figure}
+
+
+Para atinjir um controle satisfatório a nível de junta, são utilizados drivers da Maxon Motor, compatíveis com o barramento CAN. Cada junta é controlada por um driver modelo Maxon Motor EPOS2 70/10 P/N 375711, mostrado na figura \ref{fig:epos}.
 
 \section{Câmera Minoru} \label{sec:minoru}
 
@@ -55,7 +85,7 @@ A câmera em questão é a \textit{Minoru 3D Webcam}, uma câmera esterescópica
 \caption{Efetuador e câmera Minoru}
 \end{figure}
 
-\section{Sensor de Força}
+\section{Sensor de Força} \label{sec:optoforce}
 
 No efetuador do manipulador TETIS há um sensor de força da \textit{OptoForce Kft.}, modelo OMD-20-FE-200N. Os sensores Optoforce 3D medem a magnitude e direção de forças $F_x$, $F_y$ e $F_z$ utilizando princípios ópticos \cite{optoforce}. O sensor utiliza uma interface USB. 
 
@@ -70,7 +100,7 @@ No efetuador do manipulador TETIS há um sensor de força da \textit{OptoForce K
 \centering
 \caption{Capacidade do sensor Optoforce OMD-20-FE-200N}
 \label{tab:dh_tetis}
-\begin{tabular}{rrrrr} \hline
+\begin{tabular}{lrr} \hline
  &  Capacidade Nominal & Deformação Típica \\ \hline
  $F_{xy}$ & $\pm 20N$ & $\pm 1.5 mm$ \\
  $F_z $ - Compressão & $200N$ & $1.2 mm$ \\
@@ -90,5 +120,5 @@ Através da interface USB, o computador recebe realimentação do sensor de for�
 \centering
   \includegraphics[width=\linewidth]{./img/integration_diagram}
   \caption{Esquema de integração dos dispositivos.}
-  \label{fig:optoforce}
+  \label{fig:integration}
 \end{figure}%

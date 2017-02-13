@@ -155,6 +155,12 @@ Obtemos então:
 } 
 \end{equation}
 
+Definindo $\bm{T}_{b0} = \bm{I}$ e $\bm{T}_{4e} = \bm{I}$, pela equação \eqref{eq:base_efetuador} temos
+\begin{equation}
+\bm{T}_{be} (\bm{q}) = \bm{T}_{04}(\bm{q})
+\end{equation}
+
+
 \section{Espaço das Juntas e Operacional}
 Antes de tratar de estratégias de controle é necessário definir o espaço operacional e o espaço das juntas,  sob os quais serão aplicadas as leis de controle. 
 Como trata-se de um manipulador 4-DOF de temos que o vetor do espaço operacional tem dimensão $(4 \times 1)$ dado por 
@@ -190,7 +196,7 @@ A partir da cinemática direta em \eqref{eq:cine_direta} e da equação \ref{eq:
 \end{equation}
 
 \begin{equation}
-(\bm{J}_P)_0 = 
+(\bm{J}_{A_P})_0 = 
 \m{
 	\ddfrac{\partial x}{\partial q_1} & \ddfrac{\partial x}{\partial q_2} & \ddfrac{\partial x}{\partial q_3} & \ddfrac{\partial x}{\partial q_4}  \\
 	\ddfrac{\partial y}{\partial q_1} & \ddfrac{\partial y}{\partial q_2} & \ddfrac{\partial y}{\partial q_3} & \ddfrac{\partial x}{\partial q_4}  \\
@@ -215,7 +221,7 @@ onde
 
 A partir de \ref{eq:jacob_or} e de \ref{eq:orientacao} podemos calular o Jacobiano de Orientação
 \begin{equation}
-\bm{J}_{\phi}(\bm{q}) = \frac{\partial \phi_e}{\partial \bm{q}} = \m{0 & -1 & -1 & -1}
+\bm{J}_{A_\phi}(\bm{q}) = \frac{\partial \phi_e}{\partial \bm{q}} = \m{0 & -1 & -1 & -1}
 \end{equation}
  
 Em alguns modos como controle por servo visão e no controle manual com joystick é interessante fazer o controle no referencial do efetuador, portanto precisamos representar o Jacobiano de posição no referencial do efetuador como $(\bm{J}_P)_N = \bm{R}_{04}^T (\bm{J}_P)_0$.  
@@ -230,7 +236,7 @@ Em alguns modos como controle por servo visão e no controle manual com joystick
 \end{equation}
 
 
-A partir daqui, para simplificar a notação, sempre será referenciado o Jacobiano Analitico no referencial da base $(\bm{J}_A)_0$  como  $\bm{J}_0$ e o Jacobiano Analítico no referencial do efetuador $(\bm{J}_A)_N$ como $\bm{J}_N$.
+%A partir daqui, para simplificar a notação, sempre será referenciado o Jacobiano Analitico no referencial da base $(\bm{J}_A)_0$  como  $\bm{J}_0$ e o Jacobiano Analítico no referencial do efetuador $(\bm{J}_A)_N$ como $\bm{J}_N$.
 
 %\section{Singularidades}
 
@@ -256,14 +262,14 @@ Este é um modo em malha aberta, onde o sinal de entrada no controlador é de ve
 
 
 \subsection{Referencial Base}
-Quando escolhe-se o referencial da base $\bm{\dot{x}}_d$ é velocidade desejada expressa no referencial da base e utiliza-se $J_0$.
+Quando escolhe-se o referencial da base $\bm{\dot{x}}_d$ é velocidade desejada expressa no referencial da base e utiliza-se $(\bm{J}_{A})_0$.
 \begin{equation}
-\bm{u} = \bm{\dot{q}}_d = \bm{J}_0^{-1} (\bm{\dot{x}}_d)_0
+\bm{u} = \bm{\dot{q}}_d = (\bm{J}_{A})_0^{-1} (\bm{\dot{x}}_d)_0
 \end{equation}
 \subsection{Referencial Efetuador}
-Quando escolhe-se o referencial da efetuador $\bm{\dot{x}}_d$ é velocidade desejada expressa no referencial do efetuador e utiliza-se $J_N$.
+Quando escolhe-se o referencial da efetuador $\bm{\dot{x}}_d$ é velocidade desejada expressa no referencial do efetuador e utiliza-se $(\bm{J}_{A})_N$.
 \begin{equation}
-\bm{u} = \bm{\dot{q}}_d = \bm{J}_N^{-1} (\bm{\dot{x}}_d)_N
+\bm{u} = \bm{\dot{q}}_d = (\bm{J}_{A})_N^{-1} (\bm{\dot{x}}_d)_N
 \end{equation}
 onde 
 \begin{equation}
@@ -308,20 +314,41 @@ onde $\bm{K_j} = k_j \bm{I}$.
 \section{Controle de Posição no Espaço Operacional}
 Para este modo considera-se o problema de controle de posição no espaço operacional conforme definido em \ref{eq:op_space}. Para referências na forma de degrau, ou seja, quando $\dot{\bm{x}}_d = 0$ a lei de controle dada por
 \begin{equation} \label{eq:lei_posicao}
-\bm{u} = \bm{J}_0^{-1}(\bm{q})  \bm{K}_p (\bm{x_d} - \bm{x})
+\bm{u} = (\bm{J}_{A})_0^{-1} \bm{K}_p (\bm{x_d} - \bm{x})
 \end{equation}
 é capaz de levar o $\bm{e} \rightarrow 0$ quando $t \rightarrow \infty$.
 
 \section{Controle Proporcional com Feedforward}
-Para o rastreamento de trajetória considera-se o problema de seguir um referência no referencial da base $\bm{x}_d(t)$ que é função do tempo, conhecidos $\bm{x}_d(t)$ e $\bm{\dot{x}}_d(t)$. Para levar o erro assintoticamente a zero, utiliza-se uma lei de controle proporcional com \textit{feedforward} utilizando a inversa do Jacobiano Analítico. Conforme mostrado em \ref{controle_cinematico}, a lei de controle dada por 
+Para o rastreamento de trajetória considera-se o problema de seguir um referência no referencial da base $\bm{x}_d(t)$ que é função do tempo, conhecidos $\bm{x}_d(t)$ e $\bm{\dot{x}}_d(t)$. Para levar o erro assintoticamente a zero, utiliza-se uma lei de controle proporcional com \textit{feedforward} utilizando a inversa do Jacobiano Analítico. Conforme mostrado em ~\ref{controle_cinematico}, a lei de controle dada por 
 \begin{equation}
-\bm{u} = \bm{J}_0^{-1}(\bm{q}) (\dot{\bm{x}}_d + \bm{K}_t (\bm{x_d} - \bm{x}))
+\bm{u} = (\bm{J}_{A})_0^{-1} (\dot{\bm{x}}_d + \bm{K}_t (\bm{x_d} - \bm{x}))
 \end{equation} 
 é capaz de levar o erro assintoticamente a zero pois a dinâmica fica 
 \begin{equation}
 \dot{\bm{e}} + \bm{K} \bm{e} = 0
 \end{equation}
 
+O algoritmo de controle pode ser resumido por:
+\begin{align}
+\bm{e} &= (\bm{x}_d)_0 - (\bm{x})_0  \label{eq:error_pf}\\
+\bm{\bar{u}} &= \bm{K}_t \bm{e} + \bm{\dot{x}}_d \\
+\bm{u} &= (\bm{J}_A)_0^{-1} \bm{\bar{u}}
+\end{align}
+
+\begin{algorithm}
+\caption{<your caption for this algorithm>}
+\begin{algorithmic}
+\State $t = getTime()$
+\State $t = getTime()$
+\If {$i\geq maxval$}
+    \State $i\gets 0$
+\Else
+    \If {$i+k\leq maxval$}
+        \State $i\gets i+k$
+    \EndIf
+\EndIf
+\end{algorithmic}
+\end{algorithm}
 
 \section{Controle por Servo Visão}
 O controle por servo visão no manipulador TETIS é feito através de uma configuração \textit{eye-in-hand}, onde a câmera é montada no efetuador final do manipulador, utilizando a abordagem de Servo Visão Baseada em Posição (PBVS). Na seção \ref{sec:minoru} é descrita a câmera utilizada. Trata-se de uma câmera estereoscópica, no entanto será utilizada apenas um dos sensores.
@@ -389,9 +416,9 @@ Observando que o referencial da câmera e do efetuador são dados pela figura \r
 \end{figure}
 
 
-Para a servo visão baseada em posição, utiliza-se a seguinte lei de controle
+Para a servo visão baseada em posição, foi utilizada uma lei de controle proporcional
 \begin{equation} \label{eq:lei_posicao}
-\bm{u} = \bm{J}_N^{-1}(\bm{q})  \bm{K}_t (\bm{x}_t - \bm{x})
+\bm{u} = (\bm{J}_{A})_N^{-1} \bm{K}_t [(\bm{x}_t)_e - (\bm{x})_e]
 \end{equation}
 onde $\bm{x}_t$ e $\bm{x}$ estão representados no referencial do efetuador. Portanto precisamos saber a posição e orientação $\bm{x}_t$ do alvo em relação ao efetuador
 \begin{equation}
@@ -400,7 +427,7 @@ onde $\bm{x}_t$ e $\bm{x}$ estão representados no referencial do efetuador. Por
 onde $\bm{T}_{EC}$ é dado por \eqref{eq:tec} e $\bm{T}_{CT}$ obtemos através de algoritmos de estimação de posição e orientação a partir de visão computacional. 
 
 \begin{equation}
-\bm{x}_t = \m{ (\bm{p}_t)_e \\ \phi_t }
+(\bm{x}_t)_e = \m{ (\bm{p}_t)_e \\ \phi_t }
 \end{equation}
 onde $(\bm{p}_t)_e$ é o vetor de translação que pode ser obtido diretamente de $\bm{T}_{EC}$ e  $\phi_t$ é a orientação, que pode ser obtido de duas formas.
 
@@ -425,9 +452,9 @@ Dada a matriz de rotação $\bm{R}_{CT_0}$, da câmera à posição inicial
 	0 & 0 & -1
 }
 \end{equation}
-é conhecida a normal ao plano do alvo é $\bm{n} = \bm{x}_{t_0} \times \bm{z}_{t_0} =  \bm{y}_{t_0} $. A matriz de projeção linear \cite{strang} de um vetor em um plano é dada por
+é conhecida a normal ao plano do alvo é $\bm{n} = \bm{x}_{t_0} \times \bm{z}_{t_0} =  \bm{y}_{t_0} $. A matriz de projeção linear \citep{strang} de um vetor em um plano é dada por
 \begin{equation}
-P = \mathcal{I} - \bm{n} \bm{n}^T,
+\bm{P} = \bm{I} - \bm{n} \bm{n}^T,
 \end{equation}
 logo para $\bm{n} = \bm{y}_{t_0}$ temos 
 \begin{equation}
@@ -442,7 +469,7 @@ O vetor projetado no plano é dado por
 \begin{equation}
 \bm{z'}_{t} = \bm{P} \bm{z}_{t},
 \end{equation}
-assim basta apenas encontrar o ângulo entre os vetores $\bm{z'}_{t}$ e $\bm{z}_{t_0}$, que pode ser calculado pela fórmula do Cosseno \cite{strang} 
+assim basta apenas encontrar o ângulo entre os vetores $\bm{z'}_{t}$ e $\bm{z}_{t_0}$, que pode ser calculado pela fórmula do Cosseno \citep{strang} 
 \begin{equation}
 \phi_t = \cos^{-1} \left( \frac{\bm{z'}^T_{t} \bm{z}_{t_0} } {||\bm{z'}_{t}|| ||\bm{z}_{t_0}||} \right)
 \end{equation}
@@ -454,16 +481,16 @@ assim basta apenas encontrar o ângulo entre os vetores $\bm{z'}_{t}$ e $\bm{z}_
 %\end{align}
 
 
-O algoritmo de controle pode ser resumido por:
+Após obter os valores de $(p_t)_e$ e $\phi_t$, sabemos $(x_t)_e$ e controle se resume a:
 \begin{align}
-\bm{e} &= \bm{x}_t - \bm{x} \\
+\bm{e} &= (\bm{x}_t)_e - (\bm{x})_e \\
 \bm{\bar{u}} &= \bm{K}_v \bm{e}  \\
-\bm{u} &= \bm{J}_N^{-1} \bm{e}
+\bm{u} &= (\bm{J}_{A})_N^{-1} \bm{e}
 \end{align}
 
 \section{Controle de Força}
 
-Utilizando o sensor de força montado no efetuador final do manipulador, deseja-se fazer o controle da força aplicada sobre uma superfície. 
+Utilizando o sensor de força descrito em \ref{sec:optoforce}, montado no efetuador final do manipulador, deseja-se fazer o controle da força aplicada sobre uma superfície. 
 
 A matriz de rotação do referencial do sensor para o referencial do efetuador, como definido em \ref{fig:modelo_tetis} é dada por
 
@@ -476,11 +503,25 @@ R_{es} = \m{
 \end{equation}
 
 \subsection{Float}
+Esse mode de controle de força consiste em configurar uma referência de controle de força $\bm{f}_d = 0$, de modo que o efetuador do manipulador fique "flutuando", se movendo de forma sensível ao toque.
+
+Primeiramente a força representada no referencial do sensor $(\bm{f})_s$ é representada na base por $(\bm{f})_e = R_{es} (\bm{f})_s$.
+Como $\bm{f}_d = 0$:
+\begin{equation}
+(\bm{e}_f)_e = - (\bm{f})_e \\
+\end{equation}
+
+Utilizando um controle proporcional:
+\begin{align}
+\bar{\bm{u}}_f &= \bm{K}_f (\bm{e}_f)_e \\
+\bar{\bm{u}} &= \m{ \bar{\bm{u}}_f & 0}^T\\
+\bm{u} &= (\bm{J_A})_0^{-1} \bar{\bm{u}}
+\end{align}
 
 \subsection{Approach}
 Considera-se o problema de controle de força na direção de \textit{approach} para o manipulador robótico 4-DOF em questão. O objetivo de controle é rastrear uma entrada na forma de um degrau de força, a ser aplicada em uma placa de poliestireno montada em um suporte fixado na vertical como mostra a figura \ref{fig:suporte_forca}.  
 
-É possível modelar o ambiente (força de contato), ou seja, a placa de poliestireno, como uma mola linear, através da \textit{Lei de Hooke}\cite{leite2011servo}: 
+É possível modelar o ambiente (força de contato), ou seja, a placa de poliestireno, como uma mola linear, através da \textit{Lei de Hooke}: 
 \begin{equation}
 f = -k_s (x - x_s)
 \end{equation}
@@ -496,11 +537,11 @@ Foi feito um ensaio para encontrar a constante $k_s$ variando a distância $x_s$
 \end{figure}%
 
 
-Considerando que o controle de força seja ativado somente após a etapa de contato com o ambiente onde será aplicada a força e que o controle de força é feito apenas na direção de approach (segundo o referencial do manipulador, na direção $x$), pode-se utilizar a malha de controle mostrada na figura \ref{fig:controle_forca}.
+Considerando que o controle de força seja ativado somente após a etapa de contato com o ambiente onde será aplicada a força e que o controle de força é feito apenas na direção de approach (segundo o sistema de coordenadas $\bar{E}_e$, na direção $x$), pode-se utilizar a malha de controle mostrada na figura \ref{fig:controle_forca}.
 
 É utilizada uma lei de controle com ação proporcional e integral:
 \begin{equation}
-u = -K_s^{-1} (K_fe_f + K_i \int_0^t e_f(\tau)d\tau)
+\bar{u} = -K_s^{-1} (K_fe_f + K_i \int_0^t e_f(\tau)d\tau)
 \end{equation}
 
 
@@ -619,18 +660,44 @@ H(s) = \frac{1}{\tau s + 1}
 \end{equation}
 onde $\tau = 1/(2 \pi f_c) = 0.159154943$.
 
+Ficamos com a função de transferência a seguir a partir da qual é possível sintonizar os parâmetros do controlador.
 \begin{equation}
 G(s) = \frac{k_p \tau s^2 + (k_p + \tau k_i)s + k_i}{\tau s^3 + s^2 + k_p s + k_i}
 \end{equation}
 
+Considerando que obtemos do sensor de força um vetor $(\bm{f})_s \in \mathcal{R}^3$, representado no referencial do sensor. O controle de força pode ser implementado a partir das seguintes equações:
+\begin{align}
+(\bm{f})_e &= \bm{R}_{es} (\bm{f})_s \\
+(\bm{e}_f)_e &= \bm{f}_d - (\bm{f})_e \\
+\end{align}
+
+A estratégia de controle PI é dada por
+\begin{equation}
+\bar{\bm{u}}_f = -\bm{K}_s^{-1} (\bm{K}_f (\bm{e}_f)_e + \bm{K}_i \int_0^t (\bm{e}_f)_e (\tau)d\tau)\\
+\end{equation}
+
+Como $\bm{u} \in \mathcal{R}^4$  e desejamos controlar somente a direção de \textit{approach}:
+\begin{equation}
+\bar{\bm{u}} = \m{ \bm{S}_f \bar{\bm{u}}_f \\ 0} 
+\end{equation}
+onde 
+\begin{equation}
+\bm{S}_f = \m{
+  1 & 0 & 0 \\
+  0 & 0 & 0 \\
+  0 & 0 & 0
+},
+\end{equation}
+portanto:
+\begin{equation}
+\bm{u} = (\bm{J_A})_N^{-1} \bar{\bm{u}}
+\end{equation}
+
 %Especificações:
+%\section{Controle Híbrido}
+%Considerando o diagrama \ref{fig:controle_forca}, é possível suprir os graus de liberdade não controlados $y$, $z$ e $\phi$ %com outra lei de controle, como por exemplo o um Proporcional com Feedforward de modo a aplicar uma força na direção de %approach e traçar uma trajetória de na superfície em que a força está sendo aplicada. 
 
-
-\section{Controle Híbrido}
-Considerando o diagrama \ref{fig:controle_forca}, é possível suprir os graus de liberdade não controlados $y$, $z$ e $\phi$ com outra lei de controle, como por exemplo o um Proporcional com Feedforward de modo a aplicar uma força na direção de approach e traçar uma trajetória de na superfície em que a força está sendo aplicada. 
-
-
-\section{Master-Slave (Omni)}
-TODO
+%\section{Master-Slave (Omni)}
+%TODO
 
 % TODO: TABELA COM LEIS DE CONTROLE E FONTE DOS DADOS 
