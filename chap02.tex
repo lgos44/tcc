@@ -27,7 +27,7 @@ onde $\bm{T}_{i-1,i}(q_i)$ denota a transformação homogênea do sistema de coo
 
 Logo a transformação homogênea do efetuador final com respeito a base é dada por
 \begin{equation} \label{eq:base_efetuador}
-\bm{T}_{be}(\bm{q}) = \bm{T}_{b0} \bm{T}_{0n}(\bm{q}) \bm{T}_{ne} 
+\bm{T}_{be}({q}) = {T}_{b0} {T}_{0n}({q}) {T}_{ne} 
 \end{equation}
 
 \subsection{Convenção Denavit-Hartenberg} \label{sec:denavit}
@@ -102,9 +102,9 @@ Sob essas premissas a cinemática diferencial pode ser obtida como:
 \section{Controle Cinemático} \label{sec:controle_cinematico}
 O estratégia de controle cinemático pode ser aplicada quando considera-se que a dinâmica do manipulador pode ser desprezada. Essa hipótese se sustenta quando as seguintes premissas são válidas:
 \begin{itemize}
-\item Elevados fatores de redução nas juntas
-\item Baixas velocidades na realização das tarefas
-\item Existe uma malha de controle de velocidade de alto desempenho em cada junta
+\item Elevados fatores de redução nas juntas.
+\item Baixas velocidades na realização das tarefas.
+\item Existência uma malha de controle de velocidade de alto desempenho em cada junta.
 \end{itemize}
 
 A maioria dos manipuladores possui uma malha de controle de velocidade em nível de juntas como na figura \ref{fig:controlejuntas}. Logo, para um controle de alto ganho temos que:
@@ -389,15 +389,57 @@ Portanto escolhendo $k_f$ como uma constante positiva, o sistema em malha fechad
 
 \section{Controle Híbrido de Força e Posição}
 
-É chamado de controle híbrido a estratégia que envolve o uso de restrições artificiais para especificar alvos do sistema e controlar somente as variáveis que não estão sujeitas às restrições naturais. Dessa forma as variáveis que não estão restritas pelo ambiente não são afetadas pela lei de controle.
+É chamado de controle híbrido a estratégia que envolve o uso de restrições artificiais para especificar alvos do sistema e controlar somente as variáveis que não estão sujeitas às restrições naturais \citep{xaud2016doris}. Dessa forma as variáveis que não estão restritas pelo ambiente não são afetadas pela lei de controle.
 
-Considerando que força e posição estão em sub-espaços de trabalho complementares é possível dividir o controle de força em duas malhas que não se interferem. Essa separação é feita pela matriz de seleção $\bm{S}$. O controlador híbrido utiliza a matriz $\bm{S}$ para dividir as malhas de  força e a posição  que atuam sobre o erro computado no sistema de coordenadas $\bar{E}_s$ da superfície de restrição. A lei de controle híbrido é definida como:
+Considerando que força e posição estão em sub-espaços de trabalho complementares é possível dividir o controle de força em duas malhas que não se interferem. Essa separação é feita pela matriz de seleção ${S}$. O controlador híbrido utiliza a matriz ${S}$ para dividir as malhas de  força e a posição  que atuam sobre o erro computado no sistema de coordenadas ${E}_s$ da superfície de restrição. A lei de controle híbrido é definida como:
 
-\begin{equation}
-\bar{u}_h = \bar{u}_{hf} + \bar{u}_{hp}
+\begin{equation} \label{eq:ctrl_law}
+{u}_h = {u}_{hf} + {u}_{hp}
 \end{equation}
 onde $u_{hf}$ e $u_{hp}$ são os sinais de controle atuando sobre os subespaços de força e posição respectivamente. 
 
-Suponha que deseja-se aplicar controle de posição em $x_s$, $y_s$ e controle de força em $z_s$, normal a superfície de contato. %A matriz de seleção de força é dada por
+Suponha que deseja-se aplicar controle de posição em $x_s$, $y_s$ e controle de força em $z_s$, normal a superfície de contato. A matriz de seleção de força é definida como
+\begin{equation}
+S_f = \m{
+    0 & 0 & 0 \\
+    0 & 0 & 0 \\
+    0 & 0 & 1 
+}
+\end{equation}
+e cumpre o papel de cancelar os esforços de controle nos graus de liberdade complementares. A matriz de seleção de posição é complementar e pode ser definida como
+\begin{equation}
+S_p = (I - S_f) \m{
+    1 & 0 & 0 \\
+    0 & 1 & 0 \\
+    0 & 0 & 0 
+}
+\end{equation}
 
-TODO
+Se o manipulador está sendo controlado em seu referencial base, utilizando o Jacobiano geométrico, a equação \eqref{eq:ctrl_law} deve ser representada como 
+\begin{equation}
+({u}_h)_b = ({u}_{hf})_b + ({u}_{hp})_b
+\end{equation}
+
+Geralmente o erro de posição é definido como $(e_p)_b = (p_d)_b - (p_{be})_b$, enquanto que o erro de força é definido com respeito ao sistema de coordenadas do efetuador  $(e_f)_e = f_d - (f_{c})_e$. O controle de posição utiliza uma estratégia de controle proporcional com feedforward definida como:
+\begin{equation}
+(\bar{u}_p)_b = (\dot{p})_b + K_{p} (e_p)_b
+\end{equation}
+Para o sinal de controle de força é utilizada um controle proporcional integral cuja lei é dada por 
+\begin{equation}
+(\bar{u}_f)_e = K_{pf} (e_f)_e + K_{if} \int^{\tau}_0 (e_f(\tau))_e d\tau
+\end{equation}
+onde a parcela feedforward não é utilizada, já que considera-se apenas o problema de \textit{set-point}, para o qual $\dot{f}_d$. Como a matriz de seleção desacopla os subespaços de controle somente no referencial da superfície, os sinais de controle devem ser representados primeiramente nesse sistema de coordenadas, antes de serem operados po $S$ e, então, representados de volta no sistema de coordenadas da base.
+
+\begin{align}
+({u}_{hf})_b &= R_{bs} S_f R_{se} (\bar{u}_f)_e \\
+({u}_{hp})_b &= R_{bs} S_p R_{sb} (\bar{u}_p)_b 
+\end{align}
+
+O controle híbrido pode ser representado pelo diagrama de blocos da figura \ref{fig:hybrid_block}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{./img/hybrid.eps}
+  \caption{Diagrama de blocos: Controle Híbrido Força-Posição}
+  \label{fig:hybrid_block}
+\end{figure}

@@ -95,9 +95,11 @@ item \textbf{NodeletManager e RobotGUI:} o RobotGUI é um Nodelet Manager com pe
 \end{itemize}
 
 
+\href{run:pf-luisgustavo-v004.pdf}{Click to execute}% <-- This works
+
 \subsection{Topologia}
 
-No diagrama da figura \ref{fig:ros_nodes} são mostados os nós executados pelo programa para utilizar o manipulador e como se comunicam. Elipses representam Nodes, elipses tracejadas representam Nodelets e retângulos representam tópicos. Os retângulos que contém outros elementos representam os pacotes aos quais aqueles nós pertencem. Quando as setas saem de um nó, representam que o nó publica informação em um tópico, e quando chegam, representam que ele subscreve ao tópico em questão .Neste diagrama, são omitidos os tópicos de configuração de parâmetros.
+No diagrama da figura \ref{fig:ros_nodes} são mostados os nós executados pelo programa para utilizar o manipulador e como se comunicam. Elipses representam Nodes, elipses tracejadas representam Nodelets e retângulos representam tópicos. Os retângulos que contém outros elementos representam os pacotes aos quais aqueles nós pertencem. Quando as setas saem de um nó, representam que o nó publica informação em um tópico, e quando chegam, representam que ele subscreve ao tópico em questão. As linhas pontilhadas representam que os \textit{Nodelets} aos quais elas estão conectadas são executadas pelo \textit{Node} na outra extremidade. Neste diagrama, são omitidos os tópicos de configuração de parâmetros.
 
 \begin{figure}[!h]
   \centering
@@ -106,12 +108,11 @@ No diagrama da figura \ref{fig:ros_nodes} são mostados os nós executados pelo 
   \label{fig:ros_nodes}
 \end{figure}
 
-Os \textit{ROS Nodes} \verb|manipulator_controller| e \verb|usb_cam| são executados no computador embarcado. Os nós \textit{Nodes} \verb|robot_gui|, \verb|visp_auto_tracker| são executados no computador base. Os \textit{Nodelets} \verb|manipulator_controller_device| e os \verb|eposX_device| são carregados pelo \verb|robot_gui|, que é um \textit{Nodelet Manager}. As linhas pontilhadas representam 
+Os \textit{ROS Nodes} \verb|manipulator_controller| e \verb|usb_cam| são executados no computador embarcado. Os nós \textit{Nodes} \verb|robot_gui|, \verb|visp_auto_tracker| são executados no computador base. Os \textit{Nodelets} \verb|manipulator_controller_device| e os \verb|eposX_device| são carregados pelo \verb|robot_gui|, que é um \textit{Nodelet Manager}. 
 
 \subsection{ManipulatorControllerDevice}
 
 A classe ManipulatorControllerDevice deriva de Device. Possui as \textit{Variables} mostradas na tabela \ref{tab:variables}. Essa classe faz a interface entre \textit{Tools} e os tópicos de ROS. Ao receber uma mensagem de ROS, um \textit{callback} referente ao tópico em questão é executado atualizando a variável associada àquela informação. A atualização da variável resulta na atualização do \textit{Item}.
-
 
 \begin{table}[h!]
 \centering
@@ -169,17 +170,17 @@ Seguindo os princípios do ROS, busca-se separar em classes a interação com RO
 
 \subsection{Modos de controle} \label{sec:ctrlmodes}
 
+A classe DorisManipulatorController implementa os seguintes modos de controle. 
 \begin{itemize}
-\item NotControlled
-\item Brake
-\item OperationalSpace
-\item Vision
-\item VelocityTool
-\item VelocityBase
-\item PplusFF
-\item Force
-\item JointSpace
-\item MasterSlave
+\item NotControlled: Nenhum sinal de controle é enviado ao manipulador.
+\item Brake: Sinal de controle $u = 0$
+\item OperationalSpace: Implementa o controle descrito em \ref{sec:openloopbase}
+\item Vision: Implementa o controle descrito em \ref{sec:servo_vision}
+\item VelocityEfct: Implementa o controle descrito em \ref{sec:openloopefct}
+\item VelocityBase: Implementa o controle descrito em \ref{sec:openloopbase}
+\item PplusFF: Implementa o controle descrito em \ref{sec:pplusf}
+\item Force: Implementa o controle descrito em \ref{sec:forca_approach}
+\item JointSpace  Implementa o controle descrito em \ref{joint_space}
 \item Individual
 	\begin{itemize}
 	\item NotControlledI
@@ -189,7 +190,7 @@ Seguindo os princípios do ROS, busca-se separar em classes a interação com RO
 	\item Pulse
 	\item Sine
 	\end{itemize}
-\item MasterSlave
+\item MasterSlave: Estrutura preparada para integração com o Sensable\circledR Phantom Omni
 	\begin{itemize}
 	\item JointSpaceMS
 	\item VelocityToolMS

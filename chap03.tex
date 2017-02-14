@@ -240,7 +240,7 @@ Em alguns modos como controle por servo visão e no controle manual com joystick
 
 %\section{Singularidades}
 
-\section{Malha Aberta no Espaço Operacional}
+\section{Malha Aberta no Espaço Operacional} 
 Este é um modo em malha aberta, onde o sinal de entrada no controlador é de velocidade no referencial da base ou do efetuador, ou seja a velocidade linear $\bm{\dot{p}}_d$. Utiliza-se a equação \eqref{eq:jacob_pos} para calcular a velocidade de cada junta. 
 
 \begin{figure}[h!]
@@ -261,12 +261,12 @@ Este é um modo em malha aberta, onde o sinal de entrada no controlador é de ve
 \end{figure}
 
 
-\subsection{Referencial Base}
+\subsection{Referencial Base} \label{sec:openloopbase}
 Quando escolhe-se o referencial da base $\bm{\dot{x}}_d$ é velocidade desejada expressa no referencial da base e utiliza-se $(\bm{J}_{A})_0$.
 \begin{equation}
 \bm{u} = \bm{\dot{q}}_d = (\bm{J}_{A})_0^{-1} (\bm{\dot{x}}_d)_0
 \end{equation}
-\subsection{Referencial Efetuador}
+\subsection{Referencial Efetuador} \label{sec:openloopefct}
 Quando escolhe-se o referencial da efetuador $\bm{\dot{x}}_d$ é velocidade desejada expressa no referencial do efetuador e utiliza-se $(\bm{J}_{A})_N$.
 \begin{equation}
 \bm{u} = \bm{\dot{q}}_d = (\bm{J}_{A})_N^{-1} (\bm{\dot{x}}_d)_N
@@ -276,7 +276,7 @@ onde
 \bm{\dot{x}}_d = \m{\bm{\dot{p}}_d \\ 0}
 \end{equation}
 
-\section{Controle de Posição no Espaço das Juntas}
+\section{Controle de Posição no Espaço das Juntas} \label{sec:position_joint}
 O controle de posição no espaço das juntas consiste em uma realimentação com controle proporcional individual para cada junta. Considerando que as juntas sejam modeladas como integradores, o diagrama \ref{fig:pos_juntas} mostra a malha de controle.
 
 \begin{figure}[h!]
@@ -318,7 +318,7 @@ Para este modo considera-se o problema de controle de posição no espaço opera
 \end{equation}
 é capaz de levar o $\bm{e} \rightarrow 0$ quando $t \rightarrow \infty$.
 
-\section{Controle Proporcional com Feedforward}
+\section{Controle Proporcional com Feedforward} \label{sec:pplusf}
 Para o rastreamento de trajetória considera-se o problema de seguir um referência no referencial da base $\bm{x}_d(t)$ que é função do tempo, conhecidos $\bm{x}_d(t)$ e $\bm{\dot{x}}_d(t)$. Para levar o erro assintoticamente a zero, utiliza-se uma lei de controle proporcional com \textit{feedforward} utilizando a inversa do Jacobiano Analítico. Conforme mostrado em ~\ref{controle_cinematico}, a lei de controle dada por 
 \begin{equation}
 \bm{u} = (\bm{J}_{A})_0^{-1} (\dot{\bm{x}}_d + \bm{K}_t (\bm{x_d} - \bm{x}))
@@ -350,7 +350,7 @@ O algoritmo de controle pode ser resumido por:
 %\end{algorithmic}
 %\end{algorithm}
 
-\section{Controle por Servo Visão}
+\section{Controle por Servo Visão} \label{sec:servo_vision}
 O controle por servo visão no manipulador TETIS é feito através de uma configuração \textit{eye-in-hand}, onde a câmera é montada no efetuador final do manipulador, utilizando a abordagem de Servo Visão Baseada em Posição (PBVS). Na seção \ref{sec:minoru} é descrita a câmera utilizada. Trata-se de uma câmera estereoscópica, no entanto será utilizada apenas um dos sensores.
 
 %\begin{figure}[H]
@@ -372,7 +372,7 @@ O controle por servo visão no manipulador TETIS é feito através de uma config
 %\end{figure}
 
 
-O objetivo é deste modo de controle é rastrear um alvo, que é representado por um QR code como o da figura. Deseja-se que o efetuador rastreie sempre a orientação normal ao plano do alvo.
+O objetivo é deste modo de controle é rastrear um alvo, que é representado por um QR code como o da figura \ref{fig:camera_target}. Deseja-se que o efetuador rastreie sempre a orientação normal ao plano do alvo.
 
 A matriz de calibração $\bm{K}$ da equação \eqref{eq:camera_projection} obtida através do processo descrito em \cite{calibration_tutorial} é:
 
@@ -488,7 +488,7 @@ Após obter os valores de $(p_t)_e$ e $\phi_t$, sabemos $(x_t)_e$ e controle se 
 \bm{u} &= (\bm{J}_{A})_N^{-1} \bm{e}
 \end{align}
 
-\section{Controle de Força}
+\section{Controle de Força} \label{sec:force}
 
 Utilizando o sensor de força descrito em \ref{sec:optoforce}, montado no efetuador final do manipulador, deseja-se fazer o controle da força aplicada sobre uma superfície. 
 
@@ -502,7 +502,7 @@ R_{es} = \m{
 }
 \end{equation}
 
-\subsection{Float}
+\subsection{Float}  \label{sec:forca_float}
 Esse mode de controle de força consiste em configurar uma referência de controle de força $\bm{f}_d = 0$, de modo que o efetuador do manipulador fique "flutuando", se movendo de forma sensível ao toque.
 
 Primeiramente a força representada no referencial do sensor $(\bm{f})_s$ é representada na base por $(\bm{f})_e = R_{es} (\bm{f})_s$.
@@ -518,24 +518,14 @@ Utilizando um controle proporcional:
 \bm{u} &= (\bm{J_A})_0^{-1} \bar{\bm{u}}
 \end{align}
 
-\subsection{Approach}
-Considera-se o problema de controle de força na direção de \textit{approach} para o manipulador robótico 4-DOF em questão. O objetivo de controle é rastrear uma entrada na forma de um degrau de força, a ser aplicada em uma placa de poliestireno montada em um suporte fixado na vertical como mostra a figura \ref{fig:suporte_forca}.  
+\subsection{Approach} \label{sec:forca_approach}
+Considera-se o problema de controle de força na direção de \textit{approach} para o manipulador robótico 4-DOF em questão. O objetivo de controle é resolver o problema de \textit{set-point}, ou seja, rastrear uma referência de força constante.
 
 É possível modelar o ambiente (força de contato), ou seja, a placa de poliestireno, como uma mola linear, através da \textit{Lei de Hooke}: 
 \begin{equation}
 f = -k_s (x - x_s)
 \end{equation}
 onde $x$ é a posição do ponto de contato com a superfície e $x_s$ um ponto na superfície.
-
-Foi feito um ensaio para encontrar a constante $k_s$ variando a distância $x_s$ e medindo a força resultante. Os dados experimentais e a regressão linear pode ser vista na figura \ref{fig:ks_linreg}. A constante encontrada foi $k_s = 379.7642 N/m$.
-
-\begin{figure}[!ht]
-\centering
-  \includegraphics[width=0.5\linewidth]{./img/ks_estimation.eps}
-  \caption{Trajetória}
-  \label{fig:ks_linreg}
-\end{figure}%
-
 
 Considerando que o controle de força seja ativado somente após a etapa de contato com o ambiente onde será aplicada a força e que o controle de força é feito apenas na direção de approach (segundo o sistema de coordenadas $\bar{E}_e$, na direção $x$), pode-se utilizar a malha de controle mostrada na figura \ref{fig:controle_forca}.
 
