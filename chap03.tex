@@ -78,7 +78,7 @@ T_{i-1,i} = \m {
 	0			  & 0							&   0						  & 1
 }
 \end{equation}
-onde utiliza-se a notação $s_i$ para $\sin \theta_i$ e $c_i$ para $\cos \theta_i$. No caso de $s_{ij}$ denota $\sin (\theta_i + \theta_j$.
+onde utiliza-se a notação $s_i$ para $\sin \theta_i$ e $c_i$ para $\cos \theta_i$. No caso de  $\sin (\theta_i + \theta_j)$ denota-se $s_{ij}$.
 
 Obtemos então:
 %\begin{align*}
@@ -335,20 +335,20 @@ O algoritmo de controle pode ser resumido por:
 \bm{u} &= (\bm{J}_A)_0^{-1} \bm{\bar{u}}
 \end{align}
 
-\begin{algorithm}
-\caption{<your caption for this algorithm>}
-\begin{algorithmic}
-\State $t = getTime()$
-\State $t = getTime()$
-\If {$i\geq maxval$}
-    \State $i\gets 0$
-\Else
-    \If {$i+k\leq maxval$}
-        \State $i\gets i+k$
-    \EndIf
-\EndIf
-\end{algorithmic}
-\end{algorithm}
+%\begin{algorithm}
+%\caption{<your caption for this algorithm>}
+%\begin{algorithmic}
+%\State $t = getTime()$
+%\State $t = getTime()$
+%\If {$i\geq maxval$}
+%%    \State $i\gets 0$
+%\Else
+%    \If {$i+k\leq maxval$}
+%        \State $i\gets i+k$
+%    \EndIf
+%\EndIf
+%\end{algorithmic}
+%\end{algorithm}
 
 \section{Controle por Servo Visão}
 O controle por servo visão no manipulador TETIS é feito através de uma configuração \textit{eye-in-hand}, onde a câmera é montada no efetuador final do manipulador, utilizando a abordagem de Servo Visão Baseada em Posição (PBVS). Na seção \ref{sec:minoru} é descrita a câmera utilizada. Trata-se de uma câmera estereoscópica, no entanto será utilizada apenas um dos sensores.

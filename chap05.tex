@@ -1,22 +1,39 @@
 \chapter{Resultados de Simulação e Experimentais}
 
-\section{Simulação}
-Utilizando a Robotics Toolbox \citep{petercorke} para MATLAB, foram feitas simulações para o controle cinemático utilizando controle proporcional com feedforward. 
+Neste capítulo são exibidos os resultados de simulação e experimentais. A simulação mostrada é de um rastreamento de trajetória no espaço operacional, pois é representativa do comportamento do sistema. Para experimentos com o manipulador TETIS foram feitos testes em varias etapas, em crescente nível de complexidade. Iniciando com uma análise da malha interna de controle, seguida de controle no espaço das juntas, controle proporcional de posição no espaço operacional, controle proporcional com feedforward e controle de força. As trajetórias utilizadas nos testes são definidas de antemão:
 
+\textbf{Trajetória 1}
 \begin{gather}
 \bm{x_d} = \m{75 \sin(\omega_n t) + \sin (4 \omega_n t) + 500 \\ 57 \\ 75 \cos(\omega_n t) + \cos(4\omega_n t) -67 \\ \omega_n \sin(\omega_nt) }
-\qquad
 \bm{\dot{x}_d} = \m{75\omega_n \cos(t\omega_n) + 300 \omega_n \cos(4t\omega_n) \\
 0 \\
 -75 \omega_n \sin(t \omega_n) - 300 \omega_n \sin(4t\omega_n) \\
 \omega_n^2 \cos(t \omega_n)}
 \end{gather}
+onde $\omega_n = \pi/10$
 
+\textbf{Trajetória 2}
+\begin{align}
+\bm{x_d} &= \m{ 
+\ddfrac{100 \cos(t)}{\sin^2(t) + 1} + 500 \\
+57 \\
+\ddfrac{100\cos(t) \sin(t)}{\sin^2(t) + 1} -50 \\
+0
+} &&
+\bm{\dot{x}_d} = \m{
+\ddfrac{100\sin(t) (\sin^2(t) -3 )}{(\sin^2(t) + 1)^2} \\
+0 \\
+\ddfrac{-(300 \sin^2(t) - 100)}{(\sin^2(t) + 1)^2} \\
+0}
+\end{align}
+
+\section{Simulação}
+Utilizando a Robotics Toolbox \citep{petercorke} para MATLAB\circledR , foram feitas simulações para o controle cinemático utilizando controle proporcional com feedforward.
 
 \begin{figure}[H]
 \centering
   \includegraphics[width=0.5\linewidth]{./img/simul_delay_zoh1/traj.eps}
-  \caption{Trajetória 1 no plano x-z}
+  \caption{Simulação: Trajetória 1 no plano x-z}
   \label{fig:sub1}
 \end{figure}%
 
@@ -25,28 +42,28 @@ Utilizando a Robotics Toolbox \citep{petercorke} para MATLAB, foram feitas simul
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=\linewidth]{./img/simul_delay_zoh1/x1.eps}
-  \caption{$x_1$, $x_{d1}$ e $e_1$}
+  \caption{$x$}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=\linewidth]{./img/simul_delay_zoh1/x2.eps}
-  \caption{$x_2$, $x_{d2}$ e $e_2$}
+  \caption{$y$}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=\linewidth]{./img/simul_delay_zoh1/x3.eps}
-  \caption{$x_3$, $x_{d3}$ e $e_3$}
+  \caption{$z$}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=\linewidth]{./img/simul_delay_zoh1/x4.eps}
-  \caption{$x_4$, $x_{d4}$ e $e_4$}
+  \caption{$\phi$}
   \label{fig:sub2}
 \end{subfigure}
-\caption{Rastreamento da trajetória 1 para $\bm{K}_t = \bm{I}$}
+\caption{Simulação: Rastreamento da trajetória 1 para $\bm{K}_t = \bm{I}$}
 \label{fig:test}
 \end{figure}
 
@@ -89,13 +106,18 @@ onde o período $T = 1/f = 1s$ e a amplitude $A = 0.5 rad/s$
   \caption{Resposta de velocidade das juntas 3 e 4}
 \end{figure}
 
+Observa-se que para as juntas 1, 3 e 4 a resposta é de primeira ordem e que são capazes de reproduzir com precisão os comandos de velocidade. A junta 2 observa-se que existe uma dinâmica. Isso se deve ao fato de a junta 2 necessitar de um torque maior para vencer a ação da força gravitacional. O controle cinemático produz resultados satisfatórios somente quando não são necessários movimentos muito rápidos ou acelerações muito grandes.
 
-Observa-se que para as juntas 1, 3 e 4 a resposta é de primeira ordem, enquanto que para a junta 2 observa-se que existe uma dinâmica.
+
+%mais suscetível a ação da força gravitacional, devido a uma maior dist
 	
 
 \section{Controle de Posição no Espaço das Juntas}
 
-Neste experimento foi testado controle de posição no espaço das juntas, partindo da posição $\bm{q} =[ 0 \;\; -\pi/2 \;\; 0 \;\; 0]^T$, deseja-se atingir a posição $\bm{q} =[ 0 \;\; -\pi/4 \;\; \pi/2  \;\; -\pi/4]^T$
+Neste experimento foi testado controle de posição no espaço das juntas, partindo da posição $\bm{q} =[ 0 \;\; -\pi/2 \;\; 0 \;\; 0]^T$, deseja-se atingir a posição $\bm{q} =[ 0 \;\; -\pi/4 \;\; \pi/2  \;\; -\pi/4]^T$. Foi utilizado um ganho $\bm{K}_j = \bm{I}$.
+
+Os resultados foram conforme esperados, levando o erro assintoticamente a zero em todas as dimensões.
+
 \begin{figure}[H]
 \centering
 \begin{subfigure}{.5\textwidth}
@@ -200,16 +222,7 @@ A posição inicial é $\bm{x} =[ 550 \; 57 \; -100 \; 0]^T$. O gráfico \ref{fi
 
 \subsection{Trajetória 1}
 A trajetória a ser rastreada é dada pelas equações:
-\begin{gather}
-\bm{x_d} = \m{75 \sin(\omega_n t) + \sin (4 \omega_n t) + 500 \\ 57 \\ 75 \cos(\omega_n t) + \cos(4\omega_n t) -67 \\ \omega_n \sin(\omega_nt) }
-\qquad
-\bm{\dot{x}_d} = \m{75\omega_n \cos(t\omega_n) + 300 \omega_n \cos(4t\omega_n) \\
-0 \\
--75 \omega_n \sin(t \omega_n) - 300 \omega_n \sin(4t\omega_n) \\
-\omega_n^2 \cos(t \omega_n)}
-\end{gather}
 
-Onde $\omega_n = \pi/10$
 
 \subsubsection{Ganho $\bm{K}_t = \bm{I}$}
 
@@ -273,21 +286,6 @@ Podem-se observar diversos picos no gráfico do erro na figura \ref{fig:erro_tra
 
 \subsection{Trajetória 2}
 A trajetória a ser rastreada é dada pelas equações:
-
-
-\begin{align}
-\bm{x_d} &= \m{ 
-\ddfrac{100 \cos(t)}{\sin^2(t) + 1} + 500 \\
-57 \\
-\ddfrac{100\cos(t) \sin(t)}{\sin^2(t) + 1} -50 \\
-0
-}^T  &&
-\bm{\dot{x}_d} &= \m{
-\ddfrac{100\sin(t) (\sin^2(t) -3 )}{(\sin^2(t) + 1)^2} \\
-0 \\
-\ddfrac{-(300 \sin^2(t) - 100)}{(\sin^2(t) + 1)^2} \\
-0}^T
-\end{align}
 
 \subsubsection{Ganho $\bm{K}_t = \bm{I}$}
 \begin{figure}[H]

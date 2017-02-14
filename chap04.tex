@@ -18,7 +18,7 @@ Os seguintes softwares e \textit{frameworks} foram utilizados:
 \section{Robot Operating System (ROS)}
 Escrever software para robôs tem se tornado particularmente difícil conforme a escala e o escopo dos projetos de robótica continua a crescer. Robôs podem ser de diferentes tipos e ter hardware completamente distinto, o que torna a reutilização de código difícil. Além disso, a quantidade de código necessário para um projeto de robótica pode ser intimidadora, indo desde software a nível de \textit{driver} até percepção e raciocínio, por exemplo. Como o nível de conhecimento e experiência necessário é maior do que um pesquisador sozinho pode ter, arquiteturas de software para robótica devem suportar integração. 
 
-Em \cite{quigley2009ros} é descrito o framework ROS, que busca enfrentar esses desafios. A enfase dada a projetos integrados de grande escala é útil em uma variedade de aspectos conforme sistemas robóticos tornam-se mais complexos. Os objetivos de projeto do ROS podem ser resumidos como: 
+Em \citep{quigley2009ros} é descrito o framework ROS, que busca enfrentar esses desafios. A enfase dada a projetos integrados de grande escala é útil em uma variedade de aspectos conforme sistemas robóticos tornam-se mais complexos. Os objetivos de projeto do ROS podem ser resumidos como: 
 \begin{itemize}
 \item \textbf{Peer-to-peer ou ponto-a-ponto:} Um sistema construído utilizando ROS consiste de um conjunto de processos, potencialmente em diferentes máquinas hospedeiras e conectados entre si em uma topologia ponto-a-ponto. Tipicamente existe um ou mais computadores embarcados conectados via \textit{ethernet}, que se comunicam via rede \textit{wireless} com máquinas com maior poder computacional, capazes de realizar tarefas como visão computacional e reconhecimento de fala. 
 
@@ -39,7 +39,7 @@ No ROS, encoraja-se a encapsular todos os drivers e algoritmos em bibliotecas in
 \end{itemize}
 
 \subsection{Conceitos Básicos}
-Esta seção se baseia em \cite{ros_concepts} e busca detalhar conceitos do funcionamento e arquitetura do ROS necessários ao entendimento do software desenvolvido nesse trabalho. 
+Esta seção se baseia em \citep{ros_concepts} e busca detalhar conceitos do funcionamento e arquitetura do ROS necessários ao entendimento do software desenvolvido nesse trabalho. 
 
 %\subsection{Nível de Sistema de Arquivos}
 
@@ -76,7 +76,7 @@ O pacote Nodelet foi projetado de forma a permitir a execução de múltiplos al
 
 Primeiramente define-se como computador base aquele que será utilizado pelo operador para controlar e visualizar dados do robô. Define-se computador embarcado, ou do robô, o computador especificação PCIe/104, descrito no capítulo \ref{chap:descricao_hard}. O software executa nós diferentes no robô e na base.
 
-A arquitetura do RobotGUI baseia-se nos seguintes conceitos principais \cite{doris_software_architecture}:
+A arquitetura do RobotGUI baseia-se nos seguintes conceitos principais \citep{nunes2013doris}:
 
 \begin{itemize}
 \item \textbf{Components}: Lidam com a comunicação e processam dados no Computador Base. São essencialmente \textit{Nodelets} de ROS, podendo utilizar funcionalidades como comunicação através de mensagens e serviços, utilizar parâmetros e bibliotecas de ROS. Permitem maior modularidade pois componentes podem ser inicializados independentemente do \textit{RobotGUI}.
@@ -97,7 +97,7 @@ item \textbf{NodeletManager e RobotGUI:} o RobotGUI é um Nodelet Manager com pe
 
 \subsection{Topologia}
 
-No diagrama da figura \ref{fig:ros_nodes} são mostados os nós executados pelo programa para utilizar o manipulador e como se comunicam. Elipses representam nós (ou Nodelets), retângulos representam tópicos. Os retângulos que contém outros elementos representam os pacotes aos quais aqueles nós pertencem. Neste diagrama, são omitidos os tópicos de configuração de parâmetros.
+No diagrama da figura \ref{fig:ros_nodes} são mostados os nós executados pelo programa para utilizar o manipulador e como se comunicam. Elipses representam Nodes, elipses tracejadas representam Nodelets e retângulos representam tópicos. Os retângulos que contém outros elementos representam os pacotes aos quais aqueles nós pertencem. Quando as setas saem de um nó, representam que o nó publica informação em um tópico, e quando chegam, representam que ele subscreve ao tópico em questão .Neste diagrama, são omitidos os tópicos de configuração de parâmetros.
 
 \begin{figure}[!h]
   \centering
@@ -106,7 +106,7 @@ No diagrama da figura \ref{fig:ros_nodes} são mostados os nós executados pelo 
   \label{fig:ros_nodes}
 \end{figure}
 
-Os \textit{ROS Nodes} \verb|manipulator_controller| e \verb|usb_cam| são executados no computador embarcado. Os nós \textit{Nodes} \verb|robot_gui|, \verb|visp_auto_tracker| são executados no computador base. Os \textit{Nodelets} \verb|manipulator_controller_device| e os \verb|eposX_device| são carregados pelo \verb|robot_gui|, que é um \textit{Nodelet Manager}. 
+Os \textit{ROS Nodes} \verb|manipulator_controller| e \verb|usb_cam| são executados no computador embarcado. Os nós \textit{Nodes} \verb|robot_gui|, \verb|visp_auto_tracker| são executados no computador base. Os \textit{Nodelets} \verb|manipulator_controller_device| e os \verb|eposX_device| são carregados pelo \verb|robot_gui|, que é um \textit{Nodelet Manager}. As linhas pontilhadas representam 
 
 \subsection{ManipulatorControllerDevice}
 
@@ -129,7 +129,7 @@ Variable & Descrição \\ \hline
 \verb|kfGain|&				Ganho $K_f$ para controle de força.\\
 \verb|pidParameters|&		Parâmetros do controlador PID para controle de força.\\
 \verb|x|&					Vetor $\bm{x_e}$ conforme definido em \ref{eq:operational_space}.\\				
-\verb|error|&				Erro conforme definido em \\
+\verb|error|&				Erro conforme definido em \ref{eq:error_pf}.\\
 \verb|output|&				Saída $\bm{u}$ do controlador.\\
 \verb|controlMode|&			Modo de controle selecionado (detalhes em \ref{sec:ctrlmodes}). \\
 \verb|individualMode|&		Modo de controle individual selecionado (detalhes em \ref{sec:ctrlmodes}).\\
@@ -167,7 +167,7 @@ O primeiro campo identifica a fonte da mensagem. O segundo é um \textit{array} 
 
 Seguindo os princípios do ROS, busca-se separar em classes a interação com ROS de algoritmos de controle. As classes com terminação em \textit{Nodelet} herdam dessa classe e, portanto, implementam toda a comunicação (mensagens, serviços, etc.). A classe DorisManipulatorController implementa o ciclo de controle, chaveamento entre modos de controle, assim como os algoritmos de controle. OptoforceDAQ é uma classe utilizada para fazer a aquisição de dados do sensor de força Optoforce descrito na seção \ref{sec:optoforce}. A classe TetisData encapsula dados específicos do manipulador TETIS como dimensões dos elos e ângulos de juntas. A classe TimeLog é uma utilidade para salvar dados e gerar logs de forma automatizada. 
 
-\subsection{Modos de controle}
+\subsection{Modos de controle} \label{sec:ctrlmodes}
 
 \begin{itemize}
 \item NotControlled
@@ -202,7 +202,7 @@ Para interagir com o manipulador é utilizada a \textit{Tool} chamada DorisManip
 \begin{figure}[!h]
   \centering
   \includegraphics[width=\linewidth]{./img/screenshot/sc1.png}
-  \caption{ŔobotGUI com três \textit{Tools}: DorisManipulatorTool, Plotter e DeviceManagement}
+  \caption{RobotGUI com três \textit{Tools}: DorisManipulatorTool, Plotter e DeviceManagement}
   \label{fig:screenshot1}
 \end{figure}
 
@@ -210,7 +210,7 @@ Para interagir com o manipulador é utilizada a \textit{Tool} chamada DorisManip
 \begin{figure}[!h]
   \centering
   \includegraphics[width=\linewidth]{./img/screenshot/sc2.png}
-  \caption{ŔobotGUI com DorisManipulatorTool e DeviceManagement}
+  \caption{RobotGUI com DorisManipulatorTool e DeviceManagement}
   \label{fig:screenshot2}
 \end{figure}
 

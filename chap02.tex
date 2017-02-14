@@ -1,7 +1,7 @@
 %!TEX root = <main.tex>
 %\chapter{Revisão Bibliográfica}
 \chapter{Modelagem e Controle Cinemático}
-Neste capitulo serão abordados os conceitos necessários para modelagem e controle de manipuladores robóticos, focando no que foi utilizado nesse projeto, para implementação no manipulador 4-DOF chamado de TETIS. Os tópicos tratados aqui podem ser encontrados em \cite{siciliano} e \cite{petercorke}.
+Neste capitulo serão abordados os conceitos necessários para modelagem e controle de manipuladores robóticos, focando no que foi utilizado nesse projeto, para implementação no manipulador 4-DOF chamado de TETIS. Os tópicos tratados aqui podem ser encontrados em \citep{siciliano, petercorke}.
 
 \section{Cinemática Direta}
 Um manipulador robótico é composto de uma série de corpos rígidos denominados \textit{elos} conectados através de \textit{juntas}. 
@@ -210,7 +210,7 @@ obtem-se a seguinte dinâmica para o erro
 \section{Servo Visão}
 A tarefa proposta na Servo Visão é controlar a posição e orientação do efetuador do manipulador, em relação a um alvo, usando características visuais extraídas de uma imagem. A câmera pode ser carregada pelo manipulador (montada no efetuador) ou colocada em um ponto fixo, observando tanto o efetuador como o alvo.
 
-Primeiramente é importante entender os princípios de formação de imagem através de câmeras \cite{petercorke}. 
+Primeiramente é importante entender os princípios de formação de imagem através de câmeras \citep{petercorke}. 
 
 \subsection{Transformação de Perspectiva}
 A equação elementar para descrever a formação de imagem com uma lente é a Lei das Lentes
@@ -224,7 +224,7 @@ onde $z_o$ é a distância até o objeto, $z_i$ é a distância ao plano da imag
   \includegraphics[width=0.8\linewidth]{./img/camera_model2.png}
   \caption{}
 \label{fig:camera_model}
-\caption{Modelo da câmera (disponível em \cite{opencvCameraCalibration})}
+\caption{Modelo da câmera (disponível em \citep{opencvCameraCalibration})}
 \end{figure}
 
 Em visão computacional geralmente é utilizado o modelo de perspectiva central mostrado na figura \ref{fig:camera_model}.
@@ -308,9 +308,9 @@ O problema de estimar a \textit{pose} consiste em determinar a posição e orien
 Existem diversas abordagens para solucionar esse problema. Aqui será destacado o caso simples com 3 pontos e comentada a abordagem de Dementhon para N pontos pois essa abordagem foi utilizada na implementação desse projeto. Maiores detalhes sobre implementações disponíveis em código aberto podem ser encontradas no apêndice \ref{chap:pose_est}. 
 
 \subsubsection{P3P: Estimação da \textit{pose} com 3 pontos}
-Para entender o problema, considera-se o caso mais simples, com 3 pontos, já que, teoricamente como a \textit{pose} pode ser representada por 6 parâmetros independentes, três pontos seriam capazes de resolver o problema \cite{marchand2016pose}. Sejam $\bm{P_i} = [X_i \; Y_i \; Z_i ]^T$ onde $i = 1 \dots 3$ três pontos com coordenadas representadas no referencial da câmera. 
+Para entender o problema, considera-se o caso mais simples, com 3 pontos, já que, teoricamente como a \textit{pose} pode ser representada por 6 parâmetros independentes, três pontos seriam capazes de resolver o problema \citep{marchand2016pose}. Sejam $\bm{P_i} = [X_i \; Y_i \; Z_i ]^T$ onde $i = 1 \dots 3$ três pontos com coordenadas representadas no referencial da câmera. 
 
-Primeiramente, é feita uma estimativa da coordenada de profundidade $Z_i$ de cada ponto utilizando a lei dos cossenos no triângulo dado por $\bm{C} \bm{P}_i \bm{P}_j$ onde $\bm{C}$ é o ponto onde a câmera está posicionada. Para cada par de correspondências $P_i \leftrightarrow p_i$ e $P_j \leftrightarrow p_j$ podemos escrever \cite{quan1999linear} 
+Primeiramente, é feita uma estimativa da coordenada de profundidade $Z_i$ de cada ponto utilizando a lei dos cossenos no triângulo dado por $\bm{C} \bm{P}_i \bm{P}_j$ onde $\bm{C}$ é o ponto onde a câmera está posicionada. Para cada par de correspondências $P_i \leftrightarrow p_i$ e $P_j \leftrightarrow p_j$ podemos escrever \citep{quan1999linear} 
 %A distâncias entre $\bm{P}_i$ e $\bm{P}_j$ e $\bm{P}_i$ e $\bm{P}_j$  é conhecida.
 \begin{equation}
 d_{ij}^2 = w_i^2 + w_j^2 -2 w_i w_j \cos \theta_{ij}
@@ -340,9 +340,9 @@ Conhecidas as distâncias $w_i$ dos pontos do mundo à câmera, essas distância
 Esse método é didático, porém não é robusto e é pouco preciso, além de que os dados redundantes (quarto ponto) não aumentam a precisão do resultado. Portanto, outros algoritmos foram propostos.
 
 \subsubsection{PNP: Estimação da \textit{pose} com N pontos}
-Em \cite{dementhon1995model} DeMenthon propõe combinar dois algoritmos. O primeiro \textit{POS (Pose from Orthography and Scaling)} aproxima a projeção de perspectiva com uma projeção ortográfica (e de escala) e encontra a matriz de rotação e o vetor de translação do objeto resolvendo um sistema linear. O segundo algoritmo \textit{POSIT (POS with ITerations)}, usa a \textit{pose} aproximada pelo \textit{POS} em um \textit{loop} para computar melhores projeções ortográficas (e de escala) dos pontos característicos \cite{note}. Então o \textit{POS} é aplicado a essas projeções, invés de às projeções da imagem original. O \textit{POSIT} converge para medidas precisas em poucas iterações e pode utilizar mais pontos para insensibilidade a erros de medição e ruido. 
+Em \citep{dementhon1995model} DeMenthon propõe combinar dois algoritmos. O primeiro \textit{POS (Pose from Orthography and Scaling)} aproxima a projeção de perspectiva com uma projeção ortográfica (e de escala) e encontra a matriz de rotação e o vetor de translação do objeto resolvendo um sistema linear. O segundo algoritmo \textit{POSIT (POS with ITerations)}, usa a \textit{pose} aproximada pelo \textit{POS} em um \textit{loop} para computar melhores projeções ortográficas (e de escala) dos pontos característicos. Então o \textit{POS} é aplicado a essas projeções, invés de às projeções da imagem original. O \textit{POSIT} converge para medidas precisas em poucas iterações e pode utilizar mais pontos para insensibilidade a erros de medição e ruido. 
 
-Uma desvantagem do \textit{POSIT} é que ele não é diretamente aplicável a pontos coplanares \cite{marchand2016pose}. No entanto, em \cite{oberkampf1996iterative} uma extensão ao \textit{POSIT} foi proposta, resolvendo o problema para 4 ou mais pontos coplanares. 
+Uma desvantagem do \textit{POSIT} é que ele não é diretamente aplicável a pontos coplanares \citep{marchand2016pose}. No entanto, em \citep{oberkampf1996iterative} uma extensão ao \textit{POSIT} foi proposta, resolvendo o problema para 4 ou mais pontos coplanares. 
 
 
 \subsection{Servo Visão Baseada em Posição}
@@ -398,4 +398,6 @@ Considerando que força e posição estão em sub-espaços de trabalho complemen
 \end{equation}
 onde $u_{hf}$ e $u_{hp}$ são os sinais de controle atuando sobre os subespaços de força e posição respectivamente. 
 
-Suponha que deseja-se aplicar controle de posição em $x_s$, $y_s$ e controle de força em $z_s$, normal a superfície de contato. A matriz de seleção de força é dada por
+Suponha que deseja-se aplicar controle de posição em $x_s$, $y_s$ e controle de força em $z_s$, normal a superfície de contato. %A matriz de seleção de força é dada por
+
+TODO

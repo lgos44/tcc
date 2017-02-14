@@ -40,13 +40,13 @@ Processos que utilizam ROS são chamados de nós e comunicam entre si através d
 
 \section{Motivação}
 Com o projeto mecânico do manipulador finalizado, segue a etapa de modelagem e implementação de estratégias de controle. 
-Nesse contexto, insere-se esse trabalho. Utilizando a configuração do manipulador mostrada na figura \ref{fig:tetis2}, alternativa àquela abordada em \cite{xaud2016doris},  busca-se:
+Nesse contexto, insere-se esse trabalho. Utilizando a configuração do manipulador mostrada na figura \ref{fig:tetis2}, alternativa àquela abordada em \citep{xaud2016doris},  busca-se:
 \begin{itemize}
 \item Elaborar o modelo cinemático e implementar estratégias de controle. %de posição, rastreamento de trajetória.
 
 \item Realizar a integração com o RobotGUI, que já interage com os outros dispositivos do DORIS. O uso ROS proporciona uma maior versatilidade e facilidade para incorporação de novas funcionalidades, em comparação com abordagens tradicionais.
 
-\item Utilizar a câmera para controle por servo visão onde o alvo é um marcador na forma de um QR Code em algum ponto de interesse, como por exemplo uma máquina a ser inspecionada. 
+\item Utilizar a câmera para controle por servo visão onde o alvo é um marcador em algum ponto de interesse, como por exemplo uma máquina a ser inspecionada. 
 
 \item Utilizando \textit{Julia Language} permitir que o algoritmo de controle seja modificado em tempo de execução.
 \end{itemize}
@@ -54,6 +54,6 @@ Nesse contexto, insere-se esse trabalho. Utilizando a configuração do manipula
 
 \section{Organização do trabalho}
 
-No primeiro capítulo o trabalho foi contextualizado, descrevendo os objetivos do projeto DORIS e de seu manipulador TETIS. No segundo capítulo são mostrados conceitos de robótica necessários para a modelagem e controle de manipuladores robóticos. No capítulo 3 esses conceitos são aplicados ao manipulador TETIS. No capítulo 4 são abordados detalhes das ferramentas e da arquitetura utilizada para a implementação do software. No capítulo 5, são mostrados e discutidos os resultados dos testes dos diferentes modos de controle implementados. Por último, no capítulo 6 são apresentadas as conclusões sobre o trabalho e pontos para serem abordados em trabalhos futuros.
+No primeiro capítulo o trabalho foi contextualizado, descrevendo os objetivos do projeto DORIS e de seu manipulador TETIS. No segundo capítulo são mostrados conceitos de robótica necessários para a modelagem e controle de manipuladores robóticos. No capítulo 3 esses conceitos são aplicados ao manipulador TETIS. No capítulo 4 são abordados detalhes das ferramentas e da arquitetura utilizada para a implementação do software. No capítulo 5, são mostrados e discutidos os resultados dos testes dos diferentes modos de controle implementados. No capítulo \ref{chap:descricao_hard} é descrito o hardware do robô DORIS. 
+ Por último, no capítulo 6 são apresentadas as conclusões sobre o trabalho e pontos para serem abordados em trabalhos futuros.
 
-No capítulo \ref{chap:descricao_hard} é descrito o hardware do robô DORIS. 
