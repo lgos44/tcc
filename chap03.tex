@@ -52,20 +52,20 @@ Considerando a posição inicial da figura \ref{fig:modelo_tetis} todos os ângu
 A orientação de um sistema de coordenadas $i$ em relação ao anterior é dada por uma rotação de $\theta_i$ em torno de $z$ seguida de uma rotação em torno de $x$ de $\alpha_i$ considerando o sistema de coordenadas corrente.
 
 \begin{equation}
-\bm{R}_{i-1,i} = \bm{R}_z(\theta_i)\bm{R}_x(\alpha_i)
+{R}_{i-1,i} = {R}_z(\theta_i){R}_x(\alpha_i)
 \end{equation}
 
 A translação é obtida representando as distâncias no sistema de coordenadas $i-1$:
 \begin{gather}
-\bm{\vec{p}}_{i-1,i} = d_i \bm{\vec{z}}_{i-1} + a_i \bm{\vec{x}}_i \\
-(\bm{\vec{p}}_{i-1,i})_{i-1} = d_i (\bm{\vec{z}}_{i-1})_{i-1} + a_i (\bm{\vec{x}}_i)_{i-1} \\
-(\bm{\vec{p}}_{i-1,i})_{i-1} = d_i (\bm{\vec{z}}_{i-1})_{i-1} + a_i \bm{R}_{i-1,i}(\bm{\vec{x}}_i)_{i} 
+{\vec{p}}_{i-1,i} = d_i {\vec{z}}_{i-1} + a_i {\vec{x}}_i \\
+({\vec{p}}_{i-1,i})_{i-1} = d_i ({\vec{z}}_{i-1})_{i-1} + a_i ({\vec{x}}_i)_{i-1} \\
+({\vec{p}}_{i-1,i})_{i-1} = d_i ({\vec{z}}_{i-1})_{i-1} + a_i {R}_{i-1,i}({\vec{x}}_i)_{i} 
 \end{gather}
 
 As duas informações podem ser representadas de uma forma mais compacta como transformação homogênea:
 \begin{equation}
 T_{i-1,i} = \m{
-	R_{i-1,i} 		&  (\bm{\vec{p}}_{i-1,i})_{i-1} \\
+	R_{i-1,i} 		&  ({\vec{p}}_{i-1,i})_{i-1} \\
 	0_{1 \times 3}	&  							  1
 }
 \end{equation}
@@ -118,26 +118,26 @@ Obtemos então:
 %\end{equation}
 
 \begin{align*}
-\bm{T}_{01} = 
+{T}_{01} = 
 \m{c_1 & 0 & s_1 &  0 \\
    s_1 & 0 & -c_1 & 0 \\
    0   & 1 &    0 & 0 \\
    0   & 0 &    0 & 1}
 & &
-\bm{T}_{12} =  \m{c_2 & -s_2 &  0 & E_3 c_2 \\
+{T}_{12} =  \m{c_2 & -s_2 &  0 & E_3 c_2 \\
    s_2 &  c_2 &  0 & E_3 s_2  \\
    0   &    0 &  1 & 	   0  \\
    0   &    0 &  0 &       1} 
 \end{align*}
 
 \begin{align*}
-\bm{T}_{23} = 
+{T}_{23} = 
 \m{c_3 & -s_3 &  0 & E_4 c_3 \\
    s_3 &  c_3 &  0 & E_4 s_3  \\
    0   &    0 &  1 & 	   0  \\
    0   &    0 &  0 &       1}
 & &
-\bm{T}_{34} = 
+{T}_{34} = 
 \m{c_4 &    0 &  -s_4 & E_5 c_4 \\
    s_4 &    0 &   c_4 & E_5 s_4 \\
    0   &   -1 &     0 & 	-M_5 \\
@@ -146,7 +146,7 @@ Obtemos então:
 
 
 \begin{equation} \label{eq:cine_direta}
- \bm{T}_{04} = \bm{T}_{01} \bm{T}_{12}  \bm{T}_{23} \bm{T}_{34} = 
+{T}_{04} = {T}_{01} {T}_{12}  {T}_{23} {T}_{34} = 
 \m{
    c_1 c_{234} & -s_1 & -c_1 s_{234} & -M_5 s_1 + E_4 c_{23}c_1 + E_3 c_1 c_2 + E_5 c_{234} c_1 \\
    s_1 c_{234} & -c_1 & -s_1 s_{234} &   M_5 c_1+E_4 c_{23} s_1 + E_3 c_2 s_1 + E_5 c_{234} s_1 \\
@@ -155,9 +155,9 @@ Obtemos então:
 } 
 \end{equation}
 
-Definindo $\bm{T}_{b0} = \bm{I}$ e $\bm{T}_{4e} = \bm{I}$, pela equação \eqref{eq:base_efetuador} temos
+Definindo ${T}_{b0} = {I}$ e ${T}_{4e} = {I}$, pela equação \eqref{eq:base_efetuador} temos
 \begin{equation}
-\bm{T}_{be} (\bm{q}) = \bm{T}_{04}(\bm{q})
+{T}_{be} ({q}) = {T}_{04}({q})
 \end{equation}
 
 
@@ -165,29 +165,29 @@ Definindo $\bm{T}_{b0} = \bm{I}$ e $\bm{T}_{4e} = \bm{I}$, pela equação \eqref
 Antes de tratar de estratégias de controle é necessário definir o espaço operacional e o espaço das juntas,  sob os quais serão aplicadas as leis de controle. 
 Como trata-se de um manipulador 4-DOF de temos que o vetor do espaço operacional tem dimensão $(4 \times 1)$ dado por 
 \begin{equation} \label{eq:operational_space}
-\bm{x_e} = \m{\bm{p}_e \\ \phi_e}
+{x_e} = \m{{p}_e \\ \phi_e}
 \end{equation}
-onde o vetor $\bm{p}_e$ descreve a posição cartesiana representada no referencial da base:
+onde o vetor ${p}_e$ descreve a posição cartesiana representada no referencial da base:
 \begin{equation}
-\bm{p}_e = \m{x \\ y \\ z}
+{p}_e = \m{x \\ y \\ z}
 \end{equation}
-e $\phi_e$ é o grau de liberdade de orientação \textit{pitch} no referencial do efetuador (??), dado por
+e $\phi_e$ é o grau de liberdade de orientação \textit{pitch}, dado por
 \begin{equation} \label{eq:orientacao}
 \phi_e = -(\theta_2 + \theta_3 + \theta_4)
 \end{equation}
 
 O espaço das juntas é definido por 
 \begin{equation} \label{joint_space}
-\bm{q} = \m{q_1 \\ q_2 \\ q_3 \\ q_4} = \m{\theta_1 \\ \theta_2 \\ \theta_3 \\ \theta_4  }
+{q} = \m{q_1 \\ q_2 \\ q_3 \\ q_4} = \m{\theta_1 \\ \theta_2 \\ \theta_3 \\ \theta_4  }
 \end{equation} 
 pois todas as juntas são de revolução.
 
 \section{Cinemática Diferencial}
 
 \subsection{Jacobiano Analítico}
-A partir da cinemática direta em \eqref{eq:cine_direta} e da equação \ref{eq:jacob_pos} podemos obter o Jacobiano de Posição para o manipulador diferenciando a equação em relação as variáveis de junta. 
+A partir da cinemática direta em \eqref{eq:cine_direta} e da equação \ref{eq:jacob_pos} podemos obter o Jacobiano de posição para o manipulador diferenciando a equação em relação as variáveis de junta. 
 \begin{equation}
-\bm{p}_e = \m{x \\ y \\ z} =
+{p}_e = \m{x \\ y \\ z} =
 \m{
    -M_5 s_1 + E_4 c_{23}c_1 + E_3 c_1 c_2 + E_5 c_{234} c_1 \\
      M_5 c_1+E_4 c_{23} s_1 + E_3 c_2 s_1 + E_5 c_{234} s_1 \\
@@ -196,7 +196,7 @@ A partir da cinemática direta em \eqref{eq:cine_direta} e da equação \ref{eq:
 \end{equation}
 
 \begin{equation}
-(\bm{J}_{A_P})_0 = 
+({J}_{ap})_e = 
 \m{
 	\ddfrac{\partial x}{\partial q_1} & \ddfrac{\partial x}{\partial q_2} & \ddfrac{\partial x}{\partial q_3} & \ddfrac{\partial x}{\partial q_4}  \\
 	\ddfrac{\partial y}{\partial q_1} & \ddfrac{\partial y}{\partial q_2} & \ddfrac{\partial y}{\partial q_3} & \ddfrac{\partial x}{\partial q_4}  \\
@@ -221,13 +221,13 @@ onde
 
 A partir de \ref{eq:jacob_or} e de \ref{eq:orientacao} podemos calular o Jacobiano de Orientação
 \begin{equation}
-\bm{J}_{A_\phi}(\bm{q}) = \frac{\partial \phi_e}{\partial \bm{q}} = \m{0 & -1 & -1 & -1}
+{J}_{a\phi}({q}) = \frac{\partial \phi_e}{\partial {q}} = \m{0 & -1 & -1 & -1}
 \end{equation}
  
-Em alguns modos como controle por servo visão e no controle manual com joystick é interessante fazer o controle no referencial do efetuador, portanto precisamos representar o Jacobiano de posição no referencial do efetuador como $(\bm{J}_P)_N = \bm{R}_{04}^T (\bm{J}_P)_0$.  
+Em alguns modos como controle por servo visão e no controle manual com joystick é interessante fazer o controle no referencial do efetuador, portanto precisamos representar o Jacobiano de posição no referencial do efetuador como $({J}_{ap})_e = {R}_{04}^T ({J}_{ap})_e$.  
 
 \begin{equation}
-(\bm{J}_P)_N =  
+({J}_{ap})_e =  
 \m{
     -M_5c_{234} & E_3s_{34}+E_4s_4 & E_4s_4 & 0 \\
     E_4c_{23}+E_3c_2+E_5c_{234} & 0 & 0 & 0 \\
@@ -241,7 +241,7 @@ Em alguns modos como controle por servo visão e no controle manual com joystick
 %\section{Singularidades}
 
 \section{Malha Aberta no Espaço Operacional} 
-Este é um modo em malha aberta, onde o sinal de entrada no controlador é de velocidade no referencial da base ou do efetuador, ou seja a velocidade linear $\bm{\dot{p}}_d$. Utiliza-se a equação \eqref{eq:jacob_pos} para calcular a velocidade de cada junta. 
+Este é um modo em malha aberta, onde o sinal de entrada no controlador é de velocidade no referencial da base ou do efetuador, ou seja a velocidade linear ${\dot{p}}_d$. Utiliza-se a equação \eqref{eq:jacob_pos} para calcular a velocidade de cada junta. 
 
 \begin{figure}[h!]
 \centering
@@ -252,28 +252,28 @@ Este é um modo em malha aberta, onde o sinal de entrada no controlador é de ve
     \node [block, right of=J] (Integral) {$\int$};
     \node [output, right of=Integral] (output) {};
 
-    \draw [draw,->] (input) -- node {$\dot{\bm{x}}_e$} (J);
-    \draw [->] (J) -- node {$\bm{\dot{q}}$} (Integral);
-    \draw [->] (Integral) -- node [name=x] {$\bm{q}$}(output);
+    \draw [draw,->] (input) -- node {$\dot{{x}}_e$} (J);
+    \draw [->] (J) -- node {${\dot{q}}$} (Integral);
+    \draw [->] (Integral) -- node [name=x] {${q}$}(output);
 \end{tikzpicture}
 \caption{Diagrama de Blocos: Modo de velocidade do Espaço Operacional}
 \label{fig:vel_op}
 \end{figure}
 
 
-\subsection{Referencial Base} \label{sec:openloopbase}
-Quando escolhe-se o referencial da base $\bm{\dot{x}}_d$ é velocidade desejada expressa no referencial da base e utiliza-se $(\bm{J}_{A})_0$.
+\subsection{Sistema de coordenadas da Base} \label{sec:openloopbase}
+Quando escolhe-se o referencial da base ${\dot{x}}_d$ é velocidade desejada expressa no referencial da base e utiliza-se $({J}_{a})_e$.
 \begin{equation}
-\bm{u} = \bm{\dot{q}}_d = (\bm{J}_{A})_0^{-1} (\bm{\dot{x}}_d)_0
+{u} = {\dot{q}}_d = ({J}_{a})_b^{-1} ({\dot{x}}_d)_e
 \end{equation}
-\subsection{Referencial Efetuador} \label{sec:openloopefct}
-Quando escolhe-se o referencial da efetuador $\bm{\dot{x}}_d$ é velocidade desejada expressa no referencial do efetuador e utiliza-se $(\bm{J}_{A})_N$.
+\subsection{Sistema de coordenadas do Efetuador} \label{sec:openloopefct}
+Quando escolhe-se o referencial da efetuador ${\dot{x}}_d$ é velocidade desejada expressa no referencial do efetuador e utiliza-se $({J}_{a})_e$.
 \begin{equation}
-\bm{u} = \bm{\dot{q}}_d = (\bm{J}_{A})_N^{-1} (\bm{\dot{x}}_d)_N
+{u} = {\dot{q}}_d = ({J}_{a})_e^{-1} ({\dot{x}}_d)_e
 \end{equation}
 onde 
 \begin{equation}
-\bm{\dot{x}}_d = \m{\bm{\dot{p}}_d \\ 0}
+{\dot{x}}_d = \m{{\dot{p}}_d \\ 0}
 \end{equation}
 
 \section{Controle de Posição no Espaço das Juntas} \label{sec:position_joint}
@@ -285,19 +285,19 @@ O controle de posição no espaço das juntas consiste em uma realimentação co
     % We start by placing the blocks
     \node [input, name=input] {};
     \node [sum, right of=input] (sum) {};
-    \node [block, right of=sum] (controller) {$\bm{K}_j$};
+    \node [block, right of=sum] (controller) {${K}_j$};
     \node [block, right of=controller] (system) {$\ddfrac{1}{s}$};
     % We draw an edge between the controller and system block to 
     % calculate the coordinate u. We need it to place the measurement block. 
-    \draw [->] (controller) -- node[name=u] {$\bm{u}$} (system);
+    \draw [->] (controller) -- node[name=u] {${u}$} (system);
     \node [output, right of=system] (output) {};
     \node [tmp, below of=u] (tmp1) {};
 
     % Once the nodes are placed, connecting them is easy. 
-    \draw [->] (system) -- node [name=s] {$\bm{q}$}(output);
-    \draw [draw,->] (input) -- node {$\bm{q_d}$} (sum);
-    \draw [->] (sum) -- node {$\bm{e}$} (controller);
-    \draw [->] (s) |- (tmp1)-| node[pos=0.99] {$-$} node [near end] {$\bm{q}$} (sum);
+    \draw [->] (system) -- node [name=s] {${q}$}(output);
+    \draw [draw,->] (input) -- node {${q_d}$} (sum);
+    \draw [->] (sum) -- node {${e}$} (controller);
+    \draw [->] (s) |- (tmp1)-| node[pos=0.99] {$-$} node [near end] {${q}$} (sum);
        %\draw [->] (measurements) -| node[pos=0.99] {$-$} 
        % node [near end] {$\bm{q}_m$} (sum);
 \end{tikzpicture}
@@ -307,32 +307,32 @@ O controle de posição no espaço das juntas consiste em uma realimentação co
 
 A lei de controle é dada por 
 \begin{equation}
-\bm{u} = \bm{K}_j (\bm{q}_d - \bm{q})
+{u} = {K}_j ({q}_d - {q})
 \end{equation}
-onde $\bm{K_j} = k_j \bm{I}$.
+onde ${K_j} = k_j {I}$.
 
 \section{Controle de Posição no Espaço Operacional} \label{sec:pos_operacional}
-Para este modo considera-se o problema de controle de posição no espaço operacional conforme definido em \ref{eq:op_space}. Para referências na forma de degrau, ou seja, quando $\dot{\bm{x}}_d = 0$ a lei de controle dada por
+Para este modo considera-se o problema de controle de posição no espaço operacional conforme definido em \ref{eq:op_space}. Para referências na forma de degrau, ou seja, quando $\dot{{x}}_d = 0$ a lei de controle dada por
 \begin{equation} \label{eq:lei_posicao}
-\bm{u} = (\bm{J}_{A})_0^{-1} \bm{K}_p (\bm{x_d} - \bm{x})
+{u} = ({J}_{a})_b^{-1} {K}_p ({x_d} - {x_e})
 \end{equation}
-é capaz de levar o $\bm{e} \rightarrow 0$ quando $t \rightarrow \infty$.
+é capaz de levar o ${e} \rightarrow 0$ quando $t \rightarrow \infty$.
 
 \section{Controle Proporcional com Feedforward} \label{sec:pplusf}
-Para o rastreamento de trajetória considera-se o problema de seguir um referência no referencial da base $\bm{x}_d(t)$ que é função do tempo, conhecidos $\bm{x}_d(t)$ e $\bm{\dot{x}}_d(t)$. Para levar o erro assintoticamente a zero, utiliza-se uma lei de controle proporcional com \textit{feedforward} utilizando a inversa do Jacobiano Analítico. Conforme mostrado em ~\ref{controle_cinematico}, a lei de controle dada por 
+Para o rastreamento de trajetória considera-se o problema de seguir um referência no referencial da base ${x}_d(t)$ que é função do tempo, conhecidos ${x}_d(t)$ e ${\dot{x}}_d(t)$. Para levar o erro assintoticamente a zero, utiliza-se uma lei de controle proporcional com \textit{feedforward} utilizando a inversa do Jacobiano Analítico. Conforme mostrado em ~\ref{controle_cinematico}, a lei de controle dada por 
 \begin{equation}
-\bm{u} = (\bm{J}_{A})_0^{-1} (\dot{\bm{x}}_d + \bm{K}_t (\bm{x_d} - \bm{x}))
+{u} = ({J}_{a})_b^{-1} (\dot{{x}}_d + {K}_t ({x_d} - {x_e}))
 \end{equation} 
 é capaz de levar o erro assintoticamente a zero pois a dinâmica fica 
 \begin{equation}
-\dot{\bm{e}} + \bm{K} \bm{e} = 0
+\dot{{e}} + {K} {e} = 0
 \end{equation}
 
 O algoritmo de controle pode ser resumido por:
 \begin{align}
-\bm{e} &= (\bm{x}_d)_0 - (\bm{x})_0  \label{eq:error_pf}\\
-\bm{\bar{u}} &= \bm{K}_t \bm{e} + \bm{\dot{x}}_d \\
-\bm{u} &= (\bm{J}_A)_0^{-1} \bm{\bar{u}}
+{e} &= ({x}_d)_b- ({x_e})_b  \label{eq:error_pf}\\
+{\bar{u}} &= {K}_t {e} + {\dot{x}}_d \\
+{u} &= ({J}_a)_b^{-1} {\bar{u}}
 \end{align}
 
 %\begin{algorithm}
@@ -374,10 +374,10 @@ O controle por servo visão no manipulador TETIS é feito através de uma config
 
 O objetivo é deste modo de controle é rastrear um alvo, que é representado por um QR code como o da figura \ref{fig:camera_target}. Deseja-se que o efetuador rastreie sempre a orientação normal ao plano do alvo.
 
-A matriz de calibração $\bm{K}$ da equação \eqref{eq:camera_projection} obtida através do processo descrito em \cite{calibration_tutorial} é:
+A matriz de calibração ${K}$ da equação \eqref{eq:camera_projection} obtida através do processo descrito em \cite{calibration_tutorial} é:
 
 \begin{equation}
-\bm{K} = \m {
+{K} = \m {
 	f/\rho_w & 0 & u_0 \\
 	0        & f/\rho_h &v_0 \\
 	0 & 0 & 1 \\
@@ -393,7 +393,7 @@ A matriz de calibração $\bm{K}$ da equação \eqref{eq:camera_projection} obti
 Observando que o referencial da câmera e do efetuador são dados pela figura \ref{fig:camera_ref}, podemos chegar a seguinte transformação homogênea
 
 \begin{equation} \label{eq:tec}
-\bm{T}_{EC} = \m{
+{T}_{ec} = \m{
 	0 & 0 & 1 & -30 \\
 	0 & -1 & 0 & 101 \\
 	1 &  0 & 0 & -43 \\
@@ -418,47 +418,49 @@ Observando que o referencial da câmera e do efetuador são dados pela figura \r
 
 Para a servo visão baseada em posição, foi utilizada uma lei de controle proporcional
 \begin{equation} \label{eq:lei_posicao}
-\bm{u} = (\bm{J}_{A})_N^{-1} \bm{K}_t [(\bm{x}_t)_e - (\bm{x})_e]
+{u} = ({J}_{a})_e^{-1} {K}_t [({x}_t)_e - ({x_e})_e]
 \end{equation}
-onde $\bm{x}_t$ e $\bm{x}$ estão representados no referencial do efetuador. Portanto precisamos saber a posição e orientação $\bm{x}_t$ do alvo em relação ao efetuador
+onde ${x}_t$ e ${x_e}$ estão representados no referencial do efetuador. Portanto precisamos saber a posição e orientação ${x}_t$ do alvo em relação ao efetuador
 \begin{equation}
-\bm{T}_{ET} = \bm{T}_{EC} \bm{T}_{CT}
+{T}_{et} = {T}_{ec} {T}_{ct}
 \end{equation}
-onde $\bm{T}_{EC}$ é dado por \eqref{eq:tec} e $\bm{T}_{CT}$ obtemos através de algoritmos de estimação de posição e orientação a partir de visão computacional. 
+onde ${T}_{ec}$ é dado por \eqref{eq:tec} e ${T}_{ct}$ obtemos através de algoritmos de estimação de posição e orientação a partir de visão computacional. 
 
 \begin{equation}
-(\bm{x}_t)_e = \m{ (\bm{p}_t)_e \\ \phi_t }
+({x}_t)_e = \m{ ({p}_t)_e \\ \phi_t }
 \end{equation}
-onde $(\bm{p}_t)_e$ é o vetor de translação que pode ser obtido diretamente de $\bm{T}_{EC}$ e  $\phi_t$ é a orientação, que pode ser obtido de duas formas.
+onde $({p}_t)_e$ é o vetor de translação que pode ser obtido diretamente de ${T}_{ec}$ e  $\phi_t$ é a orientação, que pode ser obtido de duas formas.
 
-A primeira alternativa é obter a rotação em torno de $x$ (\textit{pitch}) em relação ao referencial do efetuador, extraído de $\bm{T}_{ET}$. No entanto essa opção não permite que o alvo seja rotacionado em torno de $\bm{z}_c$, pois a rotação em torno de $\bm{x}_c$ não mais representará a inclinação do plano do alvo em relação a posição inicial, que faz o efetuador rastrear a direção normal ao alvo. A figura \ref{fig:projection} ilustra isso. 
 
-Portanto, optou-se pela segunda alternativa. Projeta-se o eixo do alvo $(\bm{z}_t)_c$, representado do referencial da câmera, no plano $(\bm{z}_{t_0})_c \times (\bm{x}_{t_0})_c$, onde $(\bm{z}_{t0})_c$ indica o eixo de coordenadas do alvo $z_t$ em sua posição inicial conforme a figura \ref{fig:camera_target}. Em seguida encontra-se o ângulo entre os vetores $(\bm{z}_{t_0})_c$ e $(\bm{z}_{t_0})_c$. 
+%TODO
+A primeira alternativa é obter a rotação em torno do eixo $x$ (\textit{pitch}) em relação ao referencial do efetuador, extraído de ${T}_{et}$. No entanto essa opção não permite que o alvo seja rotacionado em torno de ${z}_c$, pois a rotação em torno de ${x}_c$ não mais representará a inclinação do plano do alvo em relação a posição inicial, que faz o efetuador rastrear a direção normal ao alvo. A figura \ref{fig:projection} ilustra isso. 
+
+Portanto, optou-se pela segunda alternativa. Projeta-se o eixo do alvo $({z}_t)_c$, representado do referencial da câmera, no plano $({z}_{t_0})_c \times ({x}_{t_0})_c$, onde $({z}_{t0})_c$ indica o eixo de coordenadas do alvo $z_t$ em sua posição inicial conforme a figura \ref{fig:camera_target}. Em seguida encontra-se o ângulo entre os vetores $({z}_{t_0})_c$ e $({z}_{t_0})_c$. 
 
 \begin{figure}[!ht]
 \centering
   \includegraphics[width=0.3\linewidth]{./img/projection.eps}
-  \caption{Caso em que a rotação em torno de $\bm{x}_c$ não representa a inclinação do plano do alvo.}
+  \caption{Caso em que a rotação em torno de ${x}_c$ não representa a inclinação do plano do alvo.}
   \label{fig:projection}
 \end{figure}%
 
 
-Dada a matriz de rotação $\bm{R}_{CT_0}$, da câmera à posição inicial
+Dada a matriz de rotação ${R}_{ct_0}$, da câmera à posição inicial
 \begin{equation}
-\bm{R}_{CT_0} = \m{ (\bm{x}_{t_0})_c & (\bm{y}_{t_0})_c  & (\bm{z}_{t_0})_c} = 
+{R}_{ct_0} = \m{ ({x}_{t_0})_c & ({y}_{t_0})_c  & ({z}_{t_0})_c} = 
 \m{
 	0 & 1 & 0 \\
 	1 & 0 & 0 \\
 	0 & 0 & -1
 }
 \end{equation}
-é conhecida a normal ao plano do alvo é $\bm{n} = \bm{x}_{t_0} \times \bm{z}_{t_0} =  \bm{y}_{t_0} $. A matriz de projeção linear \citep{strang} de um vetor em um plano é dada por
+é conhecida a normal ao plano do alvo é ${n} = {x}_{t_0} \times {z}_{t_0} =  {y}_{t_0} $. A matriz de projeção linear \citep{strang} de um vetor em um plano é dada por
 \begin{equation}
-\bm{P} = \bm{I} - \bm{n} \bm{n}^T,
+{P} = {I} - {n} {n}^T,
 \end{equation}
-logo para $\bm{n} = \bm{y}_{t_0}$ temos 
+logo para ${n} = {y}_{t_0}$ temos 
 \begin{equation}
-\bm{P} =  \m{
+{P} =  \m{
 	 0  &   0  &   0 \\
      0  &   1  &   0 \\
      0  &   0  &   1
@@ -467,11 +469,11 @@ logo para $\bm{n} = \bm{y}_{t_0}$ temos
 
 O vetor projetado no plano é dado por
 \begin{equation}
-\bm{z'}_{t} = \bm{P} \bm{z}_{t},
+{z'}_{t} = {P} {z}_{t},
 \end{equation}
-assim basta apenas encontrar o ângulo entre os vetores $\bm{z'}_{t}$ e $\bm{z}_{t_0}$, que pode ser calculado pela fórmula do Cosseno \citep{strang} 
+assim basta apenas encontrar o ângulo entre os vetores ${z'}_{t}$ e ${z}_{t_0}$, que pode ser calculado pela fórmula do Cosseno \citep{strang} 
 \begin{equation}
-\phi_t = \cos^{-1} \left( \frac{\bm{z'}^T_{t} \bm{z}_{t_0} } {||\bm{z'}_{t}|| ||\bm{z}_{t_0}||} \right)
+\phi_t = \cos^{-1} \left( \frac{{z'}^T_{t} {z}_{t_0} } {||{z'}_{t}|| \; ||{z}_{t_0}||} \right)
 \end{equation}
 
 
@@ -483,9 +485,9 @@ assim basta apenas encontrar o ângulo entre os vetores $\bm{z'}_{t}$ e $\bm{z}_
 
 Após obter os valores de $(p_t)_e$ e $\phi_t$, sabemos $(x_t)_e$ e controle se resume a:
 \begin{align}
-\bm{e} &= (\bm{x}_t)_e - (\bm{x})_e \\
-\bm{\bar{u}} &= \bm{K}_v \bm{e}  \\
-\bm{u} &= (\bm{J}_{A})_N^{-1} \bm{e}
+{e} &= ({x}_t)_e - ({x})_e \\
+{\bar{u}} &= {K}_v {e}  \\
+{u} &= ({J}_{a})_e^{-1} {e}
 \end{align}
 
 \section{Controle de Força} \label{sec:force}
@@ -503,19 +505,19 @@ R_{es} = \m{
 \end{equation}
 
 \subsection{Float}  \label{sec:forca_float}
-Esse mode de controle de força consiste em configurar uma referência de controle de força $\bm{f}_d = 0$, de modo que o efetuador do manipulador fique "flutuando", se movendo de forma sensível ao toque.
+Esse mode de controle de força consiste em configurar uma referência de controle de força ${f}_d = 0$, de modo que o efetuador do manipulador fique "flutuando", se movendo de forma sensível ao toque.
 
-Primeiramente a força representada no referencial do sensor $(\bm{f})_s$ é representada na base por $(\bm{f})_e = R_{es} (\bm{f})_s$.
-Como $\bm{f}_d = 0$:
+Primeiramente a força representada no referencial do sensor $({f})_s \in \mathbb{R}^3 $ é representada na base por $({f})_e = R_{es} ({f})_s$.
+Como ${f}_d = 0$:
 \begin{equation}
-(\bm{e}_f)_e = - (\bm{f})_e \\
+({e}_f)_e = - ({f})_e \\
 \end{equation}
 
 Utilizando um controle proporcional:
 \begin{align}
-\bar{\bm{u}}_f &= \bm{K}_f (\bm{e}_f)_e \\
-\bar{\bm{u}} &= \m{ \bar{\bm{u}}_f & 0}^T\\
-\bm{u} &= (\bm{J_A})_0^{-1} \bar{\bm{u}}
+\bar{{u}}_f &= {K}_f ({e}_f)_e \\
+\bar{{u}} &= \m{ \bar{{u}}_f & 0}^T\\
+{u} &= ({J_a})_b^{-1} \bar{{u}}
 \end{align}
 
 \subsection{Approach} \label{sec:forca_approach}
@@ -543,9 +545,9 @@ Considerando que o controle de força seja ativado somente após a etapa de cont
     \node [sum, right of=input] (sum) {};
     \node [block, right of=sum] (Ks1) {$k_s^{-1}$};
     \node [block, right of=Ks1] (C) {$C(s)$};
-    \node [blockbig=right:C] (J) [right=1cm of C] {$J_N^{-1}$};
+    \node [blockbig=right:C] (J) [right=1cm of C] {$(J_a)_e^{-1}$};
     \node [block=right:J] (Integral) [right=1cm of J] {$\int$};
-    \node [blockbig, right of=Integral] (DirKine) {$\bm{k}(\cdot)$};
+    \node [blockbig, right of=Integral] (DirKine) {${k}(\cdot)$};
 
 	\node [tmp=below:J] (tmp0) [below left=-1.25cm and .7cm of J] {};
 	\node [tmp=below:J] (tmp00) [below left=-2cm and 0.7cm of J] {};
@@ -582,8 +584,8 @@ Considerando que o controle de força seja ativado somente após a etapa de cont
     \draw [->] (sum) -- node {$e_f$} (Ks1);
     \draw [->] (Ks1) -- node {} (C);
     %\draw [->] (C) -- node[name=u] {$u$} (tmp0);
-    \draw [->] (J) -- node {$\bm{\dot{q}}$} (Integral);
-    \draw [->] (Integral) -- node {$\bm{q}$} (DirKine);
+    \draw [->] (J) -- node {${\dot{q}}$} (Integral);
+    \draw [->] (Integral) -- node {${q}$} (DirKine);
     \node [block, below of=J] (measurements) {$H(s)$};
     %draw [->] (DirKine) -- node {} (ks);
     \draw [->] (ks) -- node [name=x] {$f$}(output);
@@ -655,24 +657,24 @@ Ficamos com a função de transferência a seguir a partir da qual é possível 
 G(s) = \frac{k_p \tau s^2 + (k_p + \tau k_i)s + k_i}{\tau s^3 + s^2 + k_p s + k_i}
 \end{equation}
 
-Considerando que obtemos do sensor de força um vetor $(\bm{f})_s \in \mathcal{R}^3$, representado no referencial do sensor. O controle de força pode ser implementado a partir das seguintes equações:
+Considerando que obtemos do sensor de força um vetor $({f})_s \in \mathcal{R}^3$, representado no referencial do sensor. O controle de força pode ser implementado a partir das seguintes equações:
 \begin{align}
-(\bm{f})_e &= \bm{R}_{es} (\bm{f})_s \\
-(\bm{e}_f)_e &= \bm{f}_d - (\bm{f})_e \\
+({f})_e &= {R}_{es} ({f})_s \\
+({e}_f)_e &= {f}_d - ({f})_e \\
 \end{align}
 
 A estratégia de controle PI é dada por
 \begin{equation}
-\bar{\bm{u}}_f = -\bm{K}_s^{-1} (\bm{K}_f (\bm{e}_f)_e + \bm{K}_i \int_0^t (\bm{e}_f)_e (\tau)d\tau)\\
+\bar{{u}}_f = -{K}_s^{-1} ({K}_f ({e}_f)_e + {K}_i \int_0^t ({e}_f)_e (\tau)d\tau)\\
 \end{equation}
 
-Como $\bm{u} \in \mathcal{R}^4$  e desejamos controlar somente a direção de \textit{approach}:
+Como ${u} \in \mathcal{R}^4$  e desejamos controlar somente a direção de \textit{approach}:
 \begin{equation}
-\bar{\bm{u}} = \m{ \bm{S}_f \bar{\bm{u}}_f \\ 0} 
+\bar{{u}} = \m{ {S}_f \bar{{u}}_f \\ 0} 
 \end{equation}
 onde 
 \begin{equation}
-\bm{S}_f = \m{
+{S}_f = \m{
   1 & 0 & 0 \\
   0 & 0 & 0 \\
   0 & 0 & 0
@@ -680,7 +682,7 @@ onde
 \end{equation}
 portanto:
 \begin{equation}
-\bm{u} = (\bm{J_A})_N^{-1} \bar{\bm{u}}
+{u} = ({J_a})_e^{-1} \bar{{u}}
 \end{equation}
 
 %Especificações:

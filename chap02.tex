@@ -21,22 +21,22 @@ O objetivo da cinemática direta é calcular a posição e orientação do efetu
 
 Uma cadeia cinemática aberta é constituída por $n+1$ elos numerados de $0$ a $n$, onde o Elo 0 é fixado a base por convenção. O método utilizado consiste em definir um sistema de coordenadas associado a cada elo e calcular a transformação homogênea entre elos consecutivos. Em seguida a transformação do n-ésimo sistema de coordenadas pode ser obtida de forma recursiva como
 \begin{equation}\label{eq:cinedireta}
-\bm{T}_{0n}(\bm{q}) = \bm{T}_{01}(q_1) \bm{T}_{12}(q_{2}) {\dots} \bm{T}_{n-1,n}(q_n)
+{T}_{0n}({q}) = {T}_{01}(q_1) {T}_{12}(q_{2}) {\dots} {T}_{n-1,n}(q_n)
 \end{equation}
-onde $\bm{T}_{i-1,i}(q_i)$ denota a transformação homogênea do sistema de coordenadas solidário ao elo $i-1$ àquele solidário ao elo $i$.
+onde ${T}_{i-1,i}(q_i)$ denota a transformação homogênea do sistema de coordenadas solidário ao elo $i-1$ àquele solidário ao elo $i$.
 
 Logo a transformação homogênea do efetuador final com respeito a base é dada por
 \begin{equation} \label{eq:base_efetuador}
-\bm{T}_{be}({q}) = {T}_{b0} {T}_{0n}({q}) {T}_{ne} 
+{T}_{be}({q}) = {T}_{b0} {T}_{0n}({q}) {T}_{ne} 
 \end{equation}
 
 \subsection{Convenção Denavit-Hartenberg} \label{sec:denavit}
 Para calcular a cinemática direta para uma manipulador de cadeia cinemática aberta de acordo com a equação \eqref{eq:cinedireta} um método sistemático foi definido para obter a relação entre a posição e orientação de dois elos consecutivos. A convenção Denavit-Hartenberg especifica um conjunto de regras sobre como definir os sistemas de coordenadas de cada elo.
 
-Seja o Eixo $i$ o eixo da junta que conecta o elo $i-1$, ao elo $i$, então:
+Seja o $h_i$ eixo de rotação da junta que conecta o elo $i-1$, ao elo $i$, então:
 
 \begin{itemize}
-\item Escolher o eixo $z_i$ ao longo do eixo da junta $i+1$.
+\item Escolher o eixo $z_i$ ao longo do eixo $h_{i+1}$.
 \item Colocar a origem $O_i$ na interseção do eixo $z_i$ com a normal comum entre os eixos $z_{i-1}$ e $z_i$
 \item Escolher $x_i$ ao longo da normal comum aos eixos $z_{i-1}$ e $z_i$, com direção da junta $i$ para a junta $i+1$. 
 \item O eixo $y_i = z_i \times x_i$ é escolhido de forma a completar o sistema de coordenadas.
@@ -64,38 +64,40 @@ Para que o efetuador final de um manipulador realize alguma tarefa é necessári
 
 Para descrever a posição utiliza-se as coordenadas cartesianas. Para a orientação adota-se uma representação mínima (ângulos de Euler), descrevendo a rotação do efetuador em relação ao sistema de coordenadas da base. Portanto é possível descrever a \textit{pose} do efetuador através do vetor
 \begin{equation} \label{eq:op_space}
-\bm{x}_e = \m{ \bm{p}_e \\ \bm{\phi}_e}
+{x}_e = \m{ {p}_e \\ {\phi}_e}
 \end{equation}
-onde $\bm{p}_e$ descreve a posição e $\bm{\phi}_e$ a orientação.
+onde ${p}_e \in \mathbb{R}^3$ descreve a posição e ${\phi}_e \in \mathbb{R}^3$ é uma representação mínima da orientação.
 
 O \textit{espaço das juntas} denota o espaço em que o vetor $(n \times 1)$ das variáveis das juntas
 \begin{equation} \label{eq:joint_space}
-\bm{q} = \m{q_1 \\ \vdots \\ q_n}
+{q} = \m{q_1 \\ \vdots \\ q_n}
 \end{equation} 
 é definido. Se a junta é de revolução utiliza-se $q_i = \theta_i$, se é prismática $q_i = d_i$.
 
 \section{Cinemática Diferencial}
 %\subsection{Jacobiano Geométrico}
-%TODO
+%Para um manipulador de $n$ graus de liberdade 
 \subsection{Jacobiano Analítico}
 Quando a posição e orientação do efetuador são dadas em função de um número mínimos de parâmetros no espaço operacional é possível computar o Jacobiano pela diferenciação das equações da cinemática direta em função das variáveis das juntas.
 Para isso utiliza-se a técnica analítica.
 
-Seja $\bm{p}_e$ a posição do sistema de coordenadas do efetuador representada no sistema de coordenadas da base. O vetor $\dot{\bm{p}}_e$ é portanto a velocidade de translação, ou linear.
+Seja ${p}_e \in \mathbb{R}^3$ a posição do sistema de coordenadas do efetuador representada no sistema de coordenadas da base. O vetor $\dot{{p}}_e$ é portanto a velocidade de translação, ou linear.
 \begin{equation} \label{eq:jacob_pos}
-\dot{\bm{p}}_e = \frac{\partial \bm{p}_e }{\partial \bm{q}} \dot{\bm{q}} = \bm{J}_P (\bm{q}) \dot{\bm{q}} 
+\dot{{p}}_e = \frac{\partial {p}_e }{\partial {q}} {{q}} = {J}_{ap} ({q}) {{q}} 
 \end{equation}
+onde ${J}_{ap}$ denota o Jacobiano analítico de posição.
 
-Para a velocidade angular, pode ser considerada uma representação mínima da orientação em função de três variáveis $\phi_e$. 
-A derivada no tempo $\dot{\bm{\phi}}_e$ não é igual a velocidade angular, no entanto, conhecida a função $\bm{\phi}_e(\bm{q})$:
+Para a velocidade angular, pode ser considerada uma representação mínima da orientação em função de três variáveis ${\phi_e}_i$. 
+A derivada no tempo $\dot{{\phi}}_e$ não é igual a velocidade angular, no entanto, conhecida a função ${\phi}_e({q})$:
 
 \begin{equation} \label{eq:jacob_or}
-\dot{\bm{\phi}}_e = \frac{\partial \bm{\phi}_e}{\partial \bm{q}} \bm{\dot{q}} = \bm{J}_{\phi}(\bm{q})\bm{\dot{q}}
+\dot{{\phi}}_e = \frac{\partial {\phi}_e}{\partial {q}} {\dot{q}} = {J}_{a\phi}({q}){\dot{q}}
 \end{equation}
+onde ${J}_{a\phi}$ denota o Jacobiano analítico de orientação.
 
 Sob essas premissas a cinemática diferencial pode ser obtida como:
 \begin{equation} \label{eq:jacoba}
-\bm{\dot{x}}_e = \m{\bm{\dot{p}}_e \\ \bm{\dot{\phi}}_e} = \m{\bm{J}_P(\bm{q}) \\ \bm{J_\phi}(\bm{q})} \bm{\dot{q}} = \bm{J}_A (\bm{q}) \dot{\bm{q}}
+\dot{x}_e = \m{ \dot{p}_e \\ \phi_e } = \m{ J_{a_p}(q) \\ J_{a_\phi}(q)} {\dot{q}} = {J}_a ({q}) \dot{{q}}
 \end{equation}
 
  
@@ -108,7 +110,7 @@ O estratégia de controle cinemático pode ser aplicada quando considera-se que 
 \end{itemize}
 
 A maioria dos manipuladores possui uma malha de controle de velocidade em nível de juntas como na figura \ref{fig:controlejuntas}. Logo, para um controle de alto ganho temos que:
-\[ \bm{u} \approx \dot{\bm{q}}\]
+\[ {u} \approx \dot{{q}}\]
 
 \begin{figure}[h!]
 \centering
@@ -119,7 +121,7 @@ A maioria dos manipuladores possui uma malha de controle de velocidade em nível
     \node [block, right of=sum] (K) {$K$};
     \node [block, right of=K] (PWM) {PWM};
     \node [block, right of=PWM] (Robo) {Robô};
-    \node [block, right of=Robo] (JA) {$\bm{J}_A$};
+    \node [block, right of=Robo] (JA) {${J}_a^{-1}$};
     \node [block, right of=JA] (Integral) {$\int$};
     \node [tmp, below of=K] (tmp1){};
     \node [output, right of=Integral] (output) {};
@@ -130,8 +132,8 @@ A maioria dos manipuladores possui uma malha de controle de velocidade em nível
     \draw [->] (K) -- node {$v$} (PWM);
     \draw [->] (PWM) -- node [name=tau] {$\tau$} (Robo);
     \draw [->] (Robo) -- node [name=dtheta] {$\dot{q}$} (JA);
-    \draw [->] (JA) -- node {$\dot{x}$} (Integral);
-    \draw [->] (Integral) -- node [name=x] {$x$}(output);
+    \draw [->] (JA) -- node {$\dot{x}_e$} (Integral);
+    \draw [->] (Integral) -- node [name=x] {$x_e$}(output);
     \draw [->] (dtheta) |- (tmp1)-| node[pos=0.99] {$-$} (sum);
 \end{tikzpicture}
 \caption{Diagrama de Blocos: Malha de Controle de Velocidade a nível de juntas.}
@@ -148,26 +150,26 @@ Portanto é possível implementar o controle cinemático segundo o diagrama \ref
     \node  [input, name=input2] {};
     \node at (0,-1) [input, name=input] {};
     \node [sum, right of=input] (sum) {};
-    \node [block, right of=sum] (K) {$\bm{K}$};
+    \node [block, right of=sum] (K) {${K}$};
     \node [sum, right of=K, node distance=2cm] (sum2) {};
     \node [tmp, above of =sum2, node distance=1cm] (tmp1){};
-    \node [block, right of=sum2] (JA) {$\bm{J}_A^{-1}$};
-    \node [block, below of=JA] (k) {$\bm{k}(\cdot)$};
+    \node [block, right of=sum2] (JA) {${J}_a^{-1}$};
+    \node [block, below of=JA] (k) {${k}(\cdot)$};
     \node [block, right of=JA] (Integral) {$\int$};
     \node [tmp, above of=JA, node distance=1cm] (tmp2){};
     \node [output, right of=Integral] (output) {};
 
     % Once the nodes are placed, connecting them is easy. 
-    \draw [draw,->] (input) -- node {$\bm{x}_d$} (sum);
+    \draw [draw,->] (input) -- node {${x}_d$} (sum);
     %\draw [draw,->] (input2) -- node {$u$} (sum2);
-    \draw [draw,->] (input2) -- node [pos=0.1] {$\bm{\dot{x}}_d$} (tmp1)-| node [pos=0.8,anchor=left,left] {$+$} (sum2);
-    \draw [->] (sum) -- node {$\bm{e}$} (K);
+    \draw [draw,->] (input2) -- node [pos=0.1] {${\dot{x}}_d$} (tmp1)-| node [pos=0.8,anchor=left,left] {$+$} (sum2);
+    \draw [->] (sum) -- node {${e}$} (K);
     \draw [->] (K) -- node {}  node[pos=0.8] {$+$} (sum2);
     \draw [->] (sum2) -- node [name=tau]  {} (JA);
-    \draw [->] (JA) -- node [name=dtheta] {$\dot{\bm{q}}$} (Integral);
-    \draw [->] (Integral) -- node [name=x] {$\bm{q}$}(output);
+    \draw [->] (JA) -- node [name=dtheta] {$\dot{{q}}$} (Integral);
+    \draw [->] (Integral) -- node [name=x] {${q}$}(output);
     \draw [->] (x) |- (k);
-    \draw [->] (k) -| node[pos=0.99] {$-$} node [near end] {$\bm{x}$} (sum);
+    \draw [->] (k) -| node[pos=0.99] {$-$} node [near end] {${x}_e$} (sum);
     \draw [->] (x) |- (tmp2) -| (JA);
     %\draw [->] (output) |- (tmp1)-| node[pos=0.99] {$-$} (sum);
 \end{tikzpicture}
@@ -176,36 +178,37 @@ Portanto é possível implementar o controle cinemático segundo o diagrama \ref
 \end{figure}
 
 
-Se $\bm{x}$ é uma representação da posição e orientação e $\bm{x}_d$ o valor desejado nessa representação, seja o erro no espaço operacional:
+Se ${x_e} \in \mathbb{R}^3$ é uma representação da posição e orientação e ${x}_d$ o valor desejado nessa representação, seja o erro no espaço operacional:
 \begin{equation}
-\bm{e} = \bm{x}_d - \bm{x}
+{e} = {x}_d - {x}_e
 \end{equation}
 
 Derivando em relação ao tempo
 \begin{equation}
-\bm{\dot{e}} = \bm{\dot{x}}_d - \bm{\dot{x}}
+{\dot{e}} = {\dot{x}}_d - {\dot{x}_e}
 \end{equation}
 podemos escrever a partir da equação \ref{eq:jacoba}:
 \begin{equation}
-\bm{\dot{e}} = \bm{\dot{x}}_d - \bm{J}_A(\bm{q})\dot{\bm{q}}
+{\dot{e}} = {\dot{x}}_d - {J}_a({q})\dot{{q}}
 \end{equation}
-Sendo $\bm{x}_d(t)$ uma trajetória desejada, deseja-se que $\bm{x}$ atinja $\bm{x}_d(t)$ em $t \to \infty$ .
-A entrada de controle para o sistema é um valor de $\bm{u} = \dot{\bm{q}}$, logo, assumindo que $\bm{J}_A(\bm{q})$ é quadrada e não singular, a escolha da lei de controle
+Sendo ${x}_d(t)$ uma trajetória desejada, deseja-se que ${x}_e$ atinja ${x}_d(t)$ em $t \to \infty$ .
+A entrada de controle para o sistema é um valor de ${u} = \dot{{q}}$, logo, assumindo que ${J}_a({q})$ é quadrada e não singular, a escolha da lei de controle
 \begin{equation}
-\bm{u} = \bm{J}_A^{-1}(\bm{q})\bar{\bm{u}}
+{u} = {J}_a^{-1}({q})\bar{{u}}
 \end{equation}
 leva ao sistema linear:
 \begin{equation}
-\dot{\bm{e}} = \dot{\bm{x}}_d - \bar{\bm{u}}
+\dot{{e}} = \dot{{x}}_d - \bar{{u}}
 \end{equation}
-Se for escolhido $\bar{\bm{u}}$:
+Se for escolhido $\bar{{u}}$:
 \begin{equation}
-\bar{\bm{u}} = \dot{\bm{x}}_d + \bm{K} (\bm{x}_d - \bm{x})
+\bar{{u}} = \dot{{x}}_d + {K_t} ({x}_d - {x}_e)
 \end{equation}
 obtem-se a seguinte dinâmica para o erro
 \begin{equation}
-\dot{\bm{e}} + \bm{K} \bm{e} = 0
+\dot{{e}} + {K_t} {e} = 0
 \end{equation}
+onde $K_t = k_t I$. Se $k_t > 0$ o sistema é assintoticamente estável, com $e \rightarrow 0$ quando $t \to \infty$.
 
 \section{Servo Visão}
 A tarefa proposta na Servo Visão é controlar a posição e orientação do efetuador do manipulador, em relação a um alvo, usando características visuais extraídas de uma imagem. A câmera pode ser carregada pelo manipulador (montada no efetuador) ou colocada em um ponto fixo, observando tanto o efetuador como o alvo.
@@ -228,15 +231,16 @@ onde $z_o$ é a distância até o objeto, $z_i$ é a distância ao plano da imag
 \end{figure}
 
 Em visão computacional geralmente é utilizado o modelo de perspectiva central mostrado na figura \ref{fig:camera_model}.
-Seja $\bm{P} = [X\; Y\; Z]^T$ as coordenadas de um ponto do mundo e $\bm{p} = [x\;y]^T$ as coordenadas projetadas no plano da imagem por
+Seja ${P} = [X\; Y\; Z]^T$ as coordenadas de um ponto do mundo e ${p} = [x\;y]^T$ as coordenadas projetadas no plano da imagem por
+% TODO confirmar referencial do mundo
 \begin{equation}
 x = f \frac{X}{Z}, \quad y = f \frac{Y}{Z}
 \end{equation}
 
-É possivel expressar o ponto no plano da imagem em coordenadas homogêneas na forma $\tilde{\bm{p}} = [x'\; y' \; z']$ onde $x' = \frac{fX}{z'}$, $y' = \frac{fY}{z'}$ e $z' = Z$. Em forma matricial:
+É possivel expressar o ponto no plano da imagem em coordenadas homogêneas na forma $\tilde{{p}} = [x'\; y' \; z']$ onde $x' = \frac{fX}{z'}$, $y' = \frac{fY}{z'}$ e $z' = Z$. Em forma matricial:
 
 \begin{equation}
-\bm{\tilde{p}} = 
+{\tilde{p}} = 
 \m{ f & 0 & 0 \\
 	 0 & f & 0 \\
 	 0 & 0 & 1	
@@ -247,14 +251,14 @@ x = f \frac{X}{Z}, \quad y = f \frac{Y}{Z}
 Podemos retornar às coordenadas não-homogêneas com:
 \[ x = \frac{x'}{z'} \qquad y = \frac{y'}{z'}\]
 
-O ponto $\bm{P}$ do mundo pode ser representado em coordenadas homogêneas como $(\bm{\tilde{P}})_C = [X \; Y \; Z \; 1]^T$no referencial da câmera. A projeção de perspectiva é escrita em forma linear por 
+O ponto ${P}$ do mundo pode ser representado em coordenadas homogêneas como $({\tilde{P}})_C = [X \; Y \; Z \; 1]^T$no referencial da câmera. A projeção de perspectiva é escrita em forma linear por 
 
 \begin{equation} \label{eq:projpersp}
-\tilde{\bm{p}} = \m{
+\tilde{{p}} = \m{
     f & 0 & 0 & 0 \\
     0 & f & 0 & 0 \\
     0 & 0 & 1 & 0
-} (\tilde{\bm{P}})_C
+} (\tilde{{P}})_C
 \end{equation}
 
 
@@ -263,10 +267,10 @@ Uma imagem digital pode ser interpretada como uma matriz bidimensional de \texti
 u =  \frac{x}{\rho_w} + u_0 \qquad v = \frac{y}{\rho_h} + v_0
 \end{equation}
 
-Reescrevendo a equação \eqref{eq:projpersp} adicionando uma matriz $\bm{K}$ de parâmetros
+Reescrevendo a equação \eqref{eq:projpersp} adicionando uma matriz ${K}$ de parâmetros
 
 \begin{equation} \label{eq:camera_parameter}
-\bm{\tilde{p}} = 
+{\tilde{p}} = 
 \m {
 	1/\rho_w & 0 & u_0 \\
 	0        & 1/\rho_h &v_0 \\
@@ -276,13 +280,13 @@ Reescrevendo a equação \eqref{eq:projpersp} adicionando uma matriz $\bm{K}$ de
 	 0 & f & 0 & 0\\
 	 0 & 0 & 1 & 0	
 }
-(\tilde{\bm{P}})_C
+(\tilde{{P}})_C
 \end{equation}
 
-A câmera possui uma posição arbitrária com respeito ao sistema de coordenadas inercial, logo a posição do ponto com respeito a câmera é dada por  $(\bm{P})_C = \bm{T}_{0C}^{-1} \bm{P}$. Utilizando a equação \eqref{eq:camera_parameter} podemos escrever a projeção da câmera na sua forma geral como
-
+A câmera possui uma posição arbitrária com respeito ao sistema de coordenadas inercial, logo a posição do ponto com respeito a câmera é dada por  $({P})_C = {T}_{0C}^{-1} {P}$. Utilizando a equação \eqref{eq:camera_parameter} podemos escrever a projeção da câmera na sua forma geral como
+% TODO: confirmar
 \begin{align}\label{eq:camera_projection}
-\bm{\tilde{p}} =& 
+{\tilde{p}} =& 
 \m {
 	f/\rho_w & 0 & u_0 \\
 	0        & f/\rho_h &v_0 \\
@@ -292,9 +296,9 @@ A câmera possui uma posição arbitrária com respeito ao sistema de coordenada
 	 0 & 1 & 0 & 0\\
 	 0 & 0 & 1 & 0	
 }
-\bm{T}_{0C}^{-1} (\tilde{\bm{P})}_0\\
-=& \bm{K} \bm{P}_0 \bm{T}_{0C}^{-1} (\tilde{\bm{P}})_0 \\ 
-=& \bm{C} (\bm{\tilde{P})_0}
+{T}_{0C}^{-1} (\tilde{{P})}_0\\
+=& {K} {P}_0 {T}_{0C}^{-1} (\tilde{{P}})_0 \\ 
+=& {C} ({\tilde{P})_0}
 \end{align}
 
 A equação \eqref{eq:camera_projection} define a projeção na câmera. A matriz $C$ realiza a mudança de escala, tradução e projeção de perspectiva. 
@@ -303,19 +307,19 @@ A equação \eqref{eq:camera_projection} define a projeção na câmera. A matri
 %TODO
 
 \subsection{Estimação da Pose}
-O problema de estimar a \textit{pose} consiste em determinar a posição e orientação $\bm{T}_{CT}$ do alvo com respeito ao sistema de coordenadas da câmera. Considera-se que a geometria do alvo é conhecida, isto é um conjunto de pontos característicos $[X_i \; Y_i \; Z_i]$ com $i \in [1\; \cdots \; N]$, assim como os parâmetros intrínsecos da câmera. A imagem capturada pela câmera é processada e as coordenadas no plano da imagem $[u_i\; v_i]$ são determinadas utilizando algoritmos de visão computacional. Esse problema é conhecido como \textit{Perspective-n-Point}.
+O problema de estimar a \textit{pose} consiste em determinar a posição e orientação ${T}_{CT}$ do alvo com respeito ao sistema de coordenadas da câmera. Considera-se que a geometria do alvo é conhecida, isto é um conjunto de pontos característicos $[X_i \; Y_i \; Z_i]$ com $i \in [1\; \cdots \; N]$, assim como os parâmetros intrínsecos da câmera. A imagem capturada pela câmera é processada e as coordenadas no plano da imagem $[u_i\; v_i]$ são determinadas utilizando algoritmos de visão computacional. Esse problema é conhecido como \textit{Perspective-n-Point}.
 
 Existem diversas abordagens para solucionar esse problema. Aqui será destacado o caso simples com 3 pontos e comentada a abordagem de Dementhon para N pontos pois essa abordagem foi utilizada na implementação desse projeto. Maiores detalhes sobre implementações disponíveis em código aberto podem ser encontradas no apêndice \ref{chap:pose_est}. 
 
 \subsubsection{P3P: Estimação da \textit{pose} com 3 pontos}
-Para entender o problema, considera-se o caso mais simples, com 3 pontos, já que, teoricamente como a \textit{pose} pode ser representada por 6 parâmetros independentes, três pontos seriam capazes de resolver o problema \citep{marchand2016pose}. Sejam $\bm{P_i} = [X_i \; Y_i \; Z_i ]^T$ onde $i = 1 \dots 3$ três pontos com coordenadas representadas no referencial da câmera. 
+Para entender o problema, considera-se o caso mais simples, com 3 pontos, já que, teoricamente como a \textit{pose} pode ser representada por 6 parâmetros independentes, três pontos seriam capazes de resolver o problema \citep{marchand2016pose}. Sejam ${P_i} = [X_i \; Y_i \; Z_i ]^T$ onde $i = 1 \dots 3$ três pontos com coordenadas representadas no referencial da câmera. 
 
-Primeiramente, é feita uma estimativa da coordenada de profundidade $Z_i$ de cada ponto utilizando a lei dos cossenos no triângulo dado por $\bm{C} \bm{P}_i \bm{P}_j$ onde $\bm{C}$ é o ponto onde a câmera está posicionada. Para cada par de correspondências $P_i \leftrightarrow p_i$ e $P_j \leftrightarrow p_j$ podemos escrever \citep{quan1999linear} 
+Primeiramente, é feita uma estimativa da coordenada de profundidade $Z_i$ de cada ponto utilizando a lei dos cossenos no triângulo dado por ${C} {P}_i {P}_j$ onde ${C}$ é o ponto onde a câmera está posicionada. Para cada par de correspondências $P_i \leftrightarrow p_i$ e $P_j \leftrightarrow p_j$ podemos escrever \citep{quan1999linear} 
 %A distâncias entre $\bm{P}_i$ e $\bm{P}_j$ e $\bm{P}_i$ e $\bm{P}_j$  é conhecida.
 \begin{equation}
 d_{ij}^2 = w_i^2 + w_j^2 -2 w_i w_j \cos \theta_{ij}
 \end{equation}
-onde $d_{ij} = ||\bm{P}_i - \bm{P}_j||$, $w_i = ||\bm{P}_i - C||$ e $w_j = ||\bm{P}_j - \bm{C}||$. Cada restrição pode ser escrita como 
+onde $d_{ij} = ||{P}_i - {P}_j||$, $w_i = ||{P}_i - C||$ e $w_j = ||{P}_j - {C}||$. Cada restrição pode ser escrita como 
 \begin{equation}
 f_{ij}(w_i, w_j) = w_i^2 + w_j^2 - 2w_i w_j \cos \theta_{ij} - d_{ij}^2 = 0
 \end{equation}
@@ -335,7 +339,7 @@ g(x) = a_5 w^4 + a_4 w^3 + a_3 w^2 + a_2 w + a_1 = 0
 
 Essa equação possui solução fechada e como $w_i > 0$, então $w_1 = \sqrt{q}$. Logo, $w_1$ e $w_2$ são determinados unicamente a partir de $w_1$. Para obter solução única é preciso adicionar um quarto ponto, o que gera um sistema com mais restrições do que incógnitas. Uma possível abordagem é resolver o problema para subconjuntos de três pontos e encontrar a solução comum. No entanto isso não aumenta a precisão do resultado e se houver ruido pode ser difícil encontrar a solução comum. 
 
-Conhecidas as distâncias $w_i$ dos pontos do mundo à câmera, essas distâncias são convertidas em coordenadas tridimensionais centradas na câmera através de $\bm{P'}_i = w_i \bm{K}^{-1} \bm{p}_i$, onde $\bm{K}$ é a matriz de calibração da câmera. O último passo é determinar a orientação, uma transformação de similaridade pode ser obtida através de dois pares de pontos $\bm{P'}_i \leftrightarrow \bm{P}_i$. A solução pode ser obtida através de mínimos utilizando quatérnions. A partir da estimativa da rotação a obtenção da translação e da escala seguem trivialmente. 
+Conhecidas as distâncias $w_i$ dos pontos do mundo à câmera, essas distâncias são convertidas em coordenadas tridimensionais centradas na câmera através de ${P'}_i = w_i {K}^{-1} {p}_i$, onde ${K}$ é a matriz de calibração da câmera. O último passo é determinar a orientação, uma transformação de similaridade pode ser obtida através de dois pares de pontos ${P'}_i \leftrightarrow {P}_i$. A solução pode ser obtida através de mínimos utilizando quatérnions. A partir da estimativa da rotação a obtenção da translação e da escala seguem trivialmente. 
 
 Esse método é didático, porém não é robusto e é pouco preciso, além de que os dados redundantes (quarto ponto) não aumentam a precisão do resultado. Portanto, outros algoritmos foram propostos.
 
@@ -346,44 +350,44 @@ Uma desvantagem do \textit{POSIT} é que ele não é diretamente aplicável a po
 
 
 \subsection{Servo Visão Baseada em Posição}
-Em um sistema de servo visão baseado em posição a posição e orientação do alvo com respeito a câmera $\bm{T}_{CT}$ é estimada. O problema de estimação da posição e orientação foi discutido acima e as implementações disponíveis em código aberto estão listadas no apêndice \ref{chap:pose_est}.
-Especifica-se uma posição desejada relativa ao sistema de coordenadas do alvo  $\bm{T}_{C^*T}$ e deseja-se determinar o movimento necessário para mover a câmera para a posição desejada, que chamamos de $\bm{T}_\delta$.
+Em um sistema de servo visão baseado em posição a posição e orientação do alvo com respeito a câmera ${T}_{CT}$ é estimada. O problema de estimação da posição e orientação foi discutido acima e as implementações disponíveis em código aberto estão listadas no apêndice \ref{chap:pose_est}.
+Especifica-se uma posição desejada relativa ao sistema de coordenadas do alvo  ${T}_{C^*T}$ e deseja-se determinar o movimento necessário para mover a câmera para a posição desejada, que chamamos de ${T}_\delta$.
 
 \begin{equation}
- \bm{T}_{CT} =  \bm{T}_\Delta \bm{T}_{C^*T}
+ {T}_{CT} =  {T}_\Delta {T}_{C^*T}
 \end{equation}
 
 \begin{equation}
- \bm{T}_\Delta  =   \bm{T}_{CT} \bm{T}_{C^*T}^{-1}
+ {T}_\Delta  =   {T}_{CT} {T}_{C^*T}^{-1}
 \end{equation}
 
 Com isso é possível aplicar uma estratégia de controle cinemático de posição no referencial do efetuador de modo a atingir a posição e orientação desejada. A lei de controle
 \begin{equation}
-\bm{u} = (\bm{J}_A)_N^{-1}(\bm{q})\bm{K}_v[(\bm{x}_t)_N - (\bm{x})_N]
+{u} = ({J}_a)_e^{-1}{K}_v[({x}_t)_e - ({x})_e]
 \end{equation}
-é capaz de fazer $\bm{e}(t) \rightarrow 0$ quando $t \rightarrow \infty$ se $\dot{\bm{x}}_t = 0$.
+é capaz de fazer ${e}(t) \rightarrow 0$ quando $t \rightarrow \infty$ se $\dot{{x}}_t = 0$.
 
 \section{Controle de Força}
 Considera-se o problema de controle cinemático de força, para um manipulador já em contato com uma superfície, assumindo que a força de contato pode ser medida com um sensor acoplado ao efetuador. 
 
-Em \citep{leite2011servo} aplica-se o controle de força com base em uma abordagem de controle cinemático. O objetivo de controle é seguir uma força desejada variante no tempo $\bm{f}_d(t)$ a partir da força de contato $\bm{f}$ ao longo da superfície de restrição, medida com um sensor de força:
+Em \citep{leite2011servo} aplica-se o controle de força com base em uma abordagem de controle cinemático. O objetivo de controle é seguir uma força desejada variante no tempo ${f}_d(t) \in \mathbb{R}^3$ a partir da força de contato ${f} \in \mathbb{R}^3$ ao longo da superfície de restrição, medida com um sensor de força:
 \begin{equation} \label{eq:problema_ctrl_forca}
-\bm{f} \rightarrow \bm{f}_d(t), \qquad \bm{e}_f = \bm{f}_d(t) - \bm{f} \rightarrow 0
+{f} \rightarrow {f}_d(t), \qquad {e}_f = {f}_d(t) - {f} \rightarrow 0
 \end{equation}
 
 A força de contato pode ser modelada como uma mola linear, através da Lei de Hooke:
 \begin{equation} \label{eq:hooke_mat}
-\bm{f} = -\bm{K}_s (\bm{p} - \bm{d}_s)
+{f} = -{K}_s ({p} - {d}_s)
 \end{equation}
-onde $\bm{p}$ é a posição do ponto de contato e $\bm{d}_s$ é um ponto da superfície, $\bm{K}_s = k_s I$ é a matriz de rigidez e $k_s > 0$ é o coeficiente de rigidez da superfície.
+onde ${p} \in \mathbb{R}^3$ é a posição inicial do ponto de contato e ${d}_s \in \mathbb{R}^3$ é um ponto da superfície, ${K}_s = k_s I$ é a matriz de rigidez e $k_s > 0$ é o coeficiente de rigidez da superfície.
 
-Derivando \eqref{eq:problema_ctrl_forca} e \eqref{eq:hooke_mat} em relação ao tempo com respeito ao tempo, a equação do erro de força é dada por $\dot{\bm{e}}_f = \dot{\bm{f}}_d + \bm{K}_s \dot{\bm{p}}$. Considerando uma lei de controle de força com ação \textit{feedforward} e proporcional
+Derivando \eqref{eq:problema_ctrl_forca} e \eqref{eq:hooke_mat} em relação ao tempo com respeito ao tempo, a equação do erro de força $e_f \in \mathbb{R}^3$ é dada por $\dot{{e}}_f = \dot{{f}}_d + {K}_s \dot{{p}}$. Considerando uma lei de controle de força com ação \textit{feedforward} e proporcional
 \begin{equation}
-\bm{\bar{u}}_f = -\bm{K}_s^{-1} (\dot{\bm{f}}_d + \bm{K}_d\bm{e}_f)
+{\bar{u}}_f = -{K}_s^{-1} (\dot{{f}}_d + {K}_d {e}_f)
 \end{equation}
-onde $\bm{K}_f = k_f \bm{I}$, a dinâmica do erro é governada por
+onde ${K}_f = k_f {I}$, a dinâmica do erro é governada por
 \begin{equation}
-\dot{\bm{e}}_f + \bm{K}_f \bm{e}_f = 0.
+\dot{{e}}_f + {K}_f {e}_f = 0.
 \end{equation}
 Portanto escolhendo $k_f$ como uma constante positiva, o sistema em malha fechada é exponencialmente estável. 
 

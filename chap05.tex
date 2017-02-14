@@ -304,28 +304,28 @@ Podem-se observar diversos picos no sinal de erro na figura \ref{fig:erro_traj} 
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=\linewidth]{./img/traj_2_k1/x1.eps}
-  \caption{$x_1$, $x_{d1}$ e $e_1$}
+  \caption{$x_1$}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=\linewidth]{./img/traj_2_k1/x2.eps}
-  \caption{$x_2$, $x_{d2}$ e $e_2$}
+  \caption{$x_2$}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=\linewidth]{./img/traj_2_k1/x3.eps}
-  \caption{$x_3$, $x_{d3}$ e $e_3$}
+  \caption{$x_3$}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=\linewidth]{./img/traj_2_k1/x4.eps}
-  \caption{$x_4$, $x_{d4}$ e $e_4$}
+  \caption{$x_4$}
   \label{fig:sub2}
 \end{subfigure}
-\caption{Rastreamento da trajetória 2 para $\bm{K}_t = \bm{I}$}
+\caption{Resultados experimentas - Rastreamento da trajetória 2 para $\bm{K}_t = \bm{I}$}
 \label{fig:test}
 \end{figure}
 
@@ -343,7 +343,7 @@ Podem-se observar diversos picos no sinal de erro na figura \ref{fig:erro_traj} 
   \caption{$e_3$}
   \label{fig:sub2}
 \end{subfigure}
-\caption{Trajetória 2: Destaque para o erro $e_1$ e $e_3$ com $\bm{K}_t = \bm{I}$}
+\caption{Resultados experimentas - Trajetória 2: Destaque para o erro $e_1$ e $e_3$ com $\bm{K}_t = \bm{I}$}
 \label{fig:erro_traj}
 \end{figure}
 
@@ -352,7 +352,7 @@ Podem-se observar diversos picos no sinal de erro na figura \ref{fig:erro_traj} 
 \begin{figure}[H]
 \centering
   \includegraphics[width=0.5\linewidth]{./img/traj_2_k5/traj.eps}
-  \caption{Trajetória 2 no plano x-z para $\bm{K}_t = 5\bm{I}$}
+  \caption{Resultados experimentas - Trajetória 2 no plano x-z para $\bm{K}_t = 5\bm{I}$}
   \label{fig:sub1}
 \end{figure}%
 
@@ -404,10 +404,11 @@ Podem-se observar diversos picos no sinal de erro na figura \ref{fig:erro_traj} 
 \label{fig:erro_traj}
 \end{figure}
 
-
+A partir da variação do ganho de controle foi possível concluir que o fator principal que gera erro em regime permanente, não é 
 \section{Controle de Força}
 
-Nesta seção demonsta-se os reultados de experimentos de controle de força, segundo os estratégias definidas em 
+Nesta seção demonsta-se os reultados de experimentos de controle de força, segundo os estratégias definidas em \ref{sec:force}. 
+
 \subsection{Float}
 Neste experimento a referência de força é configurada para zero, logo é possível mover o efetuador aplicando forças sobre ele. O operador tentou traçar um retângulo no plano x-z.
 
@@ -463,9 +464,4 @@ Foi aplicado o controle de força com uma referência constante de $1000 mN$ na 
 \end{figure}
 
 Os resultados mostraram a existência de não linearidades que não foram consideradas no modelo. Por exemplo a relação entre força e distância no ambiente testado não é exatamente linear, no entanto a aproximação foi aceitável. O fato de o sensor de força ter uma alta relação sinal-ruído para a ordem de grandeza do o sinal de referência também contribuiu para os resultados não ideais mostrados. 
- \begin{figure}[H]
-  \centering
-  \includegraphics[width=0.5\linewidth]{./img/hybrid.eps}
-  \caption{Diagrama de blocos: Controle Híbrido Força-Posição}
-  \label{fig:sub2}
-\end{figure}
+

@@ -91,11 +91,11 @@ A arquitetura do RobotGUI baseia-se nos seguintes conceitos principais \citep{nu
 
 \item \textbf{RobotGUI:} É uma GUI \footnote{Guided User Interface} em nó de ROS. Permite que múltiplas janelas sejam criadas. O usuário pode decidir o que é exibido. Ao clicar nos \textit{toolbuttons}, uma janela referente a \textit{Tool} aparece. Essa janela pode ser encaixada na janela principal. O RobotGUI executa \textit{roslaunch}'s, nós incluídos pelo \textit{roslaunch} em questão podem ser \textit{Components}. 
 
-item \textbf{NodeletManager e RobotGUI:} o RobotGUI é um Nodelet Manager com pequenas modificações. Um NodeletManager utiliza a classe nodelet::Loader para instanciar nodelets. Utilizando uma versão modificada dessa classe é possível verificar se um Nodelet a ser carregado é um \textit{Component}. Se esse for o caso, a \textit{Tool} correspondente será carregada e as conexões são feitas. Quando um componente é descarregado, a conexão com as \textit{Tools} associadas a ele é encerrada.
+\item \textbf{NodeletManager e RobotGUI:} o RobotGUI é um Nodelet Manager com pequenas modificações. Um NodeletManager utiliza a classe nodelet::Loader para instanciar nodelets. Utilizando uma versão modificada dessa classe é possível verificar se um Nodelet a ser carregado é um \textit{Component}. Se esse for o caso, a \textit{Tool} correspondente será carregada e as conexões são feitas. Quando um componente é descarregado, a conexão com as \textit{Tools} associadas a ele é encerrada.
 \end{itemize}
 
 
-\href{run:pf-luisgustavo-v004.pdf}{Click to execute}% <-- This works
+%\href{run:pf-luisgustavo-v004.pdf}{Click to execute}% 
 
 \subsection{Topologia}
 
@@ -170,31 +170,40 @@ Seguindo os princípios do ROS, busca-se separar em classes a interação com RO
 
 \subsection{Modos de controle} \label{sec:ctrlmodes}
 
-A classe DorisManipulatorController implementa os seguintes modos de controle. 
+A classe DorisManipulatorController implementa os modos de controle descritos na tabela . 
+
+
+\begin{table}[h!]
+\centering
+\caption{\textit{Variables} do \textit{ManipulatorControllerDevice}}
+\label{tab:variables}
+\begin{tabular}{rl} \hline
+Modo de controle      	& Descrição \\ \hline
+\verb|NotControlled|  	& Nenhum sinal de controle é enviado ao manipulador.\\
+Brake 				  	& Sinal de controle $u = 0$. \\
+OperationalSpace 	  	& Implementa o controle descrito em \ref{sec:openloopbase}. \\
+Vision 				  	& Implementa o controle descrito em \ref{sec:servo_vision}. \\
+VelocityEfct 			& Implementa o controle descrito em \ref{sec:openloopefct}. \\
+VelocityBase 			& Implementa o controle descrito em \ref{sec:openloopbase}. \\
+PplusFF 				& Implementa o controle descrito em \ref{sec:pplusf}. \\
+Force 					& Implementa o controle descrito em \ref{sec:forca_approach}. \\
+JointSpace 				& Implementa o controle descrito em \ref{joint_space}. \\
+Individual 				& Implementa o controle individual de juntas por gerador de função. \\
+MasterSlave				& Estrutura preparada para integração com o Sensable\circledR Phantom Omni. \\
+\hline
+\end{tabular}
+\end{table}
+
+
 \begin{itemize}
-\item NotControlled: Nenhum sinal de controle é enviado ao manipulador.
-\item Brake: Sinal de controle $u = 0$
-\item OperationalSpace: Implementa o controle descrito em \ref{sec:openloopbase}
-\item Vision: Implementa o controle descrito em \ref{sec:servo_vision}
-\item VelocityEfct: Implementa o controle descrito em \ref{sec:openloopefct}
-\item VelocityBase: Implementa o controle descrito em \ref{sec:openloopbase}
-\item PplusFF: Implementa o controle descrito em \ref{sec:pplusf}
-\item Force: Implementa o controle descrito em \ref{sec:forca_approach}
-\item JointSpace  Implementa o controle descrito em \ref{joint_space}
-\item Individual
-	\begin{itemize}
 	\item NotControlledI
 	\item BrakeI
 	\item Constant
 	\item Square
 	\item Pulse
 	\item Sine
-	\end{itemize}
-\item MasterSlave: Estrutura preparada para integração com o Sensable\circledR Phantom Omni
-	\begin{itemize}
 	\item JointSpaceMS
 	\item VelocityToolMS
-	\end{itemize}
 \end{itemize}
 
 \subsection{DorisManipulatorTool}
@@ -214,4 +223,43 @@ Para interagir com o manipulador é utilizada a \textit{Tool} chamada DorisManip
   \caption{RobotGUI com DorisManipulatorTool e DeviceManagement}
   \label{fig:screenshot2}
 \end{figure}
+
+\section{Julia Language}
+
+\textit{Julia} é uma linguagem dinâmica de alto nível e alta performance, projetada para computação técnica. Possui uma sintaxe familiar para usuários de outras linguagens orientadas a computação científica. Dentre as funcionalidades que a linguagem proporciona, destacam-se para a aplicação neste projeto:
+
+\begin{itemize}
+\item Boa performance, aproximando-se de linguagens estaticamente compiladas como C.
+\item Tipagem dinâmca: tipos podem ser utilizados para documentação e otimização.
+\item Compilador \textit{just-in-time} \footnote{Compilação just-in-time (JIT) refere-se a compilação feita no momento de execução do programa, com contraste com compilação anterior a execução.} de alta performance.
+\item Gratuito e código aberto (Licença MIT).
+\item Possibilidade de integrar Julia a projetos C/C++.
+\end{itemize}
+
+A compilação \textit{just-in-time} é baseada no projeto LLVM \citep{llvmorg,lattner2004llvm}, que consiste em uma coleção de tecnologias e ferramentas compilação modulares e reutilizáveis. O uso dessas tecnologias, juntamente com a forma como a linguagem foi projetada permite em muitos casos ela tenha uma performance comparável com a linguagem C e ao mesmo tempo ter uma sintaxe comparativamente simples.
+
+Portanto, a linguagem Julia mostrou-se uma opção interessante e mais dinâmica para a implementação de controle no software de controle para o TETIS, que requer desempenho mas pode se beneficiar de uma linguagem dinâmica. Uma prova de conceito foi feita para o para a configuração das equações da trajetória a ser rastreada. Na interface uma janela permite a escrita de equações na forma de uma função Julia. Ao aplicar as alterações esse código é enviado para o computador embarcado através do ROS. O programa principal, em C++, chama a API em C do Julia e compila essa função no momento da primeira execução.
+
+Dessa forma a trajetória pode ser alterada em tempo de execução sem prejudicar a performance e sem necessitar acesso a dados externos constantemente. O código em \ref{lst:julia} mostra a trajetória de teste em \textit{Julia Language}.
+
+\begin{lstlisting}[caption={trajectory.jl}\label{lst:julia}]
+function trajectory(t::Float64)
+	xd = Array(Float64,4)
+	xdd = Array(Float64,4)
+
+	wn = pi/10
+	xd[1] = (75*(sin(wn*t)+sin(4*wn*t))+500)
+    xd[2] = 57
+    xd[3] = (75*(cos(wn*t)+cos(4*wn*t))-67)
+    xd[4] = wn*sin(wn*t)
+
+    xdd[1] = 75*wn*cos(t*wn) + 300*wn*cos(4*t*wn)
+    xdd[2] = 0
+    xdd[3] = - 75*wn*sin(t*wn) - 300*wn*sin(4*t*wn)
+    xdd[4] = (wn*wn*cos(t*wn))/10
+	
+	return [xd xdd]
+end
+\end{lstlisting} 
+
 
