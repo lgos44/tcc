@@ -3,7 +3,7 @@
 Neste capítulo são exibidos os resultados de simulação e experimentais. A simulação mostrada é de um rastreamento de trajetória no espaço operacional, pois é representativa do comportamento do sistema. Para experimentos com o manipulador TETIS foram feitos testes em varias etapas, em crescente nível de complexidade. Iniciando com uma análise da malha interna de controle, seguida de controle no espaço das juntas, controle proporcional de posição no espaço operacional, controle proporcional com feedforward e controle de força. As trajetórias utilizadas nos testes são definidas de antemão:
 
 \textbf{Trajetória 1}
-\begin{gather}
+\begin{gather} \label{eq:traj1}
 \bm{x_d} = \m{75 \sin(\omega_n t) + \sin (4 \omega_n t) + 500 \\ 57 \\ 75 \cos(\omega_n t) + \cos(4\omega_n t) -67 \\ \omega_n \sin(\omega_nt) }
 \bm{\dot{x}_d} = \m{75\omega_n \cos(t\omega_n) + 300 \omega_n \cos(4t\omega_n) \\
 0 \\
@@ -28,7 +28,7 @@ onde $\omega_n = \pi/10$
 \end{align}
 
 \section{Simulação}
-Utilizando a Robotics Toolbox \citep{petercorke} para MATLAB\circledR , foram feitas simulações para o controle cinemático utilizando controle proporcional com feedforward.
+Utilizando a Robotics Toolbox \citep{petercorke} para MATLAB\circledR , foram feitas simulações para o controle cinemático utilizando controle proporcional com feedforward e a trejetória 1 \eqref{eq:traj1}.
 
 \begin{figure}[H]
 \centering
@@ -81,13 +81,13 @@ Utilizando a Robotics Toolbox \citep{petercorke} para MATLAB\circledR , foram fe
   \caption{$\bm{u}(t)$}
   \label{fig:sub2}
 \end{subfigure}
-\caption{Trajetória 1: Destaque para o erro $e_1$ e $e_3$ com $\bm{K}_t = \bm{I}$}
+\caption{Simulação: Destaque para o erro $e_1$ e $e_3$ com $\bm{K}_t = \bm{I}$}
 \label{fig:erro_traj}
 \end{figure}
 
 
 \section{Análise da Malha de Controle a nível de Juntas}
-Para verificar se de fato são válidas as premissas assumidas na seção \ref{sec:controle_cinematico}para aplicação de uma estratégia de controle cinemático foi levantada para cada uma das juntas a resposta a uma onda quadrada tal que:
+Para verificar se de fato são válidas as premissas assumidas na seção \ref{sec:controle_cinematico} para aplicação de uma estratégia de controle cinemático foi levantada para cada uma das juntas a resposta a uma onda quadrada tal que:
 \[ u = A \sgn(\sin( 2\pi t/f)) \]
 onde o período $T = 1/f = 1s$ e a amplitude $A = 0.5 rad/s$
 
@@ -151,7 +151,11 @@ Os resultados foram conforme esperados, levando o erro assintoticamente a zero e
 
 \section{Controle de Posição no Espaço Operacional}
 
+Nesta seção, demonstra-se o controle no espaço operacional. Utilizando a estratégia de controle proporcional conforme definido na seção \ref{sec:pos_operacional}. 
+
 \subsection{Experimento 1}
+
+Neste experimento a posição inicial é $\bm{x} =[ 552.62 \; 57 \; -67.17 \; 0]^T$ e deseja-se alcançar $\bm{x}_d =[ 500 \; -50 \; -150 \; 0.5235]^T$.
 
 \begin{figure}[H]
 \centering
@@ -185,8 +189,7 @@ Os resultados foram conforme esperados, levando o erro assintoticamente a zero e
 
 \subsection{Experimento 2}
 
-Neste experimento, demonstra-se o controle no espaço operacional.
-A posição inicial é $\bm{x} =[ 550 \; 57 \; -100 \; 0]^T$. O gráfico \ref{fig:pos_exp2_phi} a orientação é alterada para $60^o$, ou seja $\bm{x_d} =[ 550 \; 57 \; -100 \; 1.0472]^T$. Em seguida, a orientação é alterada para $-60^o$, ou seja $\bm{x_d} =[ 550 \; 57 \; -100 \; -1.0472]^T$. 
+Neste experimento, o objetivo é testar a alteração da orientação, mantendo a posição constante. A posição inicial é $\bm{x} =[ 550 \; 57 \; -100 \; 0]^T$. O gráfico \ref{fig:pos_exp2_phi} a orientação é alterada para $60^o$, ou seja $\bm{x_d} =[ 550 \; 57 \; -100 \; 1.0472]^T$. Em seguida, a orientação é alterada para $-60^o$, ou seja $\bm{x_d} =[ 550 \; 57 \; -100 \; -1.0472]^T$. 
 
 \begin{figure}[H]
 \centering
@@ -221,8 +224,6 @@ A posição inicial é $\bm{x} =[ 550 \; 57 \; -100 \; 0]^T$. O gráfico \ref{fi
 \section{Rastreamento de Trajetória}
 
 \subsection{Trajetória 1}
-A trajetória a ser rastreada é dada pelas equações:
-
 
 \subsubsection{Ganho $\bm{K}_t = \bm{I}$}
 
@@ -285,7 +286,6 @@ Podem-se observar diversos picos no gráfico do erro na figura \ref{fig:erro_tra
 
 
 \subsection{Trajetória 2}
-A trajetória a ser rastreada é dada pelas equações:
 
 \subsubsection{Ganho $\bm{K}_t = \bm{I}$}
 \begin{figure}[H]
