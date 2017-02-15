@@ -1,13 +1,13 @@
 \chapter{Introdução}
 
-Desde a década de 60, robôs tem sido utilizados em ambientes indústriais. Manipuladores robóticos foram capazes de aumentar a produtividade, a eficiência e garantir um maior controle de qualidade dos processos. Além de serem capazes de realizar tarefas repetitivas em uma linha de montagem, muitos manipuladores o fazem com maior precisão e rapidez que um ser humano. 
+Desde a década de 60, robôs tem sido utilizados em ambientes industriais. Manipuladores robóticos foram capazes de aumentar a produtividade, a eficiência e garantir um maior controle de qualidade dos processos. Além de serem capazes de realizar tarefas repetitivas em uma linha de montagem, muitos manipuladores o fazem com maior precisão e rapidez que um ser humano. 
 
 Recentemente além de linhas de produção da industria, a robótica tem encontrado aplicação em instalações \textit{offshore} de óleo e gás. É de grande interesse utilizá-los para realizar tarefas onde a presença humana torna-se difícil, arriscada ou até mesmo impossível. Muitas empresas já tem utilizado soluções automatizadas tanto em ambientes submersos quanto acima do nível do mar. Braços robóticos tem sido de grande importância para executar tarefas que exigem interação mais complexa com o ambiente. Com isso em mente, foi desenvolvido um manipulador leve para o DORIS, robô guiado por trilhos para monitoração, inspeção e supervisão de ambientes não submersos de plataformas de petróleo \citep{xaud2016doris}.
 
 \section{DORIS}
 O uso de robôs em uma instalação de óleo e gás tem diversas vantagens. Pode reduzir o custo com manutenção de diversos sensores ao longo instalação e substituir humanos na realização de tarefas repetitivas, especialmente aquelas realizadas em ambientes perigosos, confinados ou prejudiciais a saúde. 
 
-O projeto DORIS, desenvolvido pelo laboratório LEAD-GSCAR, da Universidade Federal do Rio de Janeiro, introduz um sistema robótico onde vagões guiados por trilhos carregam diversas câmeras, sensores e dispositivos para monitorar e inspecionar diferentes áreas e equipamento na parte \textit{topside} de plataformas.
+O projeto DORIS, desenvolvido pelo laboratório LEAD-GSCAR, da Universidade Federal do Rio de Janeiro, introduz um sistema robótico onde vagões guiados por trilhos carregam diversas câmeras, sensores e dispositivos para monitorar e inspecionar diferentes áreas e equipamento na parte \textit{topside} de plataformas \citep{nunes2013doris, galassi2014doris, freitas2015embedded}.
 
 As tarefas desse robô consistem principalmente em: monitorar perfis de temperatura utilizando câmeras térmicas infravermelhas, supervisão de pessoal não autorizado, detecção de anomalias sonoras utilizando microfones, detecção de vazamentos de gás com sensores de hidrocarbonetos, inspeção de padrões de vibração de maquinário crítico, interação com interfaces touchscreen na plataforma, processamento de dados coletados, armazenamento e transmissão de áudio e vídeo em tempo real.
 
@@ -70,11 +70,11 @@ Nesse contexto, insere-se esse trabalho. Utilizando a configuração do manipula
 \begin{itemize}
 \item Elaborar o modelo cinemático e implementar estratégias de controle. %de posição, rastreamento de trajetória.
 
-\item A partir do RobotGUI, que já interage com os outros dispositivos do DORIS, desenvolver um software para controle de manipuladores robóticos. O uso do ROS proporciona uma maior versatilidade e facilidade para incorporação de novas funcionalidades, em comparação com abordagens tradicionais.
-
 \item Utilizar a câmera para controle por servo visão onde o alvo é um marcador em algum ponto de interesse, como por exemplo uma máquina a ser inspecionada. 
 
 \item Com o sensor de força montado no efetuador do manipulador, realizar controle de força sobre uma superfície.
+
+\item A partir do RobotGUI, que já interage com os outros dispositivos do DORIS, desenvolver um software para controle de manipuladores robóticos. O uso do ROS proporciona uma maior versatilidade e facilidade para incorporação de novas funcionalidades, em comparação com abordagens tradicionais.
 
 \item Utilizando \textit{Julia Language} permitir que o algoritmo de controle seja modificado em tempo de execução.
 \end{itemize}
@@ -83,6 +83,6 @@ Nesse contexto, insere-se esse trabalho. Utilizando a configuração do manipula
 \section{Organização do trabalho}
 
 %TODO
-No primeiro capítulo o trabalho foi contextualizado, descrevendo os objetivos do projeto DORIS e do manipulador TETIS. No segundo capítulo são mostrados conceitos de robótica necessários para a modelagem e controle de manipuladores robóticos. No capítulo 3 esses conceitos são aplicados ao manipulador TETIS. No capítulo 4 são abordados detalhes das ferramentas e da arquitetura utilizada para a implementação do software. No capítulo 5, são mostrados e discutidos os resultados de simulação e de testes experimentas para os diferentes modos de controle implementados. No capítulo \ref{chap:descricao_hard} é descrito o hardware do robô DORIS. 
-Por último, no capítulo 7 são apresentadas as conclusões sobre o trabalho e pontos para serem abordados em trabalhos futuros.
+No primeiro capítulo o trabalho foi contextualizado, descrevendo os objetivos do projeto DORIS e do manipulador TETIS. No segundo capítulo são mostrados conceitos de robótica necessários para a modelagem e controle de manipuladores robóticos. No capítulo 3 esses conceitos são aplicados ao manipulador TETIS.
+No capítulo \ref{chap:descricao_hard} é descrito o hardware do robô DORIS.  No capítulo 5 são abordados detalhes das ferramentas e da arquitetura utilizada para a implementação do software. No capítulo 6, são mostrados e discutidos os resultados de simulação e de testes experimentas para os diferentes modos de controle implementados.  Por último, no capítulo 7 são apresentadas as conclusões sobre o trabalho e pontos para serem abordados em trabalhos futuros.
 

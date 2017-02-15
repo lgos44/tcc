@@ -4,7 +4,7 @@ Neste capítulo são exibidos os resultados de simulação e experimentais. A si
 
 \textbf{Trajetória 1}
 \begin{gather} \label{eq:traj1}
-\bm{x_d} = \m{75 \sin(\omega_n t) + \sin (4 \omega_n t) + 500 \\ 57 \\ 75 \cos(\omega_n t) + \cos(4\omega_n t) -67 \\ \omega_n \sin(\omega_nt) }
+{x_d} = \m{75 \sin(\omega_n t) + \sin (4 \omega_n t) + 500 \\ 57 \\ 75 \cos(\omega_n t) + \cos(4\omega_n t) -67 \\ \omega_n \sin(\omega_nt) }
 {\dot{x}_d} = \m{75\omega_n \cos(t\omega_n) + 300 \omega_n \cos(4t\omega_n) \\
 0 \\
 -75 \omega_n \sin(t \omega_n) - 300 \omega_n \sin(4t\omega_n) \\
@@ -28,7 +28,7 @@ onde $\omega_n = \pi/10$
 \end{align}
 
 \section{Simulação}
-Utilizando a Robotics Toolbox \citep{petercorke} para MATLAB\circledR, foram feitas simulações para o controle cinemático utilizando controle proporcional com feedforward e a trejetória 1 \eqref{eq:traj1} como referência. Para tornar os resultados compatíveis com o sistema real, foi utilizado um ZOH na saída do controlador com período de amostragem de $10ms$ (ciclo de controle).
+Utilizando a Robotics Toolbox \citep{petercorke} para MATLAB\circledR, foram feitas simulações para o controle cinemático utilizando controle proporcional com feedforward e a trejetória 1 \eqref{eq:traj1} como referência. Para tornar os resultados compatíveis com o sistema real, foi utilizado um ZOH na saída do controlador com período de amostragem de $10ms$ (ciclo de controle do software de controle).
 
 \begin{figure}[H]
 \centering
@@ -70,7 +70,7 @@ Utilizando a Robotics Toolbox \citep{petercorke} para MATLAB\circledR, foram fei
   \caption{$\phi$}
   \label{fig:simul_traj1_x4}
 \end{subfigure}
-\caption{Simulação: Rastreamento da trajetória 1 para ${K}_t = {I}$}
+\caption{Simulação - Rastreamento da trajetória 1 para ${K}_t = {I}$}
 \label{fig:simulx}
 \end{figure}
 
@@ -88,7 +88,7 @@ Utilizando a Robotics Toolbox \citep{petercorke} para MATLAB\circledR, foram fei
   \caption{${u}(t)$}
   \label{fig:simul_u}
 \end{subfigure}
-\caption{Simulação: Destaque para o erro $e_1$ e $e_3$ com ${K}_t = {I}$}
+\caption{Simulação - Destaque para o erro $e_1$ e $e_3$ com ${K}_t = {I}$}
 \label{fig:simul_erro_traj}
 \end{figure}
 
@@ -96,7 +96,7 @@ Utilizando a Robotics Toolbox \citep{petercorke} para MATLAB\circledR, foram fei
 \section{Análise da Malha de Controle a nível de Juntas}
 Para verificar se de fato são válidas as premissas assumidas na seção \ref{sec:controle_cinematico} para aplicação de uma estratégia de controle cinemático foi levantada para cada uma das juntas a resposta a uma onda quadrada tal que:
 \[ u = A \sgn(\sin( 2\pi t/f)) \]
-onde o período $T = 1/f = 1s$ e a amplitude $A = 0.5 rad/s$
+onde o período $T = 1/f = 2s$ e a amplitude $A = 0.5 rad/s$
 
 \newlength{\imageheight}
 \begin{figure}[H]
@@ -151,7 +151,7 @@ Os resultados foram conforme esperados, levando o erro assintoticamente a zero e
   \caption{Junta 4}
   \label{fig:sub2}
 \end{subfigure}
-\caption{Controle de Posição no Espaço das Juntas: Resultado experimental}
+\caption{Resultados experimentais - Controle de Posição no Espaço das Juntas}
 \label{fig:test}
 \end{figure}
 
@@ -190,7 +190,7 @@ Neste experimento a posição inicial é ${x} =[ 552.62 \; 57 \; -67.17 \; 0]^T$
   \caption{$\phi$}
   \label{fig:oper_space_exp1_x4}
 \end{subfigure}
-\caption{Controle de Posição no Espaço Operacional: Experimento 1}
+\caption{Resultados experimentais - Controle de Posição no Espaço Operacional: Experimento 1}
 \label{fig:oper_space_exp1}
 \end{figure}
 
@@ -226,7 +226,7 @@ Nas figuras \ref{fig:oper_space_exp2_x1} e \ref{fig:oper_space_exp2_x3} é poss�
   \caption{$\phi$}
   \label{fig:pos_exp2_phi}
 \end{subfigure}
-\caption{Controle de Posição no Espaço Operacional: Experimento 2}
+\caption{Resultados experimentais - Controle de Posição no Espaço Operacional: Experimento 2}
 \label{fig:oper_space_exp2}
 \end{figure}
 
@@ -271,7 +271,7 @@ Nesta seção são exibidos os resultados experimentais para o rastreamento das 
   \caption{$x_4$}
   \label{fig:sub2}
 \end{subfigure}
-\caption{Rastreamento da trajetória 1 para ${K}_t = {I}$: Resultados experimentais}
+\caption{Resultados experimentais - Rastreamento da trajetória 1 para ${K}_t = {I}$}
 \label{fig:test}
 \end{figure}
 
@@ -286,10 +286,11 @@ Nesta seção são exibidos os resultados experimentais para o rastreamento das 
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=\linewidth]{./img/traj_1_k1/u.eps}
-  \caption{$\bm{u}(t)$}
+  \caption{$
+  {u}(t)$}
   \label{fig:sub2}
 \end{subfigure}
-\caption{Trajetória 1, destaque para o erro $e_1$ e $e_3$ com ${K}_t = {I}$: Resultados experimentais}
+\caption{Resultados experimentais - Trajetória 1: destaque para o erro $e_1$ e $e_3$ com ${K}_t = {I}$}
 \label{fig:erro_traj}
 \end{figure}
 
@@ -298,7 +299,7 @@ Podem-se observar diversos picos no sinal de erro na figura \ref{fig:erro_traj} 
 
 \subsection{Trajetória 2}
 
-\subsubsection{Ganho $\bm{K}_t = \bm{I}$}
+\subsubsection{Ganho ${K}_t = {I}$}
 \begin{figure}[H]
 \centering
   \includegraphics[width=0.5\linewidth]{./img/traj_2_k1/traj.eps}
@@ -332,7 +333,7 @@ Podem-se observar diversos picos no sinal de erro na figura \ref{fig:erro_traj} 
   \caption{$x_4$}
   \label{fig:sub2}
 \end{subfigure}
-\caption{Resultados experimentas - Rastreamento da trajetória 2 para $\bm{K}_t = \bm{I}$}
+\caption{Resultados experimentas - Rastreamento da trajetória 2 para ${K}_t = {I}$}
 \label{fig:test}
 \end{figure}
 
@@ -389,7 +390,7 @@ Podem-se observar diversos picos no sinal de erro na figura \ref{fig:erro_traj} 
   \caption{$x_4$, $x_{d4}$ e $e_4$}
   \label{fig:sub2}
 \end{subfigure}
-\caption{Rastreamento da trajetória 2 para ${K}_t = 5 {I}$}
+\caption{Resultados experimentais - Rastreamento da trajetória 2 para ${K}_t = 5 {I}$}
 \label{fig:test}
 \end{figure}
 
@@ -411,12 +412,13 @@ Podem-se observar diversos picos no sinal de erro na figura \ref{fig:erro_traj} 
 \label{fig:erro_traj}
 \end{figure}
 
-A partir da variação do ganho de controle foi possível observar que acima de ${K}_t = 5 {I}$ não resultaram em erro menor. Portanto,  
+A partir da variação do ganho de controle foi possível observar que acima de ${K}_t = 5 {I}$ não resultaram em erro menor. Portanto, conclui-se que o erro em regime permanente se deve aos seguintes fatores (i) não é possível garantir que o período de controle é constante pois não se trata de um sistema em tempo real, (ii) a junta 2 não é capaz de reproduzir com tanta precisão comandos de velocidade e (iii) período máximo que o computador embarcado consegue executar o ciclo de controle é de 10ms.
 
-
+%Observa-se nas figuras \ref{fig:fx} e \ref{fig:fz}, que os sinais se alternam, iniciando com valores negativos de $F_z$, o que representa estar empurrando o manipulador para . 
+ 
 \section{Controle de Força}
 
-Nesta seção demonsta-se os resultados de experimentos de controle de força, segundo os estratégias definidas em \ref{sec:force}. 
+Nesta seção são mostrados os resultados de experimentos de controle de força, segundo os estratégias definidas em \ref{sec:force}. 
 
 \subsection{Float}
 Neste experimento a referência de força é configurada para zero, logo é possível mover o efetuador aplicando forças sobre o  sensor de força. O operador tentou traçar um retângulo no plano x-z, movimentando o efetuador com as mãos.
@@ -472,5 +474,5 @@ Foi aplicado o controle de força com uma referência constante de $1000 mN$ na 
   \label{fig:force_approach}
 \end{figure}
 
-Os resultados mostraram a existência de não linearidades que não foram consideradas no modelo. Por exemplo a relação entre força e distância no ambiente testado não é exatamente linear, no entanto a aproximação foi aceitável. O fato de o sensor de força ter uma alta relação sinal-ruído para a ordem de grandeza do o sinal de referência também contribuiu para os resultados não ideais mostrados. 
+Os resultados mostraram a existência de não linearidades que não foram consideradas no modelo. Por exemplo a relação entre força e distância no ambiente testado não é exatamente linear, no entanto a aproximação foi aceitável. O fato de o sensor de força ter uma alta relação sinal-ruído para a ordem de grandeza do o sinal de referência também contribuiu para os resultados observados. 
 

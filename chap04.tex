@@ -1,18 +1,18 @@
 \chapter{Implementação de Software para Controle de Sistemas Robóticos}
 A implementação dos algoritmos de controle detalhados nos capítulos anteriores for feita como extensão ao software RobotGUI desenvolvido pela equipe do LEAD-GSCAR \citep{nunes2013doris}.
 
-Proporciona uma infraestrutura para carregar componentes modulares de software para robôs, juntamente com classes altamente reutilizáveis. Esses sistema permite inicializar módulos de software com uma interface gráfica associada, de modo a interagir com eles. Por exemplo, ao iniciar componente que obtêm dados de um sensor, é iniciada na interface gráfica uma \textit{Tool} que permite visualizar os dados e configurar parâmetros. Essa conexão é dinâmica, permitindo que componentes sejam iniciados de forma independente e até mesmo em momentos diferentes.  
+Proporciona uma infraestrutura para carregar componentes modulares de software para robôs, juntamente com classes altamente reutilizáveis. Esses sistema permite inicializar módulos de software com uma interface gráfica associada, de modo a interagir com eles. Por exemplo, ao iniciar componente que obtêm dados de um sensor, é iniciada na interface gráfica uma \textit{Tool} que permite visualizar os dados e configurar parâmetros. Essa conexão é dinâmica, permitindo que componentes sejam iniciados de forma independente e em momentos diferentes.  
 
 
 \section{Ferramentas}
 Os seguintes softwares e \textit{frameworks} foram utilizados:
 
 \begin{itemize}
-\item Linux (Ubuntu 14.04/16.04) como Sistema Operacional
-\item C++ como linguagem de programação
+\item Linux (Ubuntu 14.04/16.04) como Sistema Operacional.
+\item C++ como linguagem de programação.
 \item Robot Operating System \citep{quigley2009ros} como \textit{framework} principal utilizado pelo RobotGUI, fornecendo comunicação entre nós através de mensagens e serviços. Será descrito mais detalhadamente na próxima seção.
 \item Qt \citep{qtcompany} como \textit{framework} para elaboração da interface gráfica. 
-\item Julia Language como linguagem auxiliar na elaboração de algoritmos de controle modificáveis em tempo de execução
+\item Julia Language como linguagem auxiliar na elaboração de algoritmos de controle modificáveis em tempo de execução.
 \end{itemize}
 
 \section{Robot Operating System (ROS)}
@@ -22,7 +22,7 @@ Em \citep{quigley2009ros} é descrito o framework ROS, que busca enfrentar esses
 \begin{itemize}
 \item \textbf{Peer-to-peer ou ponto-a-ponto:} Um sistema construído utilizando ROS consiste de um conjunto de processos, potencialmente em diferentes máquinas hospedeiras e conectados entre si em uma topologia ponto-a-ponto. Tipicamente existe um ou mais computadores embarcados conectados via \textit{ethernet}, que se comunicam via rede \textit{wireless} com máquinas com maior poder computacional, capazes de realizar tarefas como visão computacional e reconhecimento de fala. 
 
-\item \textbf{Multi-Linguagem:} Muitos possuem preferência em relação a determinadas linguagens de programação devido a fatores como tempo para escrita do código, facilidade de \textit{debugging}, sintaxe ou eficiência de execução. ROS suporta as linguagens C++, Python, Octave e LISP. O ROS faz uma especificação a nível de mensagens. A configuração e negociação da conexão ponto a ponto ocorre através de XML-RPC \footnote{RPC, do inglês, Remote Procedure Call é um termo da computação distribuída usado para quando um programa de computador causa a execução de um procedimento (subrotina) em outro espaço de endereçamento (outro computador na mesma rede).}, para o qual existem implementações na maioria das linguagens.   
+\item \textbf{Multi-Linguagem:} Muitos possuem preferência em relação a determinadas linguagens de programação devido a fatores como tempo para escrita do código, facilidade de \textit{debugging}, sintaxe ou eficiência de execução. ROS suporta as linguagens C++, Python, Octave e LISP. O ROS faz uma especificação a nível de mensagens. A configuração e negociação da conexão ponto a ponto ocorre através de XML-RPC \footnote{RPC, do inglês, Remote Procedure Call é um termo da computação distribuída usado para quando um programa de computador causa a execução de um procedimento (sub-rotina) em outro espaço de endereçamento (outro computador na mesma rede).}, para o qual existem implementações na maioria das linguagens.   
 
 É utilizada uma linguagem de definição de interface (IDL) que descreve as mensagens enviadas entre módulos. Código nativo de cada linguagem é gerado a partir dessas mensagens. 
 
@@ -34,12 +34,12 @@ Em \citep{quigley2009ros} é descrito o framework ROS, que busca enfrentar esses
 No ROS, encoraja-se a encapsular todos os drivers e algoritmos em bibliotecas independentes. 
 
 
-\item \textbf{Gratuito e código aberto:} Todo o código fonte do ROS está disponível publicamente. Isso é critico para facilitar a descoberta e correção de erros. É distribuído sob os termos da licença BSD.  
+\item \textbf{Gratuito e código aberto:} Todo o código fonte do ROS está disponível publicamente. Isso é crítico para facilitar a descoberta e correção de erros. É distribuído sob os termos da licença BSD.  
 
 \end{itemize}
 
 \subsection{Conceitos Básicos}
-Esta seção se baseia em \citep{ros_concepts} e busca detalhar conceitos do funcionamento e arquitetura do ROS necessários ao entendimento do software desenvolvido nesse trabalho. 
+Esta seção se baseia em \citep{ros_concepts} e busca detalhar conceitos do funcionamento e arquitetura do ROS necessários ao entendimento do software desenvolvido neste trabalho. 
 
 %\subsection{Nível de Sistema de Arquivos}
 
@@ -48,7 +48,7 @@ Os conceitos a nível de grafo de computação descrevem elementos da rede ponto
 \begin{description}
 \item[Nodes:] Nós são processos que executam algum tipo de computação. ROS foi projetado para ser modular, assim um sistema de controle de um robô geralmente tem múltiplos nós. 
 
-\item[Master:] Devido a topologia ponto-a-ponto é necessário um mecanismo de busca que os processos se encontrem. O mestre é um servidor de nomes, ou seja, provê registro e busca de nomes.
+\item[Master:] Devido a topologia ponto-a-ponto é necessário um mecanismo de busca que os processos se encontrem. O mestre é um servidor de nomes, ou seja, fornece registro e busca de nomes.
 
 \item[Parameter Server:] O servidor de parâmetros permite que dados sejam armazenados em uma localização central. Faz parte do \textit{Master}.
 
@@ -75,7 +75,7 @@ Os conceitos a nível de grafo de computação descrevem elementos da rede ponto
 \item[Bags:] Bags são um formato para salvar e reproduzir dados de mensagens de ROS ao longo do tempo. São úteis para salvar dados de sensores, por exemplo, que são difíceis de coletar mas necessários para o desenvolvimento de algoritmos. 
 \end{description}
 
-O \textit{ROS Master} funciona como um servidor de nomes. Ele armazena informação de registro para os nós, que se comunicam com o Master para reportar sua informação de registro. Conforme os nós se comunicam com o \textit{Master}, eles podem receber informação sobre outros nós registrados e fazer as conexões apropriadas. \textit{Master} 
+O \textit{ROS Master} funciona como um servidor de nomes. Ele armazena informação de registro para os nós, que se comunicam com o Master para reportar sua informação de registro. Conforme os nós se comunicam com o \textit{Master}, eles podem receber informação sobre outros nós registrados e fazer as conexões apropriadas. 
 
 Nós conectam-se diretamente a outros nós, o \textit{Master} somente fornece informação de busca, como um servidor DNS. Nós que subscrevem a um tópico vão solicitar conexão aos nós que publicam naquele tópico e irão estabelecer a conexão de acordo com um protocolo de conexão concordado. O protocolo mais comum é chamado de TCPROS, que utiliza sockets TCP/IP padrão.
 
@@ -95,17 +95,18 @@ A arquitetura do RobotGUI baseia-se nos seguintes conceitos principais \citep{nu
 \begin{itemize}
 \item \textbf{Components}: Lidam com a comunicação e processam dados no Computador Base. São essencialmente \textit{Nodelets} de ROS, podendo utilizar funcionalidades como comunicação através de mensagens e serviços, utilizar parâmetros e bibliotecas de ROS. Permitem maior modularidade pois componentes podem ser inicializados independentemente do \textit{RobotGUI}.
 
-\item \textbf{Tools:} São elementos gráficos da interface para o usuário. São utilizadas para interagir com o robô e visualizar informação. São criadas como \textit{plugins} para o ROS \textit{pluginlib} e independetes de qualquer biblioteca do ROS.
+\item \textbf{Tools:} São elementos gráficos da interface para o usuário. São utilizadas para interagir com o robô e visualizar informação. São criadas como \textit{plugins} para o ROS \textit{pluginlib} e independentes de qualquer biblioteca do ROS.
 
 \item \textbf{Devices:} São \textit{Components} utilizados para representar um dispositivo do robô. Utilizam o mecanismo de \textit{Item} e \textit{Variable} e se conectam a \textit{Tools} padrão fornecidas pelo RobotGUI, que são \textit{DataTable}, \textit{Device Management} e \textit{Plotter}. 
 
 \item \textbf{Item e Variable:} \textit{Variables} contém valores de interesse, sempre guardando um valor desejado e um valor real. Por exemplo em uma variável controlada o valor desejado será a referência dada pelo operador e o valor real é obtido de algum sensor. Para mostrar esses valores na interface utiliza-se \textit{Items}. Uma \textit{Variable} pode estar associada a diversos \textit{Items}, de forma que através desse mecanismo o valor exibido em todos eles é atualizado. 
 
-\item \textbf{Interação entre Compontents e Tools:} Tools e Components podem se conectar, quando isso ocorre eles interagem entre si a nível de "ponteiro para objeto". Essa conexão permite que o desenvolvimento da interface através do \textit{Qt} seja quase que independente do desenvolvimento do código que lida com hardware, lógica e comunicação. Essas classes disponibilizam uma estrutura para conectar \textit{Components} e \textit{Tools} de tal forma que quano um \textit{Component} é iniciado ele busca por \textit{Tools} associadas a ele que estejam em execução e vice versa. Quando um \textit{Component} é 
+\item \textbf{Interação entre Compontents e Tools:} Tools e Components podem se conectar, quando isso ocorre eles interagem entre si a nível de "ponteiro para objeto". Essa conexão permite que o desenvolvimento da interface através do \textit{Qt} seja quase que independente do desenvolvimento do código que lida com hardware, lógica e comunicação. Essas classes disponibilizam uma estrutura para conectar \textit{Components} e \textit{Tools} de tal forma que quano um \textit{Component} é iniciado ele busca por \textit{Tools} associadas a ele que estejam em execução e vice versa. 
+%Quando um \textit{Component} é 
 
-\item \textbf{RobotGUI:} É uma GUI \footnote{Guided User Interface} em nó de ROS. Permite que múltiplas janelas sejam criadas. O usuário pode decidir o que é exibido. Ao clicar nos \textit{toolbuttons}, uma janela referente a \textit{Tool} aparece. Essa janela pode ser encaixada na janela principal. O RobotGUI executa \textit{roslaunch}'s, nós incluídos pelo \textit{roslaunch} em questão podem ser \textit{Components}. 
+\item \textbf{RobotGUI:} É uma GUI \footnote{Guided User Interface} em nó de ROS. Permite que múltiplas janelas sejam criadas. O usuário pode decidir o que é exibido. Ao clicar nos botões na parte superior (figura \ref{fig:screenshot1}), uma janela referente a \textit{Tool} aparece. Essa janela pode ser encaixada na janela principal. O RobotGUI executa \textit{roslaunch}'s, nós incluídos pelo \textit{roslaunch} em questão podem ser \textit{Components}. 
 
-\item \textbf{NodeletManager e RobotGUI:} o RobotGUI é um Nodelet Manager com pequenas modificações. Um NodeletManager utiliza a classe nodelet::Loader para instanciar nodelets. Utilizando uma versão modificada dessa classe é possível verificar se um Nodelet a ser carregado é um \textit{Component}. Se esse for o caso, a \textit{Tool} correspondente será carregada e as conexões são feitas. Quando um componente é descarregado, a conexão com as \textit{Tools} associadas a ele é encerrada.
+\item \textbf{NodeletManager e RobotGUI:} o RobotGUI é um Nodelet Manager com pequenas modificações. Um NodeletManager utiliza a classe nodelet::Loader para instanciar Nodelets. Utilizando uma versão modificada dessa classe é possível verificar se um Nodelet a ser carregado é um \textit{Component}. Se esse for o caso, a \textit{Tool} correspondente será carregada e as conexões são feitas. Quando um componente é descarregado, a conexão com as \textit{Tools} associadas a ele é encerrada.
 \end{itemize}
 
 
@@ -113,7 +114,7 @@ A arquitetura do RobotGUI baseia-se nos seguintes conceitos principais \citep{nu
 
 \subsection{Topologia}
 
-No diagrama da figura \ref{fig:ros_nodes} são mostados os nós executados pelo programa para utilizar o manipulador e como se comunicam. Elipses representam Nodes, elipses tracejadas representam Nodelets e retângulos representam tópicos. Os retângulos que contém outros elementos representam os pacotes aos quais aqueles nós pertencem. Quando as setas saem de um nó, representam que o nó publica informação em um tópico, e quando chegam, representam que ele subscreve ao tópico em questão. As linhas pontilhadas representam que os \textit{Nodelets} aos quais elas estão conectadas são executadas pelo \textit{Node} na outra extremidade. Neste diagrama, são omitidos os tópicos de configuração de parâmetros.
+No diagrama da figura \ref{fig:ros_nodes} são mostrados os nós executados pelo programa para utilizar o manipulador e como se comunicam. Elipses representam Nodes, elipses tracejadas representam Nodelets e retângulos representam tópicos. Os retângulos que contém outros elementos representam os pacotes aos quais aqueles nós pertencem. Quando as setas saem de um nó, representam que o nó publica informação em um tópico, e quando chegam, representam que ele subscreve ao tópico em questão. As linhas pontilhadas representam que os \textit{Nodelets} aos quais elas estão conectadas são executadas pelo \textit{Node} na outra extremidade. Neste diagrama, são omitidos os tópicos de configuração de parâmetros.
 
 \begin{figure}[!h]
   \centering
@@ -122,11 +123,11 @@ No diagrama da figura \ref{fig:ros_nodes} são mostados os nós executados pelo 
   \label{fig:ros_nodes}
 \end{figure}
 
-Os \textit{ROS Nodes} \verb|manipulator_controller| e \verb|usb_cam| são executados no computador embarcado. Os nós \textit{Nodes} \verb|robot_gui|, \verb|visp_auto_tracker| são executados no computador base. Os \textit{Nodelets} \verb|manipulator_controller_device| e os \verb|eposX_device| são carregados pelo \verb|robot_gui|, que é um \textit{Nodelet Manager}. 
+Os \textit{ROS Nodes} \verb|manipulator_controller| e \verb|usb_cam| são executados no computador embarcado. Os nós \verb|robot_gui|, \verb|visp_auto_tracker| são executados no computador base. Os \textit{Nodelets} \verb|manipulator_controller_device| e os \verb|eposX_device| são carregados pelo \verb|robot_gui|, que é um \textit{Nodelet Manager}. 
 
-\subsection{ManipulatorControllerDevice}
+\subsection{{ManipulatorControllerDevice}}
 
-A classe ManipulatorControllerDevice deriva de Device. Possui as \textit{Variables} mostradas na tabela \ref{tab:variables}. Essa classe faz a interface entre \textit{Tools} e os tópicos de ROS. Ao receber uma mensagem de ROS, um \textit{callback} referente ao tópico em questão é executado atualizando a variável associada àquela informação. A atualização da variável resulta na atualização do \textit{Item}.
+A classe \textit{ManipulatorControllerDevice} deriva de Device. Possui as \textit{Variables} mostradas na tabela \ref{tab:variables}. Essa classe faz a interface entre \textit{Tools} e os tópicos de ROS. Ao receber uma mensagem de ROS, um \textit{callback} referente ao tópico em questão é executado atualizando a variável associada àquela informação. A atualização da variável resulta na atualização do \textit{Item}.
 
 \begin{table}[h!]
 \centering
@@ -148,8 +149,8 @@ Variable & Descrição \\ \hline
 \verb|output|&				Saída $\bm{u}$ do controlador.\\
 \verb|controlMode|&			Modo de controle selecionado (detalhes em \ref{sec:ctrlmodes}). \\
 \verb|individualMode|&		Modo de controle individual selecionado (detalhes em \ref{sec:ctrlmodes}).\\
-\verb|positionValue|&		Valor de posição cartesiana (refererência/medido). \\
-\verb|forceValue|&			Valor de força (refererência/medido).\\
+\verb|positionValue|&		Valor de posição cartesiana (referência/medido). \\
+\verb|forceValue|&			Valor de força (referência/medido).\\
 \verb|individualValue|&		Valores para controle individual.  \\
 \verb|openLoopVelocityEfct|&Valores para malha aberta de velocidade em $E_e$. \\
 \verb|openLoopVelocityBase|&Valores para malha aberta de velocidade em $E_b$. \\
@@ -161,7 +162,7 @@ Variable & Descrição \\ \hline
 
 \subsection{DorisManipulatorController}
 
-A classe DorisManipulatorController deriva da classe Controller, que implementa a estrutura necessária para a criação de um controlador. Ela permite que o controle seja executado com um período fixo, em uma \textit{thread} interna, ou que o ciclo de controle seja executado por uma chamada externa. Nesse caso é utilizada a primeira opção. Possui a funcionalidade de receber entradas de múltiplas fontes. Por exemplo, o manipulador pode ser controlado por uma janela na interface e por um \textit{joystick}. O Controller está pronto para lidar com isso, quando uma fonte fica inativa, outra é capaz de controlar. 
+A classe DorisManipulatorController deriva da classe Controller, que implementa a estrutura necessária para a criação de um controlador. Ela permite que o controle seja executado com um período fixo, em uma \textit{thread} interna, ou que o ciclo de controle seja executado por uma chamada externa. Nesse caso é utilizada a primeira opção. Possui a funcionalidade de receber entradas de múltiplas fontes. Por exemplo, o manipulador pode ser controlado por uma janela na interface e por um \textit{joystick}. O Controller é capaz de tratar isso, quando uma fonte fica inativa, outra é capaz de controlar. 
 
 A entrada do Controller é uma mensagem de controle com a seguinte forma.
 
@@ -171,7 +172,7 @@ uint8[] modes
 float64[] data
 \end{lstlisting}
 
-O primeiro campo identifica a fonte da mensagem. O segundo é um \textit{array} de modos de cotrole. O primeiro elemento é o modo principal, enquando os demais, se existirem, são submodos. O terceiro elemento \verb|data| é um \textit{array} de elementos em ponto flutuante que contém a referência de controle. Pode ser vazio caso o modo de controle seja autônomo ou receba dados de outra fonte.
+O primeiro campo identifica a fonte da mensagem. O segundo é um \textit{array} de modos de cotrole. O primeiro elemento é o modo principal, enquanto os demais, se existirem, são submodos. O terceiro elemento \verb|data| é um \textit{array} de elementos em ponto flutuante que contém a referência de controle. Pode ser vazio caso o modo de controle seja autônomo ou receba dados de outra fonte.
 
 \begin{figure}[!h]
   \centering
@@ -180,11 +181,11 @@ O primeiro campo identifica a fonte da mensagem. O segundo é um \textit{array} 
   \label{fig:classes}
 \end{figure}
 
-Seguindo os princípios do ROS, busca-se separar em classes a interação com ROS de algoritmos de controle. As classes com terminação em \textit{Nodelet} herdam dessa classe e, portanto, implementam toda a comunicação (mensagens, serviços, etc.). A classe DorisManipulatorController implementa o ciclo de controle, chaveamento entre modos de controle, assim como os algoritmos de controle. OptoforceDAQ é uma classe utilizada para fazer a aquisição de dados do sensor de força Optoforce descrito na seção \ref{sec:optoforce}. A classe TetisData encapsula dados específicos do manipulador TETIS como dimensões dos elos e ângulos de juntas. A classe TimeLog é uma utilidade para salvar dados e gerar logs de forma automatizada. 
+Seguindo os princípios do ROS, busca-se separar em classes a interação com ROS de algoritmos de controle. As classes com terminação em \textit{Nodelet} herdam dessa classe e, portanto, implementam toda a comunicação (mensagens, serviços, etc.). A classe DorisManipulatorController implementa o ciclo de controle, chaveamento entre modos de controle, assim como os algoritmos de controle propriamente ditos. OptoforceDAQ é uma classe utilizada para fazer a aquisição de dados do sensor de força Optoforce descrito na seção \ref{sec:optoforce}. A classe TetisData encapsula dados específicos do manipulador TETIS como dimensões dos elos e ângulos de juntas. A classe TimeLog é uma utilidade para salvar dados e gerar logs de forma automatizada. 
 
 \subsection{Modos de controle} \label{sec:ctrlmodes}
 
-A classe DorisManipulatorController implementa os modos de controle descritos na tabela . 
+A classe \textit{DorisManipulatorController} implementa os modos de controle descritos na tabela \ref{tab:control_modes}. 
 
 
 \begin{table}[h!]
@@ -232,15 +233,15 @@ Para interagir com o manipulador é utilizada a \textit{Tool} chamada DorisManip
 
 \begin{itemize}
 \item Boa performance, aproximando-se de linguagens estaticamente compiladas como C.
-\item Tipagem dinâmca: tipos podem ser utilizados para documentação e otimização, mas podem ser omitidos.
+\item Tipagem dinâmica: tipos podem ser utilizados para documentação e otimização, mas podem ser omitidos.
 \item Compilador \textit{just-in-time} \footnote{Compilação just-in-time (JIT) refere-se a compilação feita no momento de execução do programa, em contraste a compilação anterior a execução.} de alta performance.
 \item Possibilidade de integrar Julia a projetos C/C++.
 \item Gratuito e código aberto (Licença MIT).
 \end{itemize}
 
-A compilação \textit{just-in-time} é baseada no projeto LLVM \citep{llvmorg,lattner2004llvm}, que consiste em uma coleção de tecnologias e ferramentas compilação modulares e reutilizáveis. O uso dessas tecnologias, juntamente com a forma como a linguagem foi projetada permite em muitos casos ela tenha uma performance comparável com a linguagem C e ao mesmo tempo ter uma sintaxe comparativamente simples.
+A compilação \textit{just-in-time} é baseada no projeto LLVM \citep{llvmorg,lattner2004llvm}, que consiste em uma coleção de tecnologias e ferramentas compilação modulares e reutilizáveis. O uso dessas tecnologias, juntamente com a forma como a linguagem foi projetada permite que em muitos casos ela tenha uma performance comparável com a linguagem C e ao mesmo tempo ter uma sintaxe comparativamente simples.
 
-Portanto, a linguagem Julia mostrou-se uma opção interessante e mais dinâmica para a implementação de controle no software de controle para o TETIS, que requer desempenho mas pode se beneficiar de uma linguagem dinâmica. Uma prova de conceito foi feita para a configuração das equações da trajetória a ser rastreada. Na interface uma janela permite a escrita de equações na forma de uma função Julia. Ao aplicar as alterações esse código é enviado para o computador embarcado através do ROS. O programa principal, em C++, chama a API em C do Julia e compila essa função no momento da primeira execução.
+Portanto, a linguagem Julia mostrou-se uma opção interessante e mais dinâmica para a implementação de controle no software do TETIS, que requer desempenho mas pode se beneficiar de uma linguagem dinâmica. Uma prova de conceito foi feita para a configuração das equações da trajetória a ser rastreada. Na interface uma janela permite a escrita de equações na forma de uma função Julia. Ao aplicar as alterações esse código é enviado para o computador embarcado através do ROS. O programa principal, em C++, chama a API em C do Julia e compila essa função no momento da primeira execução.
 
 Dessa forma a trajetória pode ser alterada em tempo de execução sem prejudicar a performance e sem necessitar acesso a dados externos constantemente. O código em \ref{lst:julia} mostra a trajetória de teste em \textit{Julia Language}.
 

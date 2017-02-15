@@ -2,11 +2,11 @@
 
 
 \section{Modelo}
-O manipulador Tetis consiste basicamente de um braço planar de três elos com uma rotação adicional ao redor do eixo do plano. Também pode ser visto como um braço antropomórfico com uma junta de revolução adicional ao final da cadeia, com o eixo paralelo às duas anteriores. O projeto mecânico faz com que a extremidade do efetuador final não esteja exatamente alinhada com as juntas, o que é levado em conta no último elo. O esquema na figura \ref{fig:modelo_tetis} ilustra o modelo de elos e juntas. 
+O manipulador TETIS consiste basicamente de um braço planar de três elos com uma rotação adicional ao redor do eixo do plano. Também pode ser visto como um braço antropomórfico com uma junta de revolução adicional ao final da cadeia, com o eixo paralelo às duas anteriores. O projeto mecânico faz com que a extremidade do efetuador final não esteja exatamente alinhada com as juntas, o que é levado em conta no último elo. O esquema na figura \ref{fig:modelo_tetis} ilustra o modelo de elos e juntas. 
 \begin{figure}[!ht]
 \centering
-  \includegraphics[width=0.9\linewidth]{./img/m2_meio_2.png}
-  \caption{Modelagem do Manipulador Tetis e posicionamento dos sistemas de coordenadas}
+  \includegraphics[width=0.9\linewidth]{./img/model2.png}
+  \caption{Modelagem cinemática do manipulador TETIS e posicionamento dos sistemas de coordenadas}
   \label{fig:modelo_tetis}
 \end{figure}%
 
@@ -189,12 +189,12 @@ onde
 &\frac{\partial z}{\partial q_4} =& E_{5}c_{234} 
 \end{align*}
 
-A partir de \ref{eq:jacob_or} e de \ref{eq:orientacao} podemos calular o Jacobiano de Orientação
+A partir de \ref{eq:jacob_or} e de \ref{eq:orientacao} podemos calcular o Jacobiano de orientação
 \begin{equation}
 {J}_{a\phi}({q}) = \frac{\partial \phi_e}{\partial {q}} = \m{0 & -1 & -1 & -1}
 \end{equation}
  
-Em alguns modos como controle por servo visão e no controle manual com joystick é interessante fazer o controle no referencial do efetuador, portanto precisamos representar o Jacobiano de posição no referencial do efetuador como $({J}_{ap})_e = {R}_{04}^T ({J}_{ap})_e$.  
+Em alguns modos como controle por servo visão e no controle manual com joystick é interessante fazer o controle no referencial do efetuador, portanto precisamos representar o Jacobiano de posição no referencial do efetuador como $({J}_{ap})_e = {R}_{be}^T ({J}_{ap})_b$.  
 
 \begin{equation}
 ({J}_{ap})_e =  
@@ -282,14 +282,14 @@ A lei de controle é dada por
 onde ${K_j} = k_j {I}$.
 
 \section{Controle de Posição no Espaço Operacional} \label{sec:pos_operacional}
-Para este modo considera-se o problema de controle de posição no espaço operacional conforme definido em \ref{eq:op_space}. Para referências constantes, ou seja, quando $\dot{{x}}_d = 0$ a lei de controle dada por
+Para este modo considera-se o problema de \textit{set-point} para o controle de posição no espaço operacional conforme definido em \ref{eq:op_space}. Para referências constantes, ou seja, quando $\dot{{x}}_d = 0$ a lei de controle dada por
 \begin{equation} \label{eq:lei_posicao}
-{u} = ({J}_{a})_b^{-1} {K}_p ({x_d} - {x_e})
+{u} = ({J}_{a})_b^{-1} {K}_p ( ({x_d})_b - ({x_e})_b)
 \end{equation}
 é capaz de levar o ${e} \rightarrow 0$ quando $t \rightarrow \infty$.
 
 \section{Controle Proporcional com Feedforward} \label{sec:pplusf}
-Para o rastreamento de trajetória considera-se o problema de seguir um referência no referencial da base ${x}_d(t)$ que é função do tempo, conhecidos ${x}_d(t)$ e ${\dot{x}}_d(t)$. Para levar o erro assintoticamente a zero, utiliza-se uma lei de controle proporcional com \textit{feedforward} utilizando a inversa do Jacobiano Analítico. Conforme mostrado em ~\ref{controle_cinematico}, a lei de controle dada por 
+Para o rastreamento de trajetória considera-se o problema de seguir um referência no referencial da base ${x}_d(t)$ que é função do tempo, conhecidos ${x}_d(t)$ e ${\dot{x}}_d(t)$. Para levar o erro assintoticamente a zero, utiliza-se uma lei de controle proporcional com \textit{feedforward} utilizando a inversa do Jacobiano Analítico. Conforme mostrado na Seção \ref{sec:controle_cinematico}, a lei de controle dada por 
 \begin{equation}
 {u} = ({J}_{a})_b^{-1} (\dot{{x}}_d + {K}_t ({x_d} - {x_e}))
 \end{equation} 
@@ -297,11 +297,10 @@ Para o rastreamento de trajetória considera-se o problema de seguir um referên
 \begin{equation}
 \dot{{e}} + {K} {e} = 0
 \end{equation}
-
 O algoritmo de controle pode ser resumido por:
 \begin{align}
 {e} &= ({x}_d)_b- ({x_e})_b  \label{eq:error_pf}\\
-{\bar{u}} &= {K}_t {e} + {\dot{x}}_d \\
+{\bar{u}} &= {K}_t {e} + ({\dot{x}}_d)_b \\
 {u} &= ({J}_a)_b^{-1} {\bar{u}}
 \end{align}
 
@@ -344,7 +343,7 @@ O controle por servo visão no manipulador TETIS é feito através de uma config
 
 O objetivo é deste modo de controle é rastrear um alvo, que é representado por um QR code como o da figura \ref{fig:camera_target}. Deseja-se que o efetuador rastreie sempre a orientação normal ao plano do alvo.
 
-A matriz de calibração ${K}$ da equação \eqref{eq:camera_projection} obtida através do processo descrito em \cite{calibration_tutorial} é:
+A matriz de calibração ${K}$ da equação \eqref{eq:camera_projection} obtida através do processo descrito em \citep{visp_camera_calibration} é:
 
 \begin{equation}
 {K} = \m {
@@ -445,14 +444,10 @@ assim basta apenas encontrar o ângulo entre os vetores ${z'}_{t}$ e ${z}_{t_0}$
 \begin{equation}
 \phi_t = \cos^{-1} \left( \frac{{z'}^T_{t} {z}_{t_0} } {||{z'}_{t}|| \; ||{z}_{t_0}||} \right)
 \end{equation}
-
-
 %\begin{align}
 %(\bm{p}_t)_e &= (\bm{p}_c)_e + (\bm{p}_t)_e \\
 %(\bm{p}_t)_e &= (\bm{p}_c)_e + \bm{R}_{ec} (\bm{p}_t)_c 
 %\end{align}
-
-
 Após obter os valores de $(p_t)_e$ e $\phi_t$, sabemos $(x_t)_e$ e controle se resume a:
 \begin{align}
 {e} &= ({x}_t)_e - ({x})_e \\
@@ -477,12 +472,10 @@ R_{es} = \m{
 \subsection{Float}  \label{sec:forca_float}
 Esse mode de controle de força consiste em configurar uma referência de controle de força ${f}_d = 0$, de modo que o efetuador do manipulador fique "flutuando", se movendo de forma sensível ao toque.
 
-Primeiramente a força representada no referencial do sensor $({f})_s \in \mathbb{R}^3 $ é representada na base por $({f})_e = R_{es} ({f})_s$.
-Como ${f}_d = 0$:
+Primeiramente a força representada no referencial do sensor $({f})_s \in \mathbb{R}^3 $ é representada na base por $({f})_e = R_{es} ({f})_s$. Com ${f}_d = 0$, o erro fica
 \begin{equation}
-({e}_f)_e = - ({f})_e \\
+({e}_f)_e = - ({f})_e 
 \end{equation}
-
 Utilizando um controle proporcional:
 \begin{align}
 \bar{{u}}_f &= {K}_f ({e}_f)_e \\
@@ -620,7 +613,7 @@ Como o sinal vindo do sensor é bastante ruidoso, utiliza-se um filtro de primei
 \begin{equation}
 H(s) = \frac{1}{\tau s + 1}
 \end{equation}
-onde $\tau = 1/(2 \pi f_c) = 0.159154943$.
+onde $\tau = 1/(2 \pi f_c) \approx 0.16$.
 
 Ficamos com a função de transferência a seguir a partir da qual é possível sintonizar os parâmetros do controlador.
 \begin{equation}
@@ -632,12 +625,10 @@ Considerando que obtemos do sensor de força um vetor $({f})_s \in \mathcal{R}^3
 ({f})_e &= {R}_{es} ({f})_s \\
 ({e}_f)_e &= {f}_d - ({f})_e \\
 \end{align}
-
 A estratégia de controle PI é dada por
 \begin{equation}
 \bar{{u}}_f = -{K}_s^{-1} ({K}_f ({e}_f)_e + {K}_i \int_0^t ({e}_f)_e (\tau)d\tau)\\
 \end{equation}
-
 Como ${u} \in \mathcal{R}^4$  e desejamos controlar somente a direção de \textit{approach}:
 \begin{equation}
 \bar{{u}} = \m{ {S}_f \bar{{u}}_f \\ 0} 

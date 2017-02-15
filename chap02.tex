@@ -45,7 +45,7 @@ Seja o $\vec{h}_i$ eixo de rotação da junta que conecta o elo $i-1$, ao elo $i
 Essa convenção resulta em uma definição não única do sistema de coordenadas nos seguintes casos:
 
 \begin{itemize}
-\item Para o sistema de coordenadas $0$, somente a direção do eixo $\vec{z}_0$ é especificada, portanto a escolha de $O_0$ e $ x_0$ é arbitrária.
+\item Para o sistema de coordenadas $0$, somente a direção do eixo $\vec{z}_0$ é especificada, portanto a escolha de $O_0$ e $ \vec{x}_0$ é arbitrária.
 \item Para o sistema de coordenadas $n$, como não existe junta $n+1$, $\vec{z}_n$ não está definido, mas $\vec{x}_n$ deve ser normal ao eixo $\vec{z}_{n-1}$. Tipicamente escolhe-se $\vec{z}_n$ alinhado com $\vec{z}_{n-1}$.
 \item Quando dois eixos consecutivos são paralelos, a normal comum entre eles não é definida de forma única. Tipicamente escolhe-se $O_i$ na junta $i+1$
 \item  Quando dois eixos consecutivos se interceptam, direção de $\vec{x}_i$ é normal e o sentido é arbitrário. Escolhe-se $O_i$ na intersecção.
@@ -60,7 +60,7 @@ Após determinados os sistemas de coordenadas, é possível determinar a posiç�
 \item $\theta_i$ ângulo entre $\vec{x}_{i-1}$ e $\vec{x}_i$ ao redor de $\vec{z}_{i-1}$
 \end{itemize}
 
-A orientação de um sistema de coordenadas $i$ em relação ao anterior é dada por uma rotação de $\theta_i$ em torno de $z$ seguida de uma rotação em torno de $\vec{x}$ de $\alpha_i$ considerando o sistema de coordenadas corrente.
+A orientação de um sistema de coordenadas $i$ em relação ao anterior é dada por uma rotação de $\theta_i$ em torno de $\vec{z}$ seguida de uma rotação em torno de $\vec{x}$ de $\alpha_i$ considerando o sistema de coordenadas corrente.
 
 \begin{equation}
 {R}_{i-1,i} = {R}_z(\theta_i){R}_x(\alpha_i)
@@ -126,9 +126,7 @@ A derivada no tempo $\dot{{\phi}}_e$ não é igual a velocidade angular, no enta
 \begin{equation} \label{eq:jacob_or}
 \dot{{\phi}}_e = \frac{\partial {\phi}_e}{\partial {q}} {\dot{q}} = {J}_{a\phi}({q}){\dot{q}}
 \end{equation}
-onde ${J}_{a\phi}$ denota o Jacobiano analítico de orientação.
-
-Sob essas premissas a cinemática diferencial pode ser obtida como:
+onde ${J}_{a\phi}$ denota o Jacobiano analítico de orientação. Assim, a cinemática diferencial pode ser obtida como:
 \begin{equation} \label{eq:jacoba}
 \dot{x}_e = \m{ \dot{p}_e \\ \phi_e } = \m{ J_{a_p}(q) \\ J_{a_\phi}(q)} {\dot{q}} = {J}_a ({q}) \dot{{q}}
 \end{equation}
@@ -206,7 +204,7 @@ Portanto é possível implementar o controle cinemático segundo o diagrama \ref
     \draw [->] (x) |- (tmp2) -| (JA);
     %\draw [->] (output) |- (tmp1)-| node[pos=0.99] {$-$} (sum);
 \end{tikzpicture}
-\caption{Diagrama de Blocos: Controle Cinemático Proporcional com FeedForward}
+\caption{Diagrama de Blocos: Controle cinemático proporcional com feedforward}
 \label{fig:controlecinematico}
 \end{figure}
 
@@ -374,7 +372,7 @@ Essa equação possui solução fechada e como $w_i > 0$, então $w_1 = \sqrt{q}
 
 Conhecidas as distâncias $w_i$ dos pontos do mundo à câmera, essas distâncias são convertidas em coordenadas tridimensionais centradas na câmera através de ${P'}_i = w_i {K}^{-1} {p}_i$, onde ${K}$ é a matriz de calibração da câmera. O último passo é determinar a orientação, uma transformação de similaridade pode ser obtida através de dois pares de pontos ${P'}_i \leftrightarrow {P}_i$. A solução pode ser obtida através de mínimos utilizando quatérnions. A partir da estimativa da rotação a obtenção da translação e da escala seguem trivialmente. 
 
-Esse método é didático, porém não é robusto e é pouco preciso, além de que os dados redundantes (quarto ponto) não aumentam a precisão do resultado. Portanto, outros algoritmos foram propostos.
+Esse método auxilia na compreesão do problema, porém não é robusto e é pouco preciso, além de que os dados redundantes (quarto ponto) não aumentam a precisão do resultado. Portanto, outros algoritmos foram propostos.
 
 \subsubsection{PNP: Estimação da \textit{pose} com N pontos}
 Em \citep{dementhon1995model} é proposto combinar dois algoritmos. O primeiro \textit{POS (Pose from Orthography and Scaling)} aproxima a projeção de perspectiva com uma projeção ortográfica (e de escala) e encontra a matriz de rotação e o vetor de translação do objeto resolvendo um sistema linear. O segundo algoritmo \textit{POSIT (POS with ITerations)}, usa a \textit{pose} aproximada pelo \textit{POS} em um \textit{loop} para computar melhores projeções ortográficas (e de escala) dos pontos característicos. Então o \textit{POS} é aplicado a essas projeções, invés de às projeções da imagem original. O \textit{POSIT} converge para medidas precisas em poucas iterações e pode utilizar mais pontos para insensibilidade a erros de medição e ruido. 
@@ -382,7 +380,7 @@ Em \citep{dementhon1995model} é proposto combinar dois algoritmos. O primeiro \
 Uma desvantagem do \textit{POSIT} é que ele não é diretamente aplicável a pontos coplanares \citep{marchand2016pose}. No entanto, em \citep{oberkampf1996iterative} uma extensão ao \textit{POSIT} foi proposta, resolvendo o problema para 4 ou mais pontos coplanares. 
 
 
-Considerando $N$ pontos $P_i$, cujas coordenadas homogêneas são dadas por $\tilde{P}_i = [X_i \;\; Y_i \;\; Z_i \;\; 1]$. Essas coordenadas
+%Considerando $N$ pontos $P_i$, cujas coordenadas homogêneas são dadas por $\tilde{P}_i = [X_i \;\; Y_i \;\; Z_i \;\; 1]$. Essas coordenadas
 
 \subsection{Servo Visão Baseada em Posição}
 Em um sistema de servo visão baseado em posição a posição e orientação do alvo com respeito a câmera ${T}_{ct}$ é estimada. O problema de estimação da posição e orientação foi discutido acima e as implementações disponíveis em código aberto estão listadas no apêndice \ref{chap:pose_est}.
