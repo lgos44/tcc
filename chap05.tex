@@ -5,22 +5,22 @@ Neste capítulo são exibidos os resultados de simulação e experimentais. A si
 \textbf{Trajetória 1}
 \begin{gather} \label{eq:traj1}
 \bm{x_d} = \m{75 \sin(\omega_n t) + \sin (4 \omega_n t) + 500 \\ 57 \\ 75 \cos(\omega_n t) + \cos(4\omega_n t) -67 \\ \omega_n \sin(\omega_nt) }
-\bm{\dot{x}_d} = \m{75\omega_n \cos(t\omega_n) + 300 \omega_n \cos(4t\omega_n) \\
+{\dot{x}_d} = \m{75\omega_n \cos(t\omega_n) + 300 \omega_n \cos(4t\omega_n) \\
 0 \\
 -75 \omega_n \sin(t \omega_n) - 300 \omega_n \sin(4t\omega_n) \\
 \omega_n^2 \cos(t \omega_n)}
 \end{gather}
 onde $\omega_n = \pi/10$
 
-\textbf{Trajetória 2}
-\begin{align}
-\bm{x_d} &= \m{ 
+\textbf{Trajetória 2} 
+\begin{align} \label{eq:traj2}
+{x_d} &= \m{ 
 \ddfrac{100 \cos(t)}{\sin^2(t) + 1} + 500 \\
 57 \\
 \ddfrac{100\cos(t) \sin(t)}{\sin^2(t) + 1} -50 \\
 0
 } &&
-\bm{\dot{x}_d} = \m{
+{\dot{x}_d} = \m{
 \ddfrac{100\sin(t) (\sin^2(t) -3 )}{(\sin^2(t) + 1)^2} \\
 0 \\
 \ddfrac{-(300 \sin^2(t) - 100)}{(\sin^2(t) + 1)^2} \\
@@ -28,13 +28,20 @@ onde $\omega_n = \pi/10$
 \end{align}
 
 \section{Simulação}
-Utilizando a Robotics Toolbox \citep{petercorke} para MATLAB\circledR, foram feitas simulações para o controle cinemático utilizando controle proporcional com feedforward e a trejetória 1 \eqref{eq:traj1} como referência.
+Utilizando a Robotics Toolbox \citep{petercorke} para MATLAB\circledR, foram feitas simulações para o controle cinemático utilizando controle proporcional com feedforward e a trejetória 1 \eqref{eq:traj1} como referência. Para tornar os resultados compatíveis com o sistema real, foi utilizado um ZOH na saída do controlador com período de amostragem de $10ms$ (ciclo de controle).
+
+\begin{figure}[H]
+\centering
+  \includegraphics[width=\linewidth]{./img/simulink.png}
+  \caption{Diagrama de blocos Simulink utilizado para simulação.}
+  \label{fig:simulink}
+\end{figure}%
 
 \begin{figure}[H]
 \centering
   \includegraphics[width=0.5\linewidth]{./img/simul_delay_zoh1/traj.eps}
   \caption{Simulação: Trajetória 1 no plano x-z}
-  \label{fig:sub1}
+  \label{fig:simul_traj1}
 \end{figure}%
 
 \begin{figure}[H]
@@ -43,28 +50,28 @@ Utilizando a Robotics Toolbox \citep{petercorke} para MATLAB\circledR, foram fei
   \centering
   \includegraphics[width=\linewidth]{./img/simul_delay_zoh1/x1.eps}
   \caption{$x$}
-  \label{fig:sub1}
+  \label{fig:simul_traj1_x1}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=\linewidth]{./img/simul_delay_zoh1/x2.eps}
   \caption{$y$}
-  \label{fig:sub2}
+  \label{fig:simul_traj1_x2}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=\linewidth]{./img/simul_delay_zoh1/x3.eps}
   \caption{$z$}
-  \label{fig:sub1}
+  \label{fig:simul_traj1_x3}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=\linewidth]{./img/simul_delay_zoh1/x4.eps}
   \caption{$\phi$}
-  \label{fig:sub2}
+  \label{fig:simul_traj1_x4}
 \end{subfigure}
-\caption{Simulação: Rastreamento da trajetória 1 para $\bm{K}_t = \bm{I}$}
-\label{fig:test}
+\caption{Simulação: Rastreamento da trajetória 1 para ${K}_t = {I}$}
+\label{fig:simulx}
 \end{figure}
 
 \begin{figure}[H]
@@ -73,16 +80,16 @@ Utilizando a Robotics Toolbox \citep{petercorke} para MATLAB\circledR, foram fei
   \centering
   \includegraphics[width=\linewidth]{./img/simul_delay_zoh1/error.eps}
   \caption{$e_1$ e $e_3$}
-  \label{fig:sub1}
+  \label{fig:simul_erro}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=\linewidth]{./img/simul_delay_zoh1/u.eps}
-  \caption{$\bm{u}(t)$}
-  \label{fig:sub2}
+  \caption{${u}(t)$}
+  \label{fig:simul_u}
 \end{subfigure}
-\caption{Simulação: Destaque para o erro $e_1$ e $e_3$ com $\bm{K}_t = \bm{I}$}
-\label{fig:erro_traj}
+\caption{Simulação: Destaque para o erro $e_1$ e $e_3$ com ${K}_t = {I}$}
+\label{fig:simul_erro_traj}
 \end{figure}
 
 
@@ -114,7 +121,7 @@ Observa-se que para as juntas 1, 3 e 4 a resposta é de primeira ordem e que sã
 
 \section{Controle de Posição no Espaço das Juntas}
 
-Neste experimento foi testado controle de posição no espaço das juntas, conforme definido em \ref{sec:position_joint}. Partindo da posição $\bm{q} =[ 0 \;\; -\pi/2 \;\; 0 \;\; 0]^T$, deseja-se atingir a posição $\bm{q} =[ 0 \;\; -\pi/4 \;\; \pi/2  \;\; -\pi/4]^T$. Foi utilizado um ganho $\bm{K}_j = \bm{I}$.
+Neste experimento foi testado controle de posição no espaço das juntas, conforme definido em \ref{sec:position_joint}. Partindo da posição ${q} =[ 0 \;\; -\pi/2 \;\; 0 \;\; 0]^T$, deseja-se atingir a posição ${q} =[ 0 \;\; -\pi/4 \;\; \pi/2  \;\; -\pi/4]^T$. Foi utilizado um ganho ${K}_j = {I}$.
 
 Os resultados foram conforme esperados, levando o erro assintoticamente a zero em todas as juntas.
 
@@ -123,19 +130,19 @@ Os resultados foram conforme esperados, levando o erro assintoticamente a zero e
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=\linewidth]{./img/joint_test1/q1.eps}
-  \caption{Junta 1}
+  \caption{Junta 1: $q_1$}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=\linewidth]{./img/joint_test1/q2.eps}
-  \caption{Junta 2}
+  \caption{$q_2$}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=\linewidth]{./img/joint_test1/q3.eps}
-  \caption{Junta 3}
+  \caption{ $q_3$}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
@@ -155,26 +162,26 @@ Nesta seção, demonstra-se o controle no espaço operacional. Utilizando a estr
 
 \subsection{Experimento 1}
 
-Neste experimento a posição inicial é $\bm{x} =[ 552.62 \; 57 \; -67.17 \; 0]^T$ e deseja-se alcançar $\bm{x}_d =[ 500 \; -50 \; -150 \; 0.5235]^T$. Utiliza-se um ganho $\bm{K}_p = \bm{I}$. A figura \ref{fig:oper_space_exp1} mostra que para o resultado para o problema de \textit{set-point}, o sistema foi capaz de rastrear assintoticamente um sinal de referência constante. 
+Neste experimento a posição inicial é ${x} =[ 552.62 \; 57 \; -67.17 \; 0]^T$ e deseja-se alcançar ${x}_d =[ 500 \; -50 \; -150 \; 0.5235]^T$. Utiliza-se um ganho ${K}_p = {I}$. A figura \ref{fig:oper_space_exp1} mostra que para o resultado para o problema de \textit{set-point}, o sistema foi capaz de rastrear assintoticamente um sinal de referência constante. 
 
 \begin{figure}[H]
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=\linewidth]{./img/position1/x1.eps}
-  \caption{$x$}
+  \caption{$x_1$}
   \label{fig:oper_space_exp1_x1}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=\linewidth]{./img/position1/x2.eps}
-  \caption{$y$}
+  \caption{$x_2$}
   \label{fig:oper_space_exp1_x2}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=\linewidth]{./img/position1/x3.eps}
-  \caption{$z$}
+  \caption{$x_3$}
   \label{fig:oper_space_exp1_x3}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
@@ -189,7 +196,7 @@ Neste experimento a posição inicial é $\bm{x} =[ 552.62 \; 57 \; -67.17 \; 0]
 
 \subsection{Experimento 2}
 
-Neste experimento, o objetivo é testar a alteração da orientação, mantendo a posição constante. A posição inicial é $\bm{x} =[ 550 \; 57 \; -100 \; 0]^T$. O gráfico \ref{fig:pos_exp2_phi} a orientação é alterada para $60^o$, ou seja $\bm{x_d} =[ 550 \; 57 \; -100 \; 1.0472]^T$. Em seguida, a orientação é alterada para $-60^o$, ou seja $\bm{x_d} =[ 550 \; 57 \; -100 \; -1.0472]^T$. 
+Neste experimento, o objetivo é testar a alteração da orientação, mantendo a posição constante. A posição inicial é ${x} =[ 550 \; 57 \; -100 \; 0]^T$. Como mostra o gráfico \ref{fig:pos_exp2_phi}, a orientação é alterada para $60^o$, ou seja ${x_d} =[ 550 \; 57 \; -100 \; 1.0472]^T$. Em seguida, a orientação é alterada para $-60^o$, ou seja ${x_d} =[ 550 \; 57 \; -100 \; -1.0472]^T$. 
 
 Nas figuras \ref{fig:oper_space_exp2_x1} e \ref{fig:oper_space_exp2_x3} é possível identificar que a mudança de orientação gerou distúrbios nas dimensões $x$ e $z$. No entanto, os distúrbios foram rejeitados assintoticamente.
 
@@ -229,12 +236,12 @@ Nesta seção são exibidos os resultados experimentais para o rastreamento das 
 
 \subsection{Trajetória 1}
 
-\subsubsection{Ganho $\bm{K}_t = \bm{I}$}
+\subsubsection{Ganho ${K}_t = {I}$}
 
 \begin{figure}[H]
 \centering
   \includegraphics[width=0.5\linewidth]{./img/traj_1_k1/traj.eps}
-  \caption{Trajetória 1 no plano x-z: Resultados experimentais com $\bm{K}_t = \bm{I}$}
+  \caption{Trajetória 1 no plano x-z: Resultados experimentais com ${K}_t = {I}$}
   \label{fig:sub1}
 \end{figure}%
 
@@ -264,7 +271,7 @@ Nesta seção são exibidos os resultados experimentais para o rastreamento das 
   \caption{$x_4$}
   \label{fig:sub2}
 \end{subfigure}
-\caption{Rastreamento da trajetória 1 para $\bm{K}_t = \bm{I}$: Resultados experimentais}
+\caption{Rastreamento da trajetória 1 para ${K}_t = {I}$: Resultados experimentais}
 \label{fig:test}
 \end{figure}
 
@@ -282,7 +289,7 @@ Nesta seção são exibidos os resultados experimentais para o rastreamento das 
   \caption{$\bm{u}(t)$}
   \label{fig:sub2}
 \end{subfigure}
-\caption{Trajetória 1, destaque para o erro $e_1$ e $e_3$ com $\bm{K}_t = \bm{I}$: Resultados experimentais}
+\caption{Trajetória 1, destaque para o erro $e_1$ e $e_3$ com ${K}_t = {I}$: Resultados experimentais}
 \label{fig:erro_traj}
 \end{figure}
 
@@ -295,7 +302,7 @@ Podem-se observar diversos picos no sinal de erro na figura \ref{fig:erro_traj} 
 \begin{figure}[H]
 \centering
   \includegraphics[width=0.5\linewidth]{./img/traj_2_k1/traj.eps}
-  \caption{Trajetória 2 no plano x-z}
+  \caption{Resultados experimentais - Trajetória 2 no plano x-z}
   \label{fig:sub1}
 \end{figure}%
 
@@ -343,16 +350,16 @@ Podem-se observar diversos picos no sinal de erro na figura \ref{fig:erro_traj} 
   \caption{$e_3$}
   \label{fig:sub2}
 \end{subfigure}
-\caption{Resultados experimentas - Trajetória 2: Destaque para o erro $e_1$ e $e_3$ com $\bm{K}_t = \bm{I}$}
+\caption{Resultados experimentais - Trajetória 2: Destaque para o erro $e_1$ e $e_3$ com ${K}_t = {I}$}
 \label{fig:erro_traj}
 \end{figure}
 
-\subsubsection{Ganho $\bm{K}_t = 5\bm{I}$}
+\subsubsection{Ganho ${K}_t = 5{I}$}
 
 \begin{figure}[H]
 \centering
   \includegraphics[width=0.5\linewidth]{./img/traj_2_k5/traj.eps}
-  \caption{Resultados experimentas - Trajetória 2 no plano x-z para $\bm{K}_t = 5\bm{I}$}
+  \caption{Resultados experimentais - Trajetória 2 no plano x-z para ${K}_t = 5{I}$}
   \label{fig:sub1}
 \end{figure}%
 
@@ -382,7 +389,7 @@ Podem-se observar diversos picos no sinal de erro na figura \ref{fig:erro_traj} 
   \caption{$x_4$, $x_{d4}$ e $e_4$}
   \label{fig:sub2}
 \end{subfigure}
-\caption{Rastreamento da trajetória 2 para $\bm{K}_t = 5\bm{I}$}
+\caption{Rastreamento da trajetória 2 para ${K}_t = 5 {I}$}
 \label{fig:test}
 \end{figure}
 
@@ -400,17 +407,19 @@ Podem-se observar diversos picos no sinal de erro na figura \ref{fig:erro_traj} 
   \caption{$e_3$}
   \label{fig:sub2}
 \end{subfigure}
-\caption{Trajetória 2: destaque para o erro $e_1$ e $e_3$}
+\caption{Resultados experimentais - Trajetória 2: destaque para o erro $e_1$ e $e_3$}
 \label{fig:erro_traj}
 \end{figure}
 
-A partir da variação do ganho de controle foi possível concluir que o fator principal que gera erro em regime permanente, não é 
+A partir da variação do ganho de controle foi possível observar que acima de ${K}_t = 5 {I}$ não resultaram em erro menor. Portanto,  
+
+
 \section{Controle de Força}
 
-Nesta seção demonsta-se os reultados de experimentos de controle de força, segundo os estratégias definidas em \ref{sec:force}. 
+Nesta seção demonsta-se os resultados de experimentos de controle de força, segundo os estratégias definidas em \ref{sec:force}. 
 
 \subsection{Float}
-Neste experimento a referência de força é configurada para zero, logo é possível mover o efetuador aplicando forças sobre ele. O operador tentou traçar um retângulo no plano x-z.
+Neste experimento a referência de força é configurada para zero, logo é possível mover o efetuador aplicando forças sobre o  sensor de força. O operador tentou traçar um retângulo no plano x-z, movimentando o efetuador com as mãos.
 
 \begin{figure}[H]
 \centering
@@ -450,7 +459,7 @@ Foi feito um ensaio para encontrar a constante $k_s$ variando a distância $x_s$
 \begin{figure}[!ht]
 \centering
   \includegraphics[width=0.5\linewidth]{./img/ks_estimation.eps}
-  \caption{Estimação da constante elástica $k_s$ e regressão linear.}
+  \caption{Estimação da constante elástica $k_s$ por regressão linear.}
   \label{fig:ks_linreg}
 \end{figure}%
 
@@ -460,7 +469,7 @@ Foi aplicado o controle de força com uma referência constante de $1000 mN$ na 
   \centering
   \includegraphics[width=0.5\linewidth]{./img/force1000_kp2_ki005/Fx.eps}
   \caption{Resultados experimentais - Controle de força: Approach $Fx$}
-  \label{fig:sub2}
+  \label{fig:force_approach}
 \end{figure}
 
 Os resultados mostraram a existência de não linearidades que não foram consideradas no modelo. Por exemplo a relação entre força e distância no ambiente testado não é exatamente linear, no entanto a aproximação foi aceitável. O fato de o sensor de força ter uma alta relação sinal-ruído para a ordem de grandeza do o sinal de referência também contribuiu para os resultados não ideais mostrados. 

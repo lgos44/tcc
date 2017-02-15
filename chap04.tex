@@ -54,9 +54,23 @@ Os conceitos a nível de grafo de computação descrevem elementos da rede ponto
 
 \item[Messages:] Nós comunicam entre si passando mensagens. Uma mensagem consiste apenas de uma estrutura de dados. Mensagens suportam tipos primitivos, \textit{arrays} de tipos primitivos ou outras estruturas aninhadas. 
 
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=0.9\linewidth]{./img/topics.png}
+  \caption{Topics}
+  \label{fig:topics}
+\end{figure}
+
 \item[Topics:] Um nó envia uma mensagem publicando a um dado tópico. O nome do tópico é utilizado para identificar o conteúdo da mensagem. Um outro nó que esteja interessado nesse conteúdo pode subscrever ao tópico. Podem existir múltiplos \textit{publishers} e \textit{subscribers} para o mesmo tópico e um nó pode publicar e/ou subscrever a múltiplos tópicos. 
 
 \item[Services:] Em muitos casos é necessário ter um mecanismo de comunicação um para um de modo a lidar com interações do tipo pedido/resposta. Isso é feito através de serviços, que são definidos por um par de estruturas como as mensagens, uma para o pedido e outra para a resposta. Um nó oferece um serviço sob um nome e um cliente utiliza o serviço mandando um mensagem de pedido e esperando uma resposta. As bibliotecas do ROS apresentam essa interação na forma de um chamada de procedimento remoto (RPC).
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=0.7\linewidth]{./img/services.png}
+  \caption{Services}
+  \label{fig:services}
+\end{figure}
 
 \item[Bags:] Bags são um formato para salvar e reproduzir dados de mensagens de ROS ao longo do tempo. São úteis para salvar dados de sensores, por exemplo, que são difíceis de coletar mas necessários para o desenvolvimento de algoritmos. 
 \end{description}
@@ -194,18 +208,6 @@ MasterSlave				& Estrutura preparada para integração com o Sensable\circledR P
 \end{tabular}
 \end{table}
 
-
-\begin{itemize}
-	\item NotControlledI
-	\item BrakeI
-	\item Constant
-	\item Square
-	\item Pulse
-	\item Sine
-	\item JointSpaceMS
-	\item VelocityToolMS
-\end{itemize}
-
 \subsection{DorisManipulatorTool}
 Para interagir com o manipulador é utilizada a \textit{Tool} chamada DorisManipulatorTool. Ela permite alternar entre os modos de controle listados acima, ajustar parâmetros e ganhos dos controladores e alterar referências. A imagem \ref{fig:screenshot1} mostra a interface com DorisManipulatorTool a direita,  Plotter no canto esquerdo superior, e DeviceManagement no canto esquerdo inferior.
  
@@ -230,10 +232,10 @@ Para interagir com o manipulador é utilizada a \textit{Tool} chamada DorisManip
 
 \begin{itemize}
 \item Boa performance, aproximando-se de linguagens estaticamente compiladas como C.
-\item Tipagem dinâmca: tipos podem ser utilizados para documentação e otimização.
-\item Compilador \textit{just-in-time} \footnote{Compilação just-in-time (JIT) refere-se a compilação feita no momento de execução do programa, com contraste com compilação anterior a execução.} de alta performance.
-\item Gratuito e código aberto (Licença MIT).
+\item Tipagem dinâmca: tipos podem ser utilizados para documentação e otimização, mas podem ser omitidos.
+\item Compilador \textit{just-in-time} \footnote{Compilação just-in-time (JIT) refere-se a compilação feita no momento de execução do programa, em contraste a compilação anterior a execução.} de alta performance.
 \item Possibilidade de integrar Julia a projetos C/C++.
+\item Gratuito e código aberto (Licença MIT).
 \end{itemize}
 
 A compilação \textit{just-in-time} é baseada no projeto LLVM \citep{llvmorg,lattner2004llvm}, que consiste em uma coleção de tecnologias e ferramentas compilação modulares e reutilizáveis. O uso dessas tecnologias, juntamente com a forma como a linguagem foi projetada permite em muitos casos ela tenha uma performance comparável com a linguagem C e ao mesmo tempo ter uma sintaxe comparativamente simples.
