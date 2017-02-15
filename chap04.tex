@@ -189,21 +189,21 @@ A classe DorisManipulatorController implementa os modos de controle descritos na
 
 \begin{table}[h!]
 \centering
-\caption{\textit{Variables} do \textit{ManipulatorControllerDevice}}
-\label{tab:variables}
+\caption{Modos de controle}
+\label{tab:control_modes}
 \begin{tabular}{rl} \hline
 Modo de controle      	& Descrição \\ \hline
 \verb|NotControlled|  	& Nenhum sinal de controle é enviado ao manipulador.\\
-Brake 				  	& Sinal de controle $u = 0$. \\
-OperationalSpace 	  	& Implementa o controle descrito em \ref{sec:openloopbase}. \\
-Vision 				  	& Implementa o controle descrito em \ref{sec:servo_vision}. \\
-VelocityEfct 			& Implementa o controle descrito em \ref{sec:openloopefct}. \\
-VelocityBase 			& Implementa o controle descrito em \ref{sec:openloopbase}. \\
-PplusFF 				& Implementa o controle descrito em \ref{sec:pplusf}. \\
-Force 					& Implementa o controle descrito em \ref{sec:forca_approach}. \\
-JointSpace 				& Implementa o controle descrito em \ref{joint_space}. \\
-Individual 				& Implementa o controle individual de juntas por gerador de função. \\
-MasterSlave				& Estrutura preparada para integração com o Sensable\circledR Phantom Omni. \\
+\verb|Brake|			& Sinal de controle $u = 0$. \\
+\verb|VelocityEfct|		& Implementa o controle descrito em \ref{sec:openloopefct}. \\
+\verb|VelocityBase|		& Implementa o controle descrito em \ref{sec:openloopbase}. \\
+\verb|JointSpace|		& Implementa o controle descrito em \ref{sec:position_joint}. \\
+\verb|OperationalSpace| & Implementa o controle descrito em \ref{sec:pos_operacional}. \\
+\verb|PplusFF|			& Implementa o controle descrito em \ref{sec:pplusf}. \\
+\verb|Vision|			& Implementa o controle descrito em \ref{sec:servo_vision}. \\
+\verb|Force|			& Implementa o controle descrito em \ref{sec:forca_approach}. \\
+\verb|Individual|		& Implementa o controle individual de juntas por gerador de função. \\
+\verb|MasterSlave|		& Modo Master/Slave com o Sensable\circledR Phantom Omni. \\
 \hline
 \end{tabular}
 \end{table}
@@ -240,7 +240,7 @@ Para interagir com o manipulador é utilizada a \textit{Tool} chamada DorisManip
 
 A compilação \textit{just-in-time} é baseada no projeto LLVM \citep{llvmorg,lattner2004llvm}, que consiste em uma coleção de tecnologias e ferramentas compilação modulares e reutilizáveis. O uso dessas tecnologias, juntamente com a forma como a linguagem foi projetada permite em muitos casos ela tenha uma performance comparável com a linguagem C e ao mesmo tempo ter uma sintaxe comparativamente simples.
 
-Portanto, a linguagem Julia mostrou-se uma opção interessante e mais dinâmica para a implementação de controle no software de controle para o TETIS, que requer desempenho mas pode se beneficiar de uma linguagem dinâmica. Uma prova de conceito foi feita para o para a configuração das equações da trajetória a ser rastreada. Na interface uma janela permite a escrita de equações na forma de uma função Julia. Ao aplicar as alterações esse código é enviado para o computador embarcado através do ROS. O programa principal, em C++, chama a API em C do Julia e compila essa função no momento da primeira execução.
+Portanto, a linguagem Julia mostrou-se uma opção interessante e mais dinâmica para a implementação de controle no software de controle para o TETIS, que requer desempenho mas pode se beneficiar de uma linguagem dinâmica. Uma prova de conceito foi feita para a configuração das equações da trajetória a ser rastreada. Na interface uma janela permite a escrita de equações na forma de uma função Julia. Ao aplicar as alterações esse código é enviado para o computador embarcado através do ROS. O programa principal, em C++, chama a API em C do Julia e compila essa função no momento da primeira execução.
 
 Dessa forma a trajetória pode ser alterada em tempo de execução sem prejudicar a performance e sem necessitar acesso a dados externos constantemente. O código em \ref{lst:julia} mostra a trajetória de teste em \textit{Julia Language}.
 

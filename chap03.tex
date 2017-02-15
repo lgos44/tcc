@@ -14,11 +14,11 @@ O manipulador Tetis consiste basicamente de um braço planar de três elos com u
 O primeiro passo ao modelar um manipulador robótico é encontrar a cinemática direta. Será utilizada a convenção de Denavit-Hartenberg para posicionar os sistemas de coordenadas e obter os parâmetros. Seguindo os passos descritos em \ref{sec:denavit} os sistemas de coordenadas foram posicionados da seguinte forma:
 
 \begin{itemize}
-\item Eixo $z_0$ escolhido ao longo da Junta 1. Origem $O_0$ escolhida arbitrariamente de modo a coincidir com $O_1$ por simplicidade.  
-\item Eixo $z_1$ escolhido ao longo da Junta 2. Origem $O_1$ na intersecção entre $z_0$ e $z_1$. Eixo $x_1$ na direção normal ao plano definido por $z_0$ e $z_1$ pois se interceptam. O sentido foi arbitrariamente escolhido na direção de avanço da cadeia por simplicidade.
-\item Eixo $z_2$ escolhido ao longo da Junta 3. Origem $O_2$ na junta 3 pois $z_2$ e $z_1$ são paralelas. Eixo $x_2$ escolhido arbitrariamente ao longo de  $x_1$ pois a normal comum entre $z_2$ e $z_1$ não é unicamente definida.
-\item Eixo $z_3$ escolhido ao longo da Junta 4. Origem $O_3$ na junta 3 pois $z_3$ e $z_2$ são paralelas. Eixo $x_3$ escolhido arbitrariamente ao longo de  $x_2$ pois a normal comum entre $z_3$ e $z_2$ não é unicamente definida.
-\item Como não existe junta 5, eixo $z_4$ definido arbitrariamente. Origem $O_4$ na extremidade do efetuador final. Eixo $x_4$ normal ao eixo $z_3$.
+\item Eixo $\vec{z}_0$ escolhido ao longo da Junta 1. Origem $O_0$ escolhida arbitrariamente de modo a coincidir com $O_1$ por simplicidade.  
+\item Eixo $\vec{z}_1$ escolhido ao longo da Junta 2. Origem $O_1$ na intersecção entre $\vec{z}_0$ e $\vec{z}_1$. Eixo $\vec{x}_1$ na direção normal ao plano definido por $\vec{z}_0$ e $\vec{z}_1$ pois se interceptam. O sentido foi arbitrariamente escolhido na direção de avanço da cadeia por simplicidade.
+\item Eixo $\vec{z}_2$ escolhido ao longo da Junta 3. Origem $O_2$ na junta 3 pois $\vec{z}_2$ e $\vec{z}_1$ são paralelas. Eixo $\vec{x}_2$ escolhido arbitrariamente ao longo de $\vec{x}_1$ pois a normal comum entre $\vec{z}_2$ e $\vec{z}_1$ não é unicamente definida.
+\item Eixo $\vec{z}_3$ escolhido ao longo da Junta 4. Origem $O_3$ na junta 3 pois $\vec{z}_3$ e $\vec{z}_2$ são paralelas. Eixo $\vec{x}_3$ escolhido arbitrariamente ao longo de  $\vec{x}_2$ pois a normal comum entre $\vec{z}_3$ e $\vec{z}_2$ não é unicamente definida.
+\item Como não existe junta 5, eixo $\vec{z}_4$ definido arbitrariamente. Origem $O_4$ na extremidade do efetuador final. Eixo $\vec{x}_4$ normal ao eixo $\vec{z}_3$.
 \end{itemize}
 
 A partir dos eixos posicionados conforme a figura \ref{fig:modelo_tetis} é possível obter os parâmetros na tabela \ref{tab:dh_tetis}. 
@@ -39,48 +39,18 @@ Elo & $a_i$ & $\alpha_i$ & $d_i$  & $\theta_i$ \\ \hline
 
 
 \begin{itemize}
-\item $a_1 = 0$  e $d_1 = 0$ pois $O_0$ e $O_1$ coincidem. $\alpha_1 = \pi/2$ ângulo entre $z_0$ e $z_1$ ao redor de $x_i$.
-\item $a_2 = E_3$ é a distância entre $z_1$ e $z_2$ ao longo de $x_2$ que corresponde ao comprimento do elo 2. $z_1$ e $z_2$ são sempre paralelos logo $\alpha_2 = 0$. A distância $d_2$ entre $x_1$ e $x_2$ ao longo de $z_1$ é zero. 
+\item $a_1 = 0$  e $d_1 = 0$ pois $O_0$ e $O_1$ coincidem. $\alpha_1 = \pi/2$ ângulo entre $\vec{z}_0$ e $\vec{z}_1$ ao redor de $\vec{x}_1$.
+\item $a_2 = E_3$ é a distância entre $\vec{z}_1$ e $\vec{z}_2$ ao longo de $\vec{x}_2$ que corresponde ao comprimento do elo 2. $\vec{z}_1$ e $\vec{z}_2$ são sempre paralelos logo $\alpha_2 = 0$. A distância $d_2$ entre $\vec{x}_1$ e $\vec{x}_2$ ao longo de $\vec{z}_1$ é zero. 
 
-\item $a_3 = E_4$ é a distância entre $z_2$ e $z_3$ ao longo de $x_3$ que corresponde ao comprimento do elo 3. $z_2$ e $z_3$ são sempre paralelos logo $\alpha_3 = 0$. A distância $d_3$ entre $x_2$ e $x_3$ ao longo de $z_2$ é zero. 
+\item $a_3 = E_4$ é a distância entre $\vec{z}_2$ e $\vec{z}_3$ ao longo de $\vec{x}_3$ que corresponde ao comprimento do elo 3. $\vec{z}_2$ e $\vec{z}_3$ são sempre paralelos logo $\alpha_3 = 0$. A distância $d_3$ entre $\vec{x}_2$ e $\vec{x}_3$ ao longo de $z_2$ é zero. 
 
-\item $a_4 = E_5$ é a distância entre $z_3$ e $z_4$ ao longo de $x_4$. $\alpha_4 = -\pi/2$ é o ângulo entre $z_3$ e $z_4$ ao redor de $x_4$, sendo portanto negativo. $d_4 = -M_5$ é a distância entre $x_3$ e $x_4$ ao longo de $z_3$. 
+\item $a_4 = E_5$ é a distância entre $\vec{z}_3$ e $\vec{z}_4$ ao longo de $\vec{x}_4$. $\alpha_4 = -\pi/2$ é o ângulo entre $\vec{z}_3$ e $\vec{z}_4$ ao redor de $\vec{x}_4$, sendo portanto negativo. $d_4 = -M_5$ é a distância entre $\vec{x}_3$ e $\vec{x}_4$ ao longo de $\vec{z}_3$. 
 \end{itemize}
 
 Considerando a posição inicial da figura \ref{fig:modelo_tetis} todos os ângulos $\theta_i$ são dados diretamente pelas variáveis de junta, sem \textit{offsets}. 
 
-A orientação de um sistema de coordenadas $i$ em relação ao anterior é dada por uma rotação de $\theta_i$ em torno de $z$ seguida de uma rotação em torno de $x$ de $\alpha_i$ considerando o sistema de coordenadas corrente.
 
-\begin{equation}
-{R}_{i-1,i} = {R}_z(\theta_i){R}_x(\alpha_i)
-\end{equation}
-
-A translação é obtida representando as distâncias no sistema de coordenadas $i-1$:
-\begin{gather}
-{\vec{p}}_{i-1,i} = d_i {\vec{z}}_{i-1} + a_i {\vec{x}}_i \\
-({\vec{p}}_{i-1,i})_{i-1} = d_i ({\vec{z}}_{i-1})_{i-1} + a_i ({\vec{x}}_i)_{i-1} \\
-({\vec{p}}_{i-1,i})_{i-1} = d_i ({\vec{z}}_{i-1})_{i-1} + a_i {R}_{i-1,i}({\vec{x}}_i)_{i} 
-\end{gather}
-
-As duas informações podem ser representadas de uma forma mais compacta como transformação homogênea:
-\begin{equation}
-T_{i-1,i} = \m{
-	R_{i-1,i} 		&  ({\vec{p}}_{i-1,i})_{i-1} \\
-	0_{1 \times 3}	&  							  1
-}
-\end{equation}
-que em função dos parâmetros fica:
-\begin{equation}
-T_{i-1,i} = \m {
-	c_{\theta_i}  & -s_{\theta_i}c_{\alpha_i}	&	s_{\theta_i}s_{\alpha_i}  &	a_i c_{\theta_i} \\ 
-	s_{\theta_i}  &	c_{\theta_i}c_{\alpha_i}	&  -c_{\theta_i}s_{\alpha_i}  & a_i s_{\theta_i} \\
-	0			  & s_{\alpha_i}				&   c_{\alpha_i}			  &	d_i				 \\
-	0			  & 0							&   0						  & 1
-}
-\end{equation}
-onde utiliza-se a notação $s_i$ para $\sin \theta_i$ e $c_i$ para $\cos \theta_i$. No caso de  $\sin (\theta_i + \theta_j)$ denota-se $s_{ij}$.
-
-Obtemos então:
+Obtemos a partir da equação \eqref{eq:transform_dh} as transformações homogêneas entre sistemas de coordenadas consecutivos:
 %\begin{align*}
 %\bm{R}_{01} =
 %\m{c_1 & 0 & s_1   \\
@@ -196,7 +166,7 @@ A partir da cinemática direta em \eqref{eq:cine_direta} e da equação \ref{eq:
 \end{equation}
 
 \begin{equation}
-({J}_{ap})_e = 
+({J}_{ap})_b = 
 \m{
 	\ddfrac{\partial x}{\partial q_1} & \ddfrac{\partial x}{\partial q_2} & \ddfrac{\partial x}{\partial q_3} & \ddfrac{\partial x}{\partial q_4}  \\
 	\ddfrac{\partial y}{\partial q_1} & \ddfrac{\partial y}{\partial q_2} & \ddfrac{\partial y}{\partial q_3} & \ddfrac{\partial x}{\partial q_4}  \\
@@ -262,12 +232,12 @@ Este é um modo em malha aberta, onde o sinal de entrada no controlador é de ve
 
 
 \subsection{Sistema de coordenadas da Base} \label{sec:openloopbase}
-Quando escolhe-se o referencial da base ${\dot{x}}_d$ é velocidade desejada expressa no referencial da base e utiliza-se $({J}_{a})_e$.
+Quando o controle é feito no referencial da base ${\dot{x}}_d$ é velocidade desejada expressa no referencial da base e utiliza-se $({J}_{a})_e$.
 \begin{equation}
 {u} = {\dot{q}}_d = ({J}_{a})_b^{-1} ({\dot{x}}_d)_e
 \end{equation}
 \subsection{Sistema de coordenadas do Efetuador} \label{sec:openloopefct}
-Quando escolhe-se o referencial da efetuador ${\dot{x}}_d$ é velocidade desejada expressa no referencial do efetuador e utiliza-se $({J}_{a})_e$.
+Quando o controle é feito no referencial do efetuador ${\dot{x}}_d$ é velocidade desejada expressa no referencial do efetuador e utiliza-se $({J}_{a})_e$.
 \begin{equation}
 {u} = {\dot{q}}_d = ({J}_{a})_e^{-1} ({\dot{x}}_d)_e
 \end{equation}
@@ -312,7 +282,7 @@ A lei de controle é dada por
 onde ${K_j} = k_j {I}$.
 
 \section{Controle de Posição no Espaço Operacional} \label{sec:pos_operacional}
-Para este modo considera-se o problema de controle de posição no espaço operacional conforme definido em \ref{eq:op_space}. Para referências na forma de degrau, ou seja, quando $\dot{{x}}_d = 0$ a lei de controle dada por
+Para este modo considera-se o problema de controle de posição no espaço operacional conforme definido em \ref{eq:op_space}. Para referências constantes, ou seja, quando $\dot{{x}}_d = 0$ a lei de controle dada por
 \begin{equation} \label{eq:lei_posicao}
 {u} = ({J}_{a})_b^{-1} {K}_p ({x_d} - {x_e})
 \end{equation}

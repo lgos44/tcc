@@ -1,3 +1,43 @@
 \chapter{Cinemática}
 
 \section{Posição e orientação de um corpo rígido}
+
+Um corpo rígido é descrito no espaço por sua posição e orientação (\textit{pose}) em relação a um sistema de coordenadas de referência. Escolhe-se um ponto do corpo e afixa-se um sistema de coordenadas. Denota-se como $\bar{E}$ um sistema de coordenadas ortonormal com $\vec{x}$, $\vec{y}$ e $\vec{z}$ como vetores unitários.
+
+Sejam o sistema de coordenadas inercial $\bar{E}_a = [\vec{x}_a \; \vec{y}_a \; \vec{z}_a ]$ e o sistema de coordenadas do corpo $\bar{E}_b = [\vec{x}_b \; \vec{y}_b \; \vec{z}_b ]$.
+
+
+As coordenadas de $\vec{x}_b$, $\vec{y}_b$ e $\vec{z}_b$ representadas no sistema de coordenadas $\bar{E}_a$ são
+
+\begin{align}
+\vec{x}_b &= \bar{E}_a x_{ab} \\
+\vec{y}_b &= \bar{E}_a y_{ab} \\
+\vec{z}_b &= \bar{E}_a z_{ab} ,
+\end{align}
+portanto,
+\begin{equation}
+\bar{E}_b = [\bar{E}_a x_{ab} \;\; \bar{E}_a y_{ab} \;\; \bar{E}_a z_{ab}] = \bar{E}_a [x_{ab} \;\;  y_{ab} \;\; z_{ab}] = \bar{E}_a R_{ab}
+\end{equation}
+
+A matriz $R_{ab}$ é chamada de matriz de rotação.
+\begin{equation}
+R_{ab} = \m{ x_{ab} & y_{ab} & z_{ab} }
+\end{equation}
+onde $x_{ab} \in \mathbb{R}^3$,  $y_{ab} \in \mathbb{R}^3$ e $z_{ab} \in \mathbb{R}^3$ são as componentes do sistema de coordenadas $\bar{E}_b$ no sistema de coordenadas $\bar{E}_a$, ou seja:
+
+
+\begin{equation}
+R_{ab} =  \m{ \vec{x}_a \cdot \\ \vec{y}_a \cdot  \\ \vec{z}_a \cdot  } \m{ \vec{x}_b & \vec{y}_b & \vec{z}_b } = 
+\m{
+	(\vec{x}_a \cdot \vec{x}_b) & (\vec{x}_a \cdot \vec{y}_b)& (\vec{x}_a \cdot \vec{z}_b) \\
+	(\vec{y}_a \cdot \vec{x}_b)& (\vec{y}_a \cdot \vec{y}_b)& (\vec{y}_a \cdot \vec{z}_b) \\
+	(\vec{z}_a \cdot \vec{x}_b) &(\vec{z}_a \cdot \vec{y}_b)& (\vec{z}_a \cdot \vec{z}_b)
+}
+\end{equation}
+
+
+
+A posição da origem do sistema de coordenadas do corpo rígido $O_b$ pode ser expressa no sistema de coordenadas inercial como 
+\begin{equation}
+p_b = p_{bx} 
+\end{equation}

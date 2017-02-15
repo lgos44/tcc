@@ -33,32 +33,64 @@ Logo a transformação homogênea do efetuador final com respeito a base é dada
 \subsection{Convenção Denavit-Hartenberg} \label{sec:denavit}
 Para calcular a cinemática direta para uma manipulador de cadeia cinemática aberta de acordo com a equação \eqref{eq:cinedireta} um método sistemático foi definido para obter a relação entre a posição e orientação de dois elos consecutivos. A convenção Denavit-Hartenberg especifica um conjunto de regras sobre como definir os sistemas de coordenadas de cada elo.
 
-Seja o $h_i$ eixo de rotação da junta que conecta o elo $i-1$, ao elo $i$, então:
+Seja o $\vec{h}_i$ eixo de rotação da junta que conecta o elo $i-1$, ao elo $i$, então:
 
 \begin{itemize}
-\item Escolher o eixo $z_i$ ao longo do eixo $h_{i+1}$.
-\item Colocar a origem $O_i$ na interseção do eixo $z_i$ com a normal comum entre os eixos $z_{i-1}$ e $z_i$
-\item Escolher $x_i$ ao longo da normal comum aos eixos $z_{i-1}$ e $z_i$, com direção da junta $i$ para a junta $i+1$. 
-\item O eixo $y_i = z_i \times x_i$ é escolhido de forma a completar o sistema de coordenadas.
+\item Escolher o eixo $\vec{z}_i$ ao longo do eixo $\vec{h}_{i+1}$.
+\item Colocar a origem $O_i$ na interseção do eixo $\vec{z}_i$ com a normal comum entre os eixos $\vec{z}_{i-1}$ e $\vec{z}_i$
+\item Escolher $\vec{x}_i$ ao longo da normal comum aos eixos $\vec{z}_{i-1}$ e $\vec{z}_i$, com direção da junta $i$ para a junta $i+1$. 
+\item O eixo $\vec{y}_i = \vec{z}_i \times \vec{x}_i$ é escolhido de forma a completar o sistema de coordenadas.
 \end{itemize}
 
 Essa convenção resulta em uma definição não única do sistema de coordenadas nos seguintes casos:
 
 \begin{itemize}
-\item Para o sistema de coordenadas $0$, somente a direção do eixo $z_0$ é especificada, portanto a escolha de $O_0$ e $ x_0$ é arbitrária.
-\item Para o sistema de coordenadas $n$, como não existe junta $n+1$, $z_n$ não está definido, mas $x_n$ deve ser normal ao eixo $z_{n-1}$. Tipicamente escolhe-se $z_n$ alinhado com $z_{n-1}$.
+\item Para o sistema de coordenadas $0$, somente a direção do eixo $\vec{z}_0$ é especificada, portanto a escolha de $O_0$ e $ x_0$ é arbitrária.
+\item Para o sistema de coordenadas $n$, como não existe junta $n+1$, $\vec{z}_n$ não está definido, mas $\vec{x}_n$ deve ser normal ao eixo $\vec{z}_{n-1}$. Tipicamente escolhe-se $\vec{z}_n$ alinhado com $\vec{z}_{n-1}$.
 \item Quando dois eixos consecutivos são paralelos, a normal comum entre eles não é definida de forma única. Tipicamente escolhe-se $O_i$ na junta $i+1$
-\item  Quando dois eixos consecutivos se interceptam, direção de $x_i$ é normal e o sentido é arbitrário. Escolhe-se $O_i$ na intersecção.
-\item Quando a junta $i$ é prismática a direção de $z_{i-1}$ é arbitrária.
+\item  Quando dois eixos consecutivos se interceptam, direção de $\vec{x}_i$ é normal e o sentido é arbitrário. Escolhe-se $O_i$ na intersecção.
+\item Quando a junta $i$ é prismática a direção de $\vec{z}_{i-1}$ é arbitrária.
 \end{itemize}
 
 Após determinados os sistemas de coordenadas, é possível determinar a posição e orientação de um referencial em relação ao outro através dos seguintes parâmetros:
 \begin{itemize}
-\item $a_i$ distância entre $z_{i-1}$ e $z_i$ ao longo de $x_i$
-\item $\alpha_i$ ângulo entre $z_{i-1}$ e $z_i$ ao redor de $x_i$
-\item $d_i$ distância entre $x_{i-1}$ e $x_i$ ao longo de $z_{i-1}$
-\item $\theta_i$ ângulo entre $x_{i-1}$ e $x_i$ ao redor de $z_{i-1}$
+\item $a_i$ distância entre $\vec{z}_{i-1}$ e $z_i$ ao longo de $\vec{x}_i$
+\item $\alpha_i$ ângulo entre $\vec{z}_{i-1}$ e $\vec{z}_i$ ao redor de $\vec{x}_i$
+\item $d_i$ distância entre $\vec{x}_{i-1}$ e $\vec{x}_i$ ao longo de $\vec{z}_{i-1}$
+\item $\theta_i$ ângulo entre $\vec{x}_{i-1}$ e $\vec{x}_i$ ao redor de $\vec{z}_{i-1}$
 \end{itemize}
+
+A orientação de um sistema de coordenadas $i$ em relação ao anterior é dada por uma rotação de $\theta_i$ em torno de $z$ seguida de uma rotação em torno de $\vec{x}$ de $\alpha_i$ considerando o sistema de coordenadas corrente.
+
+\begin{equation}
+{R}_{i-1,i} = {R}_z(\theta_i){R}_x(\alpha_i)
+\end{equation}
+
+A translação é obtida representando as distâncias no sistema de coordenadas $i-1$:
+\begin{gather}
+{\vec{p}}_{i-1,i} = d_i {\vec{z}}_{i-1} + a_i {\vec{x}}_i \\
+({\vec{p}}_{i-1,i})_{i-1} = d_i ({\vec{z}}_{i-1})_{i-1} + a_i ({\vec{x}}_i)_{i-1} \\
+({\vec{p}}_{i-1,i})_{i-1} = d_i ({\vec{z}}_{i-1})_{i-1} + a_i {R}_{i-1,i}({\vec{x}}_i)_{i} 
+\end{gather}
+
+As duas informações podem ser representadas de uma forma mais compacta como transformação homogênea:
+\begin{equation}
+T_{i-1,i} = \m{
+    R_{i-1,i}       &  ({\vec{p}}_{i-1,i})_{i-1} \\
+    0_{1 \times 3}  &                             1
+}
+\end{equation}
+que em função dos parâmetros fica:
+\begin{equation} \label{eq:transform_dh}
+T_{i-1,i} = \m {
+    c_{\theta_i}  & -s_{\theta_i}c_{\alpha_i}   &   s_{\theta_i}s_{\alpha_i}  & a_i c_{\theta_i} \\ 
+    s_{\theta_i}  & c_{\theta_i}c_{\alpha_i}    &  -c_{\theta_i}s_{\alpha_i}  & a_i s_{\theta_i} \\
+    0             & s_{\alpha_i}                &   c_{\alpha_i}              & d_i              \\
+    0             & 0                           &   0                         & 1
+}
+\end{equation}
+onde utiliza-se a notação $s_i$ para $\sin \theta_i$ e $c_i$ para $\cos \theta_i$. No caso de  $\sin (\theta_i + \theta_j)$ denota-se $s_{ij}$.
+
 \subsection{Espaço das Juntas e Espaço Operacional}
 Para que o efetuador final de um manipulador realize alguma tarefa é necessário atribuir uma posição e orientação desejada, que  pode ser função do tempo (trajetória). Surge então o problema de representar posição e orientação. 
 
@@ -76,7 +108,8 @@ O \textit{espaço das juntas} denota o espaço em que o vetor $(n \times 1)$ das
 
 \section{Cinemática Diferencial}
 %\subsection{Jacobiano Geométrico}
-%Para um manipulador de $n$ graus de liberdade 
+%Para um manipulador de $n$ graus de liberdade a cinemática direta pode ser escrita como
+
 \subsection{Jacobiano Analítico}
 Quando a posição e orientação do efetuador são dadas em função de um número mínimos de parâmetros no espaço operacional é possível computar o Jacobiano pela diferenciação das equações da cinemática direta em função das variáveis das juntas.
 Para isso utiliza-se a técnica analítica.
@@ -283,7 +316,7 @@ Reescrevendo a equação \eqref{eq:projpersp} adicionando uma matriz ${K}$ de pa
 (\tilde{{P}})_C
 \end{equation}
 
-A câmera possui uma posição arbitrária com respeito ao sistema de coordenadas inercial, logo a posição do ponto com respeito a câmera é dada por  $({P})_C = {T}_{0C}^{-1} {P}$. Utilizando a equação \eqref{eq:camera_parameter} podemos escrever a projeção da câmera na sua forma geral como
+A câmera possui uma posição arbitrária com respeito ao sistema de coordenadas inercial, logo a posição do ponto com respeito a câmera é dada por  $({P})_c = {T}_{0c}^{-1} {P}$. Utilizando a equação \eqref{eq:camera_parameter} podemos escrever a projeção da câmera na sua forma geral como
 % TODO: confirmar
 \begin{align}\label{eq:camera_projection}
 {\tilde{p}} =& 
@@ -296,8 +329,8 @@ A câmera possui uma posição arbitrária com respeito ao sistema de coordenada
 	 0 & 1 & 0 & 0\\
 	 0 & 0 & 1 & 0	
 }
-{T}_{0C}^{-1} (\tilde{{P})}_0\\
-=& {K} {P}_0 {T}_{0C}^{-1} (\tilde{{P}})_0 \\ 
+{T}_{0c}^{-1} (\tilde{{P})}_0\\
+=& {K} {P}_0 {T}_{0c}^{-1} (\tilde{{P}})_0 \\ 
 =& {C} ({\tilde{P})_0}
 \end{align}
 
@@ -307,9 +340,9 @@ A equação \eqref{eq:camera_projection} define a projeção na câmera. A matri
 %TODO
 
 \subsection{Estimação da Pose}
-O problema de estimar a \textit{pose} consiste em determinar a posição e orientação ${T}_{CT}$ do alvo com respeito ao sistema de coordenadas da câmera. Considera-se que a geometria do alvo é conhecida, isto é um conjunto de pontos característicos $[X_i \; Y_i \; Z_i]$ com $i \in [1\; \cdots \; N]$, assim como os parâmetros intrínsecos da câmera. A imagem capturada pela câmera é processada e as coordenadas no plano da imagem $[u_i\; v_i]$ são determinadas utilizando algoritmos de visão computacional. Esse problema é conhecido como \textit{Perspective-n-Point}.
+O problema de estimar a \textit{pose} consiste em determinar a posição e orientação ${T}_{ct}$ do alvo com respeito ao sistema de coordenadas da câmera. Considera-se que a geometria do alvo é conhecida, isto é um conjunto de pontos característicos $[X_i \; Y_i \; Z_i]$ com $i \in [1\; \cdots \; N]$, assim como os parâmetros intrínsecos da câmera. A imagem capturada pela câmera é processada e as coordenadas no plano da imagem $[u_i\; v_i]$ são determinadas utilizando algoritmos de visão computacional. Esse problema é conhecido como \textit{Perspective-n-Point}.
 
-Existem diversas abordagens para solucionar esse problema. Aqui será destacado o caso simples com 3 pontos e comentada a abordagem de Dementhon para N pontos pois essa abordagem foi utilizada na implementação desse projeto. Maiores detalhes sobre implementações disponíveis em código aberto podem ser encontradas no apêndice \ref{chap:pose_est}. 
+Existem diversas abordagens para solucionar esse problema. Aqui será destacado o caso simples com 3 pontos e comentada a abordagem de \citep{dementhon1995model}  para N pontos pois esta foi utilizada na implementação desse projeto. Maiores detalhes sobre implementações disponíveis em código aberto podem ser encontradas no apêndice \ref{chap:pose_est}. 
 
 \subsubsection{P3P: Estimação da \textit{pose} com 3 pontos}
 Para entender o problema, considera-se o caso mais simples, com 3 pontos, já que, teoricamente como a \textit{pose} pode ser representada por 6 parâmetros independentes, três pontos seriam capazes de resolver o problema \citep{marchand2016pose}. Sejam ${P_i} = [X_i \; Y_i \; Z_i ]^T$ onde $i = 1 \dots 3$ três pontos com coordenadas representadas no referencial da câmera. 
@@ -344,21 +377,23 @@ Conhecidas as distâncias $w_i$ dos pontos do mundo à câmera, essas distância
 Esse método é didático, porém não é robusto e é pouco preciso, além de que os dados redundantes (quarto ponto) não aumentam a precisão do resultado. Portanto, outros algoritmos foram propostos.
 
 \subsubsection{PNP: Estimação da \textit{pose} com N pontos}
-Em \citep{dementhon1995model} DeMenthon propõe combinar dois algoritmos. O primeiro \textit{POS (Pose from Orthography and Scaling)} aproxima a projeção de perspectiva com uma projeção ortográfica (e de escala) e encontra a matriz de rotação e o vetor de translação do objeto resolvendo um sistema linear. O segundo algoritmo \textit{POSIT (POS with ITerations)}, usa a \textit{pose} aproximada pelo \textit{POS} em um \textit{loop} para computar melhores projeções ortográficas (e de escala) dos pontos característicos. Então o \textit{POS} é aplicado a essas projeções, invés de às projeções da imagem original. O \textit{POSIT} converge para medidas precisas em poucas iterações e pode utilizar mais pontos para insensibilidade a erros de medição e ruido. 
+Em \citep{dementhon1995model} é proposto combinar dois algoritmos. O primeiro \textit{POS (Pose from Orthography and Scaling)} aproxima a projeção de perspectiva com uma projeção ortográfica (e de escala) e encontra a matriz de rotação e o vetor de translação do objeto resolvendo um sistema linear. O segundo algoritmo \textit{POSIT (POS with ITerations)}, usa a \textit{pose} aproximada pelo \textit{POS} em um \textit{loop} para computar melhores projeções ortográficas (e de escala) dos pontos característicos. Então o \textit{POS} é aplicado a essas projeções, invés de às projeções da imagem original. O \textit{POSIT} converge para medidas precisas em poucas iterações e pode utilizar mais pontos para insensibilidade a erros de medição e ruido. 
 
 Uma desvantagem do \textit{POSIT} é que ele não é diretamente aplicável a pontos coplanares \citep{marchand2016pose}. No entanto, em \citep{oberkampf1996iterative} uma extensão ao \textit{POSIT} foi proposta, resolvendo o problema para 4 ou mais pontos coplanares. 
 
 
+Considerando $N$ pontos $P_i$, cujas coordenadas homogêneas são dadas por $\tilde{P}_i = [X_i \;\; Y_i \;\; Z_i \;\; 1]$. Essas coordenadas
+
 \subsection{Servo Visão Baseada em Posição}
-Em um sistema de servo visão baseado em posição a posição e orientação do alvo com respeito a câmera ${T}_{CT}$ é estimada. O problema de estimação da posição e orientação foi discutido acima e as implementações disponíveis em código aberto estão listadas no apêndice \ref{chap:pose_est}.
-Especifica-se uma posição desejada relativa ao sistema de coordenadas do alvo  ${T}_{C^*T}$ e deseja-se determinar o movimento necessário para mover a câmera para a posição desejada, que chamamos de ${T}_\delta$.
+Em um sistema de servo visão baseado em posição a posição e orientação do alvo com respeito a câmera ${T}_{ct}$ é estimada. O problema de estimação da posição e orientação foi discutido acima e as implementações disponíveis em código aberto estão listadas no apêndice \ref{chap:pose_est}.
+Especifica-se uma posição desejada relativa ao sistema de coordenadas do alvo  ${T}_{c^*t}$ e deseja-se determinar o movimento necessário para mover a câmera para a posição desejada, que chamamos de ${T}_\delta$.
 
 \begin{equation}
- {T}_{CT} =  {T}_\Delta {T}_{C^*T}
+ {T}_{ct} =  {T}_\Delta {T}_{c^*t}
 \end{equation}
 
 \begin{equation}
- {T}_\Delta  =   {T}_{CT} {T}_{C^*T}^{-1}
+ {T}_\Delta  =   {T}_{ct} {T}_{c^*t}^{-1}
 \end{equation}
 
 Com isso é possível aplicar uma estratégia de controle cinemático de posição no referencial do efetuador de modo a atingir a posição e orientação desejada. A lei de controle
