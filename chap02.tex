@@ -1,7 +1,7 @@
 %!TEX root = <main.tex>
 %\chapter{Revisão Bibliográfica}
 \chapter{Modelagem e Controle Cinemático}
-Neste capitulo serão abordados os conceitos necessários para modelagem e controle de manipuladores robóticos, focando no que foi utilizado nesse projeto, para implementação no manipulador 4-DOF chamado de TETIS. Os tópicos tratados aqui podem ser encontrados em \citep{siciliano, petercorke}.
+Neste capitulo serão abordados os conceitos necessários para modelagem e controle de manipuladores robóticos, focando no que foi utilizado neste projeto, para implementação no manipulador 4-DOF chamado de TETIS. Os tópicos tratados aqui podem ser encontrados em \citep{siciliano, petercorke}.
 
 \section{Cinemática Direta}
 Um manipulador robótico é composto de uma série de corpos rígidos denominados \textit{elos} conectados através de \textit{juntas}. 
@@ -23,7 +23,7 @@ Uma cadeia cinemática aberta é constituída por $n+1$ elos numerados de $0$ a 
 \begin{equation}\label{eq:cinedireta}
 {T}_{0n}({q}) = {T}_{01}(q_1) {T}_{12}(q_{2}) {\dots} {T}_{n-1,n}(q_n)
 \end{equation}
-onde ${T}_{i-1,i}(q_i)$ denota a transformação homogênea do sistema de coordenadas solidário ao elo $i-1$ àquele solidário ao elo $i$.
+onde ${T}_{i-1,i}(q_i)$ denota a transformação homogênea do sistema de coordenadas solidário ao elo $i-1$ àquele solidário ao elo $i$ e $q \in \mathbb{R}^N$ é o vetor de variáveis de junta.
 
 Logo a transformação homogênea do efetuador final com respeito a base é dada por
 \begin{equation} \label{eq:base_efetuador}

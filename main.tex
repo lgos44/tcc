@@ -67,14 +67,6 @@ output/.style= {coordinate},
 pinstyle/.style = {pin edge={to-,thin,black}}
 }
 
-
-\newcommand*{\MyExecutableScript}{MyScript.command}%
-\begin{filecontents*}{\MyExecutableScript}
-    #!/bin/bash
-    evince
-\end{filecontents*}
-
-
 \makelosymbols
 \makeloabbreviations
 
@@ -89,14 +81,16 @@ pinstyle/.style = {pin edge={to-,thin,black}}
 
 
   \examiner{Prof.}{Fernando Lizarralde}{D.Sc.}
-  \examiner{Prof.}{Antonio Candea Leite}{Ph.D.}
+  \examiner{Prof.}{Antonio Candea Leite}{D.Sc}
   \examiner{Prof.}{Afonso Celso Del Nero Gomes}{D.Sc.}
   \department{CONT}
   \date{02}{2017}
 
-  \keyword{Primeira palavra-chave}
-  \keyword{Segunda palavra-chave}
-  \keyword{Terceira palavra-chave}
+  \keyword{robótica}
+  \keyword{controle}
+  \keyword{cinemática}
+  \keyword{servo-visão}
+  \keyword{visão computacional}
  
   \maketitle
 
@@ -126,5 +120,6 @@ pinstyle/.style = {pin edge={to-,thin,black}}
   \bibliography{thesis}
 
   \appendix
+  %\include{appenB}
   \include{appenA}
 \end{document}
