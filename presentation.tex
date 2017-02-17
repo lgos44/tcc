@@ -92,7 +92,6 @@
 \title[]{Controle de um Manipulador Robótico 4-DOF com Software baseado em ROS e Qt} % The short title appears at the bottom of every slide, the full title is only on the title page
 
 \author{Luís Gustavo Oliveira Silva} % Your name
-\author{Luís Gustavo Oliveira Silva} % Your name
 
 \institute[UFRJ] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
 {
@@ -128,7 +127,7 @@ Universidade Federeal do Rio de Janeiro \\ % Your institution for the title page
 \frametitle{Introdução}
 Robótica em instalações offshore de óleo e gás.
 \begin{itemize}
-\item Subustituir o uso de diversos sensores.
+\item Substituir o uso de diversos sensores.
 \item Tarefas repetitivas.
 \item Tarefas onde a presença humana é difícil, ou arriscada.
 \item Tarefas que requerem interação complexa e precisa com o ambiente.
@@ -333,7 +332,7 @@ onde ${p}_e \in \mathbb{R}^3$ é a posição cartesiana e ${\phi}_e$ dado por
 
 \begin{block}{Espaço das juntas}
 \begin{equation} \label{eq:joint_space}
-{q} = \m{q_1 \\ \vdots \\ q_n}
+{q} = \m{q_1 \\ q_2 \\ q_3 \\ q_4} = \m{ \theta_1 \\ \theta_2 \\ \theta_3 \\ \theta_4}
 \end{equation} 
 onde todas as juntas são de revolução $q_i = \theta_i$.
 \end{block}
@@ -343,7 +342,7 @@ onde todas as juntas são de revolução $q_i = \theta_i$.
 \frametitle{Cinemática Diferencial}
 \begin{block}{Jacobiano analítico de posição}
 \begin{equation} \label{eq:jacob_pos}
-\dot{{p}}_e = \frac{\partial {p}_e }{\partial {q}} {{q}} = {J}_{ap} ({q}) {{q}} 
+\dot{{p}}_e = \frac{\partial {p}_e }{\partial {q}} {\dot{q}} = {J}_{ap} ({q}) {\dot{q}} 
 \end{equation}
 \end{block}
 
@@ -409,8 +408,17 @@ Sistema é assintoticamente estável, com $e \rightarrow 0$ quando $t \to \infty
 \begin{frame}
 \frametitle{Servo Visão}
 \begin{itemize}
-\item Servo Visão Baseada em Posição
+\item Controlar a posição e orientação do efetuador do manipulador em relação a um alvo utilizando características extraídas de uma imagem.
+\item Servo Visão Baseada em Posição: Considera-se a posição e orientação do alvo com respeito a câmera ${T}_{ct}$ é estimada através de visão computacional. 
 \end{itemize}
+
+\begin{equation}
+ {T}_{ct} =  {T}_\Delta {T}_{c't}
+\end{equation}
+
+\begin{equation}
+ {T}_\Delta  =   {T}_{ct} {T}_{c't}^{-1}
+\end{equation}
 \end{frame}
 
 
@@ -418,7 +426,7 @@ Sistema é assintoticamente estável, com $e \rightarrow 0$ quando $t \to \infty
 \frametitle{Servo Visão}
 \textbf{Modelo da Câmera}
 \begin{figure}
-\includegraphics[height=0.75\paperheight]{./img/camera_model2.png}
+\includegraphics[height=0.75\paperheight]{./img/camera_model3.png}
 \end{figure}
 \end{frame}
 
@@ -469,11 +477,15 @@ onde $K$ é chamada matriz de calibração da câmera.
 \begin{itemize}
 \item Configuração \textit{eye-in-hand}.
 \item Servo Visão baseada em Posição.
+\item Rastrear um QR Code
 \end{itemize}
 
 \column{.5\textwidth} % Right column and width
 \begin{figure}
 \includegraphics[width=0.5\linewidth]{./img/manip_zoom.png}
+\end{figure}
+\begin{figure}
+\includegraphics[width=0.5\linewidth]{./img/template-qr-code-small.png}
 \end{figure}
 \end{columns}
 \end{frame}
@@ -517,8 +529,8 @@ onde $K$ é chamada matriz de calibração da câmera.
 \column{.45\textwidth}
 \begin{equation}
 T_{ct_0} = \m{
-	0 & 1 & 0  &\vdots \\
-	1 & 0 & 0  & (p_{t_0})_c    \\
+	-1 & 0 & 0  &\vdots \\
+	0 & 1 & 0  & (p_{t_0})_c    \\
 	0 & 0 & -1 &\vdots \\
 	0 & 0 & 0 & 1
 }
@@ -552,8 +564,7 @@ T_{ct_0} = \m{
 \textbf{Orientação $\phi_t$}
 \begin{figure}[!ht]
 \centering
-  \includegraphics[width=0.2\linewidth]{./img/projection.eps}
-  \caption{Caso em que a rotação em torno de ${x}_c$ não representa a inclinação do plano do alvo.}
+  \includegraphics[width=0.3\linewidth]{./img/projection2.eps}
   \label{fig:projection}
 \end{figure}%
 \end{frame}
@@ -594,6 +605,7 @@ Após obter os valores de $(p_t)_e$ e $\phi_t$:
 \item Messages
 \item Topics
 \item Services
+\item Nodelet
 \end{itemize}
 
 \column{.7\textwidth} % Right column and width
@@ -608,14 +620,14 @@ Após obter os valores de $(p_t)_e$ e $\phi_t$:
 
 
 \begin{frame}
-\frametitle{Software - Topologia (simplificar ...)}
+\frametitle{Software - Topologia}
 \begin{figure}
-\includegraphics[width=0.8\linewidth]{./img/node_diagram.pdf}
+\includegraphics[width=\linewidth]{./img/nodes_simple.pdf}
 \end{figure}
 \end{frame}
 
 \begin{frame}
-\frametitle{Software - Interface}
+\frametitle{Software - Interface gráfica}
 \begin{figure}
 \includegraphics[width=\linewidth]{./img/screenshot/sc1.png}
 \end{figure}
@@ -713,18 +725,14 @@ Após obter os valores de $(p_t)_e$ e $\phi_t$:
 \begin{figure}[H]
 \includegraphics[width=0.5\linewidth]{./img/tracker_viewer-small.png}
 \end{figure}%\href{run:traject1.mp4}{
-\begin{center}
-\href{run:forca.mp4}{\textbf{Video}}% 
-\end{center}
 \end{frame}
 
 \begin{frame}
 \frametitle{Conclusão}
 \begin{itemize}
-\item Tópico 1
-\item Tópico 2
-\item Tópico 3
-\item Tópico 4
+\item Resultados 
+\item Controle Cinemático.
+\item Sistemas de controle utilizando ROS.
 \end{itemize}
 \end{frame}
 
