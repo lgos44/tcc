@@ -127,7 +127,7 @@ Universidade Federeal do Rio de Janeiro \\ % Your institution for the title page
 \frametitle{Introdução}
 Robótica em instalações offshore de óleo e gás.
 \begin{itemize}
-\item Substituir o uso de diversos sensores.
+\item Substituir o uso de múltiplos sensores.
 \item Tarefas repetitivas.
 \item Tarefas onde a presença humana é difícil, ou arriscada.
 \item Tarefas que requerem interação complexa e precisa com o ambiente.
@@ -163,7 +163,7 @@ Robótica em instalações offshore de óleo e gás.
 \begin{frame}
 \frametitle{Motivação}
 \begin{itemize}
-\item DORIS:
+\item DORIS
 \item Robô guiado por trilhos para monitorar e inspecionar área \textit{topside} de instalações de óleo e gás.
 \end{itemize}
 \begin{figure}
@@ -182,10 +182,10 @@ Robótica em instalações offshore de óleo e gás.
 \caption{DORIS em operação no CENPES}
 \end{figure}
 \begin{itemize}
-\item Monitorar perfis de temperatura.
+\item Monitorar perfis de temperatura com câmeras térmicas.
 \item Supervisão de pessoal não autorizado.
 \item Inspeção de padrões de vibração.
-\item Interação com interfaces touchscreen na plataforma.
+\item Detecção de anomalias sonoras, vazamentos de gás com sensores de hidrocarbonetos
 \end{itemize}
 \end{frame}
 
@@ -298,8 +298,8 @@ T_{i-1,i} = \m{
 \end{frame}
 
 \begin{frame}
-\frametitle{Espaços de Controle}
-Definição dos espaços onde o controle será aplicado.
+\frametitle{Espaços das Juntas e Operacional}
+São definidos o Espaço das Juntas e Espaço Operacional:
 
 \begin{block}{Espaço operacional}
 \begin{equation} \label{eq:op_space}
@@ -492,7 +492,7 @@ onde $K$ é chamada matriz de calibração da câmera.
 
 \begin{frame}
 \frametitle{Servo Visão - Câmera Minoru}
-\textbf{Matriz de calibração da câmera:  parâmetros instrínsecos.}
+\textbf{Matriz de calibração da câmera:  parâmetros intrínsecos.}
 \begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
 \column{.45\textwidth}
 \begin{figure}
@@ -605,7 +605,7 @@ Após obter os valores de $(p_t)_e$ e $\phi_t$:
 \item Messages
 \item Topics
 \item Services
-\item Nodelet
+\item Nodelets
 \end{itemize}
 
 \column{.7\textwidth} % Right column and width
@@ -722,8 +722,9 @@ Após obter os valores de $(p_t)_e$ e $\phi_t$:
 
 \begin{frame}
 \frametitle{Resultados experimentais - Controle por Servo Visão}
+\textbf{Controle por servo visão baseada em posição, rastreando um QRCode como alvo.}
 \begin{figure}[H]
-\includegraphics[width=0.5\linewidth]{./img/tracker_viewer-small.png}
+\includegraphics[width=0.8\linewidth]{./img/tracker_viewer-small.png}
 \begin{center}
 \href{run:./videos/vision_complete.mp4}{\textbf{Video}}% 
 \end{center}
