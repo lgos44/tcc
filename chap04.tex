@@ -1,11 +1,11 @@
 \chapter{Implementação de Software para Controle de Sistemas Robóticos}
-A implementação dos algoritmos de controle detalhados nos capítulos anteriores for feita como extensão ao software RobotGUI desenvolvido pela equipe do LEAD-GSCAR \citep{nunes2013doris}.
+A implementação dos algoritmos de controle detalhados nos capítulos anteriores for feita como extensão ao \textit{software} RobotGUI desenvolvido pela equipe do LEAD-GSCAR \citep{nunes2013doris}.
 
-Proporciona uma infraestrutura para carregar componentes modulares de software para robôs, juntamente com classes altamente reutilizáveis. Esses sistema permite inicializar módulos de software com uma interface gráfica associada, de modo a interagir com eles. Por exemplo, ao iniciar componente que obtêm dados de um sensor, é iniciada na interface gráfica uma \textit{Tool} que permite visualizar os dados e configurar parâmetros. Essa conexão é dinâmica, permitindo que componentes sejam iniciados de forma independente e em momentos diferentes.  
+Proporciona uma infraestrutura para carregar componentes modulares de \textit{software} para robôs, juntamente com classes altamente reutilizáveis. Esses sistema permite inicializar módulos de software com uma interface gráfica associada, de modo a interagir com eles. Por exemplo, ao iniciar componente que obtêm dados de um sensor, é iniciada na interface gráfica uma \textit{Tool} que permite visualizar os dados e configurar parâmetros. Essa conexão é dinâmica, permitindo que componentes sejam iniciados de forma independente e em momentos diferentes.  
 
 
 \section{Ferramentas}
-Os seguintes softwares e \textit{frameworks} foram utilizados:
+Os seguintes programas e \textit{frameworks} foram utilizados:
 
 \begin{itemize}
 \item Linux (Ubuntu 14.04/16.04) como Sistema Operacional.
@@ -16,30 +16,30 @@ Os seguintes softwares e \textit{frameworks} foram utilizados:
 \end{itemize}
 
 \section{Robot Operating System (ROS)}
-Escrever software para robôs tem se tornado particularmente difícil conforme a escala e o escopo dos projetos de robótica continua a crescer. Robôs podem ser de diferentes tipos e ter hardware completamente distinto, o que torna a reutilização de código difícil. Além disso, a quantidade de código necessário para um projeto de robótica pode ser intimidadora, indo desde software a nível de \textit{driver} até percepção e raciocínio, por exemplo. Como o nível de conhecimento e experiência necessário é maior do que um pesquisador sozinho pode ter, arquiteturas de software para robótica devem suportar integração. 
+Escrever \textit{software} para robôs tem se tornado particularmente difícil conforme a escala e o escopo dos projetos de robótica continua a crescer. Robôs podem ser de diferentes tipos e ter \textit{hardware} completamente distinto, o que torna a reutilização de código difícil. Além disso, a quantidade de código necessário para um projeto de robótica pode ser intimidadora, indo desde o nível de \textit{driver} até algoritmos de percepção e raciocínio, por exemplo. Como o nível de conhecimento e experiência necessário é maior do que um pesquisador sozinho pode ter, arquiteturas de \textit{software} para robótica devem suportar integração. 
 
-Em \citep{quigley2009ros} é descrito o framework ROS, que busca enfrentar esses desafios. A enfase dada a projetos integrados de grande escala é útil em uma variedade de aspectos conforme sistemas robóticos tornam-se mais complexos. Os objetivos de projeto do ROS podem ser resumidos como: 
+Em \citep{quigley2009ros} é descrito o \textit{framework} ROS, que busca enfrentar esses desafios. A enfase dada a projetos integrados de grande escala é útil em uma variedade de aspectos conforme sistemas robóticos tornam-se mais complexos. Os objetivos de projeto do ROS podem ser resumidos como: 
 \begin{itemize}
 \item \textbf{Peer-to-peer ou ponto-a-ponto:} Um sistema construído utilizando ROS consiste de um conjunto de processos, potencialmente em diferentes máquinas hospedeiras e conectados entre si em uma topologia ponto-a-ponto. Tipicamente existe um ou mais computadores embarcados conectados via \textit{ethernet}, que se comunicam via rede \textit{wireless} com máquinas com maior poder computacional, capazes de realizar tarefas como visão computacional e reconhecimento de fala. 
 
 \item \textbf{Multi-Linguagem:} Muitos possuem preferência em relação a determinadas linguagens de programação devido a fatores como tempo para escrita do código, facilidade de \textit{debugging}, sintaxe ou eficiência de execução. ROS suporta as linguagens C++, Python, Octave e LISP. O ROS faz uma especificação a nível de mensagens. A configuração e negociação da conexão ponto a ponto ocorre através de XML-RPC \footnote{RPC, do inglês, Remote Procedure Call é um termo da computação distribuída usado para quando um programa de computador causa a execução de um procedimento (sub-rotina) em outro espaço de endereçamento (outro computador na mesma rede).}, para o qual existem implementações na maioria das linguagens.   
 
-É utilizada uma linguagem de definição de interface (IDL) que descreve as mensagens enviadas entre módulos. Código nativo de cada linguagem é gerado a partir dessas mensagens. 
+É utilizada uma linguagem de definição de interface (IDL) que descreve as mensagens enviadas entre módulos. O código nativo de cada linguagem é gerado a partir dessas mensagens. 
 
 
-\item \textbf{Baseado em ferramentas:} Para dar conta da complexidade do ROS seus desenvolvedores optaram por um design \textit{microkernel}, em contraste a um design monolítico. Essas ferramentas cumprem tarefas como navegar pela árvore de código fonte, configurar parâmetros, visualizar a topologia dos nós, publicar e exibir mensagens, entre outros.
+\item \textbf{Baseado em ferramentas:} Para dar conta da complexidade do ROS seus desenvolvedores optaram por um  \textit{design microkernel}, em contraste a um \textit{design} monolítico. Essas ferramentas cumprem tarefas como navegar pela árvore de código fonte, configurar parâmetros, visualizar a topologia dos nós, publicar e exibir mensagens, entre outros.
 
-\item \textbf{Fino:} Muitos projetos de software para robótica possuem drivers e algoritmos que poderiam ser reutilizados mas estão altamente "amarrados" ao software em questão, de modo que é difícil extrair e reutilizar essas funcionalidades.
+\item \textbf{Fino:} Muitos projetos de \textit{software} para robótica possuem \textit{drivers} e algoritmos que poderiam ser reutilizados mas estão altamente "amarrados" ao programa em questão, de modo que é difícil extrair e reutilizar essas funcionalidades.
 
-No ROS, encoraja-se a encapsular todos os drivers e algoritmos em bibliotecas independentes. 
+No ROS, encoraja-se a encapsular todos os \textit{drivers} e algoritmos em bibliotecas independentes. 
 
 
-\item \textbf{Gratuito e código aberto:} Todo o código fonte do ROS está disponível publicamente. Isso é crítico para facilitar a descoberta e correção de erros. É distribuído sob os termos da licença BSD.  
+\item \textbf{Gratuito e código aberto:} Todo o código fonte do ROS está disponível publicamente. Isso é útil para facilitar a descoberta e correção de erros. É distribuído sob os termos da licença BSD.  
 
 \end{itemize}
 
 \subsection{Conceitos Básicos}
-Esta seção se baseia em \citep{ros_concepts} e busca detalhar conceitos do funcionamento e arquitetura do ROS necessários ao entendimento do software desenvolvido neste trabalho. 
+Esta seção se baseia em \citep{ros_concepts} e busca detalhar conceitos do funcionamento e arquitetura do ROS necessários ao entendimento do \textit{software} desenvolvido neste trabalho. 
 
 %\subsection{Nível de Sistema de Arquivos}
 
@@ -88,7 +88,7 @@ O pacote Nodelet foi projetado de forma a permitir a execução de múltiplos al
 
 \section{Arquitetura do RobotGUI}
 
-Primeiramente define-se como computador base aquele que será utilizado pelo operador para controlar e visualizar dados do robô. Define-se computador embarcado, ou do robô, o computador especificação PCIe/104, descrito no capítulo \ref{chap:descricao_hard}. O software executa nós diferentes no robô e na base.
+Primeiramente define-se como computador base aquele que será utilizado pelo operador para controlar e visualizar dados do robô. Define-se computador embarcado, ou do robô, o computador especificação PCIe/104, descrito no Capítulo \ref{chap:descricao_hard}. O programa executa nós diferentes no robô e na base.
 
 A arquitetura do RobotGUI baseia-se nos seguintes conceitos principais \citep{nunes2013doris}:
 
@@ -101,10 +101,10 @@ A arquitetura do RobotGUI baseia-se nos seguintes conceitos principais \citep{nu
 
 \item \textbf{Item e Variable:} \textit{Variables} contém valores de interesse, sempre guardando um valor desejado e um valor real. Por exemplo em uma variável controlada o valor desejado será a referência dada pelo operador e o valor real é obtido de algum sensor. Para mostrar esses valores na interface utiliza-se \textit{Items}. Uma \textit{Variable} pode estar associada a diversos \textit{Items}, de forma que através desse mecanismo o valor exibido em todos eles é atualizado. 
 
-\item \textbf{Interação entre Compontents e Tools:} Tools e Components podem se conectar, quando isso ocorre eles interagem entre si a nível de "ponteiro para objeto". Essa conexão permite que o desenvolvimento da interface através do \textit{Qt} seja quase que independente do desenvolvimento do código que lida com hardware, lógica e comunicação. Essas classes disponibilizam uma estrutura para conectar \textit{Components} e \textit{Tools} de tal forma que quano um \textit{Component} é iniciado ele busca por \textit{Tools} associadas a ele que estejam em execução e vice versa. 
+\item \textbf{Interação entre Compontents e Tools:} Tools e Components podem se conectar, quando isso ocorre eles interagem entre si a nível de "ponteiro para objeto". Essa conexão permite que o desenvolvimento da interface através do \textit{Qt} seja quase que independente do desenvolvimento do código que lida com \textit{hardware}, lógica e comunicação. Essas classes disponibilizam uma estrutura para conectar \textit{Components} e \textit{Tools} de tal forma que quano um \textit{Component} é iniciado ele busca por \textit{Tools} associadas a ele que estejam em execução e vice versa. 
 %Quando um \textit{Component} é 
 
-\item \textbf{RobotGUI:} É uma GUI \footnote{Guided User Interface} em nó de ROS. Permite que múltiplas janelas sejam criadas. O usuário pode decidir o que é exibido. Ao clicar nos botões na parte superior (figura \ref{fig:screenshot1}), uma janela referente a \textit{Tool} aparece. Essa janela pode ser encaixada na janela principal. O RobotGUI executa \textit{roslaunch}'s, nós incluídos pelo \textit{roslaunch} em questão podem ser \textit{Components}. 
+\item \textbf{RobotGUI:} É uma GUI \footnote{Guided User Interface} em nó de ROS. Permite que múltiplas janelas sejam criadas. O usuário pode decidir o que é exibido. Ao clicar nos botões na parte superior (Figura \ref{fig:screenshot1}), uma janela referente a \textit{Tool} aparece. Essa janela pode ser encaixada na janela principal. O RobotGUI executa \textit{roslaunch}'s, nós incluídos pelo \textit{roslaunch} em questão podem ser \textit{Components}. 
 
 \item \textbf{NodeletManager e RobotGUI:} o RobotGUI é um Nodelet Manager com pequenas modificações. Um NodeletManager utiliza a classe nodelet::Loader para instanciar Nodelets. Utilizando uma versão modificada dessa classe é possível verificar se um Nodelet a ser carregado é um \textit{Component}. Se esse for o caso, a \textit{Tool} correspondente será carregada e as conexões são feitas. Quando um componente é descarregado, a conexão com as \textit{Tools} associadas a ele é encerrada.
 \end{itemize}
@@ -114,7 +114,7 @@ A arquitetura do RobotGUI baseia-se nos seguintes conceitos principais \citep{nu
 
 \subsection{Topologia}
 
-No diagrama da figura \ref{fig:ros_nodes} são mostrados os nós executados pelo programa para utilizar o manipulador e como se comunicam. Elipses representam Nodes, elipses tracejadas representam Nodelets e retângulos representam tópicos. Os retângulos que contém outros elementos representam os pacotes aos quais aqueles nós pertencem. Quando as setas saem de um nó, representam que o nó publica informação em um tópico, e quando chegam, representam que ele subscreve ao tópico em questão. As linhas pontilhadas representam que os \textit{Nodelets} aos quais elas estão conectadas são executadas pelo \textit{Node} na outra extremidade. Neste diagrama, são omitidos os tópicos de configuração de parâmetros.
+No diagrama da Figura \ref{fig:ros_nodes} são mostrados os nós executados pelo programa para utilizar o manipulador e como se comunicam. Elipses representam Nodes, elipses tracejadas representam Nodelets e retângulos representam tópicos. Os retângulos que contém outros elementos representam os pacotes aos quais aqueles nós pertencem. Quando as setas saem de um nó, representam que o nó publica informação em um tópico, e quando chegam, representam que ele subscreve ao tópico em questão. As linhas pontilhadas representam que os \textit{Nodelets} aos quais elas estão conectadas são executadas pelo \textit{Node} na outra extremidade. Neste diagrama, são omitidos os tópicos de configuração de parâmetros.
 
 \begin{figure}[!h]
   \centering
@@ -141,7 +141,7 @@ Variable & Descrição \\ \hline
 \verb|zeroForce|& 			Comando de \textit{reset} do sensor de Força.\\
 \verb|ktGain|&				Ganho $K_t$ para rastreamento de trajetória. \\
 \verb|kjGain|&				Ganho $K_j$ para controle no espaço das juntas.\\
-\verb|kvGain|&				Ganho $K_v$ para controle por servo visão.\\
+\verb|kvGain|&				Ganho $K_v$ para controle por servovisão.\\
 \verb|kfGain|&				Ganho $K_f$ para controle de força.\\
 \verb|pidParameters|&		Parâmetros do controlador PID para controle de força.\\
 \verb|x|&					Vetor $\bm{x_e}$ conforme definido em \ref{eq:operational_space}.\\				
@@ -181,7 +181,7 @@ O primeiro campo identifica a fonte da mensagem. O segundo é um \textit{array} 
   \label{fig:classes}
 \end{figure}
 
-Seguindo os princípios do ROS, busca-se separar em classes a interação com ROS de algoritmos de controle. As classes com terminação em \textit{Nodelet} herdam dessa classe e, portanto, implementam toda a comunicação (mensagens, serviços, etc.). A classe DorisManipulatorController implementa o ciclo de controle, chaveamento entre modos de controle, assim como os algoritmos de controle propriamente ditos. OptoforceDAQ é uma classe utilizada para fazer a aquisição de dados do sensor de força Optoforce descrito na seção \ref{sec:optoforce}. A classe TetisData encapsula dados específicos do manipulador TETIS como dimensões dos elos e ângulos de juntas. A classe TimeLog é uma utilidade para salvar dados e gerar logs de forma automatizada. 
+Seguindo os princípios do ROS, busca-se separar em classes a interação com ROS de algoritmos de controle. As classes com terminação em \textit{Nodelet} herdam dessa classe e, portanto, implementam toda a comunicação (mensagens, serviços, etc.). A classe DorisManipulatorController implementa o ciclo de controle, chaveamento entre modos de controle, assim como os algoritmos de controle propriamente ditos. OptoforceDAQ é uma classe utilizada para fazer a aquisição de dados do sensor de força Optoforce descrito na Seção \ref{sec:optoforce}. A classe TetisData encapsula dados específicos do manipulador TETIS como dimensões dos elos e ângulos de juntas. A classe TimeLog é uma utilidade para salvar dados e gerar logs de forma automatizada. 
 
 \subsection{Modos de controle} \label{sec:ctrlmodes}
 
@@ -210,7 +210,7 @@ Modo de controle      	& Descrição \\ \hline
 \end{table}
 
 \subsection{DorisManipulatorTool}
-Para interagir com o manipulador é utilizada a \textit{Tool} chamada DorisManipulatorTool. Ela permite alternar entre os modos de controle listados acima, ajustar parâmetros e ganhos dos controladores e alterar referências. A imagem \ref{fig:screenshot1} mostra a interface com DorisManipulatorTool a direita,  Plotter no canto esquerdo superior, e DeviceManagement no canto esquerdo inferior.
+Para interagir com o manipulador é utilizada a \textit{Tool} chamada DorisManipulatorTool. Ela permite alternar entre os modos de controle listados acima, ajustar parâmetros e ganhos dos controladores e alterar referências. A Figura \ref{fig:screenshot1} mostra a interface com DorisManipulatorTool a direita,  Plotter no canto esquerdo superior, e DeviceManagement no canto esquerdo inferior.
  
 \begin{figure}[!h]
   \centering
@@ -239,11 +239,11 @@ Para interagir com o manipulador é utilizada a \textit{Tool} chamada DorisManip
 \item Gratuito e código aberto (Licença MIT).
 \end{itemize}
 
-A compilação \textit{just-in-time} é baseada no projeto LLVM \citep{llvmorg,lattner2004llvm}, que consiste em uma coleção de tecnologias e ferramentas compilação modulares e reutilizáveis. O uso dessas tecnologias, juntamente com a forma como a linguagem foi projetada permite que em muitos casos ela tenha uma performance comparável com a linguagem C e ao mesmo tempo ter uma sintaxe comparativamente simples.
+A compilação \textit{just-in-time} é baseada no projeto LLVM \citep{llvmorg,lattner2004llvm}, que consiste em uma coleção de tecnologias e ferramentas de compilação modulares e reutilizáveis. O uso dessas tecnologias, juntamente com a forma como a linguagem foi projetada permite que em muitos casos ela tenha uma performance comparável com a linguagem C e ao mesmo tempo ter uma sintaxe comparativamente simples.
 
-Portanto, a linguagem Julia mostrou-se uma opção interessante e mais dinâmica para a implementação de controle no software do TETIS, que requer desempenho mas pode se beneficiar de uma linguagem dinâmica. Uma prova de conceito foi feita para a configuração das equações da trajetória a ser rastreada. Na interface uma janela permite a escrita de equações na forma de uma função Julia. Ao aplicar as alterações esse código é enviado para o computador embarcado através do ROS. O programa principal, em C++, chama a API em C do Julia e compila essa função no momento da primeira execução.
+Portanto, a linguagem Julia mostrou-se uma opção interessante e mais dinâmica para a implementação de controle no \textit{software} do TETIS, que requer desempenho mas pode se beneficiar de uma linguagem dinâmica. Uma prova de conceito foi feita para a configuração das equações da trajetória a ser rastreada. Na interface uma janela permite a escrita de equações na forma de uma função Julia. Ao aplicar as alterações esse código é enviado para o computador embarcado através do ROS. O programa principal, em C++, chama a API em C do Julia e compila essa função no momento da primeira execução.
 
-Dessa forma a trajetória pode ser alterada em tempo de execução sem prejudicar a performance e sem necessitar acesso a dados externos constantemente. O código em \ref{lst:julia} mostra a trajetória de teste em \textit{Julia Language}.
+Dessa forma a trajetória pode ser alterada em tempo de execução sem prejudicar a performance e sem necessitar acesso a dados externos constantemente. O Código~\ref{lst:julia} mostra a trajetória de teste em \textit{Julia Language}.
 
 \begin{lstlisting}[caption={trajectory.jl}\label{lst:julia}]
 function trajectory(t::Float64)

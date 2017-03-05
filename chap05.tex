@@ -1,6 +1,6 @@
 \chapter{Resultados de Simulação e Experimentais}
 
-Neste capítulo são exibidos os resultados de simulação e experimentais. A simulação mostrada é de um rastreamento de trajetória no espaço operacional, pois é representativa do comportamento do sistema. Para experimentos com o manipulador TETIS foram feitos testes em varias etapas, em crescente nível de complexidade. Iniciando com uma análise da malha interna de controle, seguida de controle no espaço das juntas, controle proporcional de posição no espaço operacional, controle proporcional com feedforward e controle de força. As trajetórias utilizadas nos testes são definidas de antemão:
+Neste capítulo são exibidos os resultados de simulação numérica e ensaios experimentais. A simulação mostrada é de um rastreamento de trajetória no espaço operacional, pois é representativa do comportamento do sistema. Para experimentos com o manipulador TETIS foram feitos testes em varias etapas, em crescente nível de complexidade. Iniciando com uma análise da malha interna de controle, seguida de controle no espaço das juntas, controle proporcional de posição no espaço operacional, controle proporcional com feedforward e controle de força. As trajetórias utilizadas nos testes são definidas a seguir.
 
 \textbf{Trajetória 1}
 \begin{gather} \label{eq:traj1}
@@ -94,7 +94,7 @@ Utilizando a Robotics Toolbox \citep{petercorke} para MATLAB\circledR, foram fei
 
 
 \section{Análise da Malha de Controle a nível de Juntas}
-Para verificar se de fato são válidas as premissas assumidas na seção \ref{sec:controle_cinematico} para aplicação de uma estratégia de controle cinemático foi levantada para cada uma das juntas a resposta a uma onda quadrada tal que:
+Para verificar se de fato são válidas as premissas assumidas na Seção \ref{sec:controle_cinematico} para aplicação de uma estratégia de controle cinemático foi levantada para cada uma das juntas a resposta a uma onda quadrada tal que:
 \[ u = A \sgn(\sin( 2\pi t/f)) \]
 onde o período $T = 1/f = 2s$ e a amplitude $A = 0.5 rad/s$
 
@@ -158,7 +158,7 @@ Os resultados foram conforme esperados, levando o erro assintoticamente a zero e
 
 \section{Controle de Posição no Espaço Operacional}
 
-Nesta seção, demonstra-se o controle no espaço operacional. Utilizando a estratégia de controle proporcional conforme definido na seção \ref{sec:pos_operacional}. 
+Nesta seção, demonstra-se o controle no espaço operacional. Utilizando a estratégia de controle proporcional conforme definido na Seção \ref{sec:pos_operacional}. 
 
 \subsection{Experimento 1}
 
@@ -196,9 +196,9 @@ Neste experimento a posição inicial é ${x} =[ 552.62 \; 57 \; -67.17 \; 0]^T$
 
 \subsection{Experimento 2}
 
-Neste experimento, o objetivo é testar a alteração da orientação, mantendo a posição constante. A posição inicial é ${x} =[ 550 \; 57 \; -100 \; 0]^T$. Como mostra o gráfico \ref{fig:pos_exp2_phi}, a orientação é alterada para $60^o$, ou seja ${x_d} =[ 550 \; 57 \; -100 \; 1.0472]^T$. Em seguida, a orientação é alterada para $-60^o$, ou seja ${x_d} =[ 550 \; 57 \; -100 \; -1.0472]^T$. 
+Neste experimento, o objetivo é testar a alteração da orientação, mantendo a posição constante. A posição inicial é ${x} =[ 550 \; 57 \; -100 \; 0]^T$. Como mostra o gráfico na Figura \ref{fig:pos_exp2_phi}, a orientação é alterada para $60^o$, ou seja ${x_d} =[ 550 \; 57 \; -100 \; 1.0472]^T$. Em seguida, a orientação é alterada para $-60^o$, ou seja ${x_d} =[ 550 \; 57 \; -100 \; -1.0472]^T$. 
 
-Nas figuras \ref{fig:oper_space_exp2_x1} e \ref{fig:oper_space_exp2_x3} é possível identificar que a mudança de orientação gerou distúrbios nas dimensões $x$ e $z$. No entanto, os distúrbios foram rejeitados assintoticamente.
+Nas Figuras \ref{fig:oper_space_exp2_x1} e \ref{fig:oper_space_exp2_x3} é possível identificar que a mudança de orientação gerou distúrbios nas dimensões $x$ e $z$. No entanto, os distúrbios foram rejeitados assintoticamente.
 
 \begin{figure}[H]
 \centering
@@ -232,7 +232,7 @@ Nas figuras \ref{fig:oper_space_exp2_x1} e \ref{fig:oper_space_exp2_x3} é poss�
 
 \section{Rastreamento de Trajetória}
 
-Nesta seção são exibidos os resultados experimentais para o rastreamento das duas trajetórias definidas em \eqref{eq:traj1} e \eqref{eq:traj2}. Utiliza-se uma estratégia de controle proporcional com feedforward, conforme definido em \ref{sec:pplusf}. 
+Nesta seção são exibidos os resultados experimentais para o rastreamento das duas trajetórias definidas em \eqref{eq:traj1} e \eqref{eq:traj2}. Utiliza-se uma estratégia de controle proporcional com \textit{feedforward}, conforme definido na Seção \ref{sec:pplusf}. 
 
 \subsection{Trajetória 1}
 
@@ -294,7 +294,7 @@ Nesta seção são exibidos os resultados experimentais para o rastreamento das 
 \label{fig:erro_traj}
 \end{figure}
 
-Podem-se observar diversos picos no sinal de erro na figura \ref{fig:erro_traj} que se devem ao fato de, por não se tratar de um sistema em tempo-real, o período de controle pode sofrer variação caso aconteça alguma interrupção no sistema operacional. Assim, o comando não seria atualizado, resultando em um erro maior na próxima iteração.
+Podem-se observar diversos picos no sinal de erro na Figura \ref{fig:erro_traj} que se devem ao fato de, por não se tratar de um sistema em tempo-real, o período do laço de controle pode sofrer variação caso aconteça alguma interrupção no sistema operacional. Assim, o comando não seria atualizado, resultando em um erro maior na próxima iteração.
 
 
 \subsection{Trajetória 2}
@@ -418,7 +418,7 @@ A partir da variação do ganho de controle foi possível observar que acima de 
  
 \section{Controle de Força}
 
-Nesta seção são mostrados os resultados de experimentos de controle de força, segundo os estratégias definidas em \ref{sec:force}. 
+Nesta seção são mostrados os resultados de experimentos de controle de força, segundo os estratégias definidas na Seção \ref{sec:force}. 
 
 \subsection{Float}
 Neste experimento a referência de força é configurada para zero, logo é possível mover o efetuador aplicando forças sobre o  sensor de força. O operador tentou traçar um retângulo no plano x-z, movimentando o efetuador com as mãos.
@@ -454,9 +454,9 @@ Neste experimento a referência de força é configurada para zero, logo é poss
 \end{figure}
 
 \subsection{Approach}
-Considerando o problema de aplicar uma força em uma placa de poliestireno montada em um suporte fixado na vertical como mostra a figura \ref{fig:suporte_forca}.  Conforme mostrado em \ref{sec:forca_approach} a força de contato pode ser modelada pela lei de Hooke, portanto é necessário saber a constante elástica do ambiente.
+Considerando o problema de aplicar uma força em uma placa de poliestireno fixada em um suporte plano na vertical.  Conforme mostrado na Seção \ref{sec:forca_approach} a força de contato pode ser modelada pela Lei de Hooke, portanto é necessário saber a constante elástica do ambiente.
 
-Foi feito um ensaio para encontrar a constante $k_s$ variando a distância $x_s$ e medindo a força resultante. Os dados experimentais e a regressão linear pode ser vista na figura \ref{fig:ks_linreg}. A constante encontrada foi $k_s = 379.7642 N/m$.
+Foi feito um ensaio para encontrar a constante $k_s$ variando a distância $x_s$ e medindo a força resultante. Após o contato com a superfície, foi variada a distância $x_s$ de $x_{si}$, a distância inicial de contato, até $x_{si} + 10mm$, em incrementos de $1mm$. Os dados experimentais e a reta obtida por regressão linear pode ser vista na Figura \ref{fig:ks_linreg}. A constante encontrada foi $k_s = 379.7642 N/m$.
 
 \begin{figure}[!ht]
 \centering
@@ -474,5 +474,5 @@ Foi aplicado o controle de força com uma referência constante de $1000 mN$ na 
   \label{fig:force_approach}
 \end{figure}
 
-Os resultados mostraram a existência de não linearidades que não foram consideradas no modelo. Por exemplo a relação entre força e distância no ambiente testado não é exatamente linear, no entanto a aproximação foi aceitável. O fato de o sensor de força ter uma alta relação sinal-ruído para a ordem de grandeza do o sinal de referência também contribuiu para os resultados observados. 
+Os resultados mostraram a existência de não linearidades que não foram consideradas no modelo. Por exemplo, a relação entre força e distância no ambiente testado não é exatamente linear, no entanto a aproximação foi aceitável. O fato de o sensor de força ter uma alta relação sinal-ruído para a ordem de grandeza do sinal de referência também contribuiu para os resultados observados. 
 

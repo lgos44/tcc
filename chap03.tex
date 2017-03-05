@@ -5,13 +5,13 @@
 O manipulador TETIS consiste basicamente de um braço planar de três elos com uma rotação adicional ao redor do eixo do plano. Também pode ser visto como um braço antropomórfico com uma junta de revolução adicional ao final da cadeia, com o eixo paralelo às duas anteriores. O projeto mecânico faz com que a extremidade do efetuador final não esteja exatamente alinhada com as juntas, o que é levado em conta no último elo. O esquema na figura \ref{fig:modelo_tetis} ilustra o modelo de elos e juntas. 
 \begin{figure}[!ht]
 \centering
-  \includegraphics[width=0.9\linewidth]{./img/model2.png}
+  \includegraphics[width=0.9\linewidth]{./img/model3.png}
   \caption{Modelagem cinemática do manipulador TETIS e posicionamento dos sistemas de coordenadas}
   \label{fig:modelo_tetis}
 \end{figure}%
 
 \section{Cinemática Direta}
-O primeiro passo ao modelar um manipulador robótico é encontrar a cinemática direta. Será utilizada a convenção de Denavit-Hartenberg para posicionar os sistemas de coordenadas e obter os parâmetros. Seguindo os passos descritos em \ref{sec:denavit} os sistemas de coordenadas foram posicionados da seguinte forma:
+O primeiro passo ao modelar um manipulador robótico é encontrar a cinemática direta. Será utilizada a convenção de Denavit-Hartenberg para posicionar os sistemas de coordenadas e obter os parâmetros. Seguindo os passos descritos na Seção \ref{sec:denavit} os sistemas de coordenadas foram posicionados da seguinte forma:
 
 \begin{itemize}
 \item Eixo $\vec{z}_0$ escolhido ao longo da Junta 1. Origem $O_0$ escolhida arbitrariamente de modo a coincidir com $O_1$ por simplicidade.  
@@ -26,7 +26,7 @@ A partir dos eixos posicionados conforme a figura \ref{fig:modelo_tetis} é poss
 
 \begin{table}[h!]
 \centering
-\caption{Parâmetros Denavit–Hartenberg para manipulatodor Tetis}
+\caption{Parâmetros Denavit–Hartenberg para manipulador Tetis}
 \label{tab:dh_tetis}
 \begin{tabular}{rrrrr} \hline
 Elo & $a_i$ & $\alpha_i$ & $d_i$  & $\theta_i$ \\ \hline
@@ -169,7 +169,7 @@ A partir da cinemática direta em \eqref{eq:cine_direta} e da equação \ref{eq:
 ({J}_{ap})_b = 
 \m{
 	\ddfrac{\partial x}{\partial q_1} & \ddfrac{\partial x}{\partial q_2} & \ddfrac{\partial x}{\partial q_3} & \ddfrac{\partial x}{\partial q_4}  \\
-	\ddfrac{\partial y}{\partial q_1} & \ddfrac{\partial y}{\partial q_2} & \ddfrac{\partial y}{\partial q_3} & \ddfrac{\partial x}{\partial q_4}  \\
+	\ddfrac{\partial y}{\partial q_1} & \ddfrac{\partial y}{\partial q_2} & \ddfrac{\partial y}{\partial q_3} & \ddfrac{\partial y}{\partial q_4}  \\
 	\ddfrac{\partial z}{\partial q_1} & \ddfrac{\partial z}{\partial q_2} & \ddfrac{\partial z}{\partial q_3} & \ddfrac{\partial z}{\partial q_4}  \\
 }
 \end{equation}
@@ -194,7 +194,7 @@ A partir de \ref{eq:jacob_or} e de \ref{eq:orientacao} podemos calcular o Jacobi
 {J}_{a\phi}({q}) = \frac{\partial \phi_e}{\partial {q}} = \m{0 & -1 & -1 & -1}
 \end{equation}
  
-Em alguns modos como controle por servo visão e no controle manual com joystick é interessante fazer o controle no referencial do efetuador, portanto precisamos representar o Jacobiano de posição no referencial do efetuador como $({J}_{ap})_e = {R}_{be}^T ({J}_{ap})_b$.  
+Em alguns modos como controle por servovisão e no controle manual com \textit{joystick} é interessante fazer o controle no referencial do efetuador, portanto precisamos representar o Jacobiano de posição no referencial do efetuador como $({J}_{ap})_e = {R}_{be}^T ({J}_{ap})_b$.  
 
 \begin{equation}
 ({J}_{ap})_e =  
@@ -218,7 +218,7 @@ Este é um modo em malha aberta, onde o sinal de entrada no controlador é de ve
 \begin{tikzpicture}[auto, node distance=2cm,>=latex']
     % We start by placing the blocks
     \node [input, name=input] {};
-    \node [block, right of=input] (J) {$J^{-1}$};
+    \node [block, right of=input] (J) {$J_a^{-1}$};
     \node [block, right of=J] (Integral) {$\int$};
     \node [output, right of=Integral] (output) {};
 
@@ -232,18 +232,18 @@ Este é um modo em malha aberta, onde o sinal de entrada no controlador é de ve
 
 
 \subsection{Sistema de coordenadas da Base} \label{sec:openloopbase}
-Quando o controle é feito no referencial da base ${\dot{x}}_d$ é velocidade desejada expressa no referencial da base e utiliza-se $({J}_{a})_e$.
+Quando o controle é feito no referencial da base $({\dot{x}}_d)_b$ é velocidade desejada expressa no referencial da base e utiliza-se $({J}_{a})_b$.
 \begin{equation}
-{u} = {\dot{q}}_d = ({J}_{a})_b^{-1} ({\dot{x}}_d)_e
+{u} = {\dot{q}}_d = ({J}_{a})_b^{-1} ({\dot{x}}_d)_b
 \end{equation}
 \subsection{Sistema de coordenadas do Efetuador} \label{sec:openloopefct}
-Quando o controle é feito no referencial do efetuador ${\dot{x}}_d$ é velocidade desejada expressa no referencial do efetuador e utiliza-se $({J}_{a})_e$.
+Quando o controle é feito no referencial do efetuador $({\dot{x}}_d)_e$ é velocidade desejada expressa no referencial do efetuador e utiliza-se $({J}_{a})_e$.
 \begin{equation}
 {u} = {\dot{q}}_d = ({J}_{a})_e^{-1} ({\dot{x}}_d)_e
 \end{equation}
 onde 
 \begin{equation}
-{\dot{x}}_d = \m{{\dot{p}}_d \\ 0}
+{\dot{x}}_d = \m{{\dot{p}}_d \\ \dot{\phi}_d}
 \end{equation}
 
 \section{Controle de Posição no Espaço das Juntas} \label{sec:position_joint}
@@ -319,8 +319,8 @@ O algoritmo de controle pode ser resumido por:
 %\end{algorithmic}
 %\end{algorithm}
 
-\section{Controle por Servo Visão} \label{sec:servo_vision}
-O controle por servo visão no manipulador TETIS é feito através de uma configuração \textit{eye-in-hand}, onde a câmera é montada no efetuador final do manipulador, utilizando a abordagem de Servo Visão Baseada em Posição (PBVS). Na seção \ref{sec:minoru} é descrita a câmera utilizada. Trata-se de uma câmera estereoscópica, no entanto será utilizada apenas um dos sensores.
+\section{Controle por Servovisão} \label{sec:servo_vision}
+O controle por servovisão no manipulador TETIS é feito através de uma configuração \textit{eye-in-hand}, onde a câmera é montada no efetuador final do manipulador, utilizando a abordagem de Servovisão Baseada em Posição (PBVS). Na Seção \ref{sec:minoru} é descrita a câmera utilizada. Trata-se de uma câmera estereoscópica, no entanto será utilizada apenas um dos sensores. Assume-se que é possível aproximar a câmera pelo modelo \textit{pin-hole} descrito na Seção \ref{sec:camera_model}. Consideram-se desprezíveis as distorções geométricas causadas pelas lentes.
 
 %\begin{figure}[H]
 %\centering
@@ -341,7 +341,7 @@ O controle por servo visão no manipulador TETIS é feito através de uma config
 %\end{figure}
 
 
-O objetivo é deste modo de controle é rastrear um alvo, que é representado por um QR code como o da figura \ref{fig:camera_target}. Deseja-se que o efetuador rastreie sempre a orientação normal ao plano do alvo.
+O objetivo é deste modo de controle é rastrear um alvo, que é representado por um QR code como o da Figura \ref{fig:camera_target}. Deseja-se que o efetuador rastreie sempre a orientação normal ao plano do alvo.
 
 A matriz de calibração ${K}$ da equação \eqref{eq:camera_projection} obtida através do processo descrito em \citep{visp_camera_calibration} é:
 
@@ -359,7 +359,7 @@ A matriz de calibração ${K}$ da equação \eqref{eq:camera_projection} obtida 
 }	
 \end{equation}
 
-Observando que o referencial da câmera e do efetuador são dados pela figura \ref{fig:camera_ref}, podemos chegar a seguinte transformação homogênea
+Observando que o referencial da câmera e do efetuador são dados pela Figura \ref{fig:camera_ref}, podemos chegar a seguinte transformação homogênea
 
 \begin{equation} \label{eq:tec}
 {T}_{ec} = \m{
@@ -385,11 +385,12 @@ Observando que o referencial da câmera e do efetuador são dados pela figura \r
 \end{figure}
 
 
-Para a servo visão baseada em posição, foi utilizada uma lei de controle proporcional
+Para a servovisão baseada em posição, foi utilizada uma lei de controle proporcional
 \begin{equation} \label{eq:lei_posicao}
-{u} = ({J}_{a})_e^{-1} {K}_t [({x}_t)_e - ({x_e})_e]
+{u} = ({J}_a)_e^{-1}{K}_v[({x}_o)_e - ({x}_t)_e]
+%{u} = ({J}_{a})_e^{-1} {K}_t [({x}_t)_e - ({x_e})_e]
 \end{equation}
-onde ${x}_t$ e ${x_e}$ estão representados no referencial do efetuador. Portanto precisamos saber a posição e orientação ${x}_t$ do alvo em relação ao efetuador
+onde ${x}_o$ e ${x_t}$ estão representados no referencial do efetuador. Portanto precisamos saber a posição e orientação ${x}_t$ do alvo em relação ao efetuador
 \begin{equation}
 {T}_{et} = {T}_{ec} {T}_{ct}
 \end{equation}
@@ -402,9 +403,9 @@ onde $({p}_t)_e$ é o vetor de translação que pode ser obtido diretamente de $
 
 
 %TODO
-A primeira alternativa é obter a rotação em torno do eixo $x$ (\textit{pitch}) em relação ao referencial do efetuador, extraído de ${T}_{et}$. No entanto essa opção não permite que o alvo seja rotacionado em torno de ${z}_c$, pois a rotação em torno de ${x}_c$ não mais representará a inclinação do plano do alvo em relação a posição inicial, que faz o efetuador rastrear a direção normal ao alvo. A figura \ref{fig:projection} ilustra isso. 
+A primeira alternativa é obter a rotação em torno do eixo $x$ (\textit{pitch}) em relação ao referencial do efetuador, extraído de ${T}_{et}$. No entanto essa opção não permite que o alvo seja rotacionado em torno de ${z}_c$, pois a rotação em torno de ${x}_c$ não mais representará a inclinação do plano do alvo em relação a posição inicial, que faz o efetuador rastrear a direção normal ao alvo ( vide Figura \ref{fig:projection}). 
 
-Portanto, optou-se pela segunda alternativa. Projeta-se o eixo do alvo $({z}_t)_c$, representado do referencial da câmera, no plano $({z}_{t_0})_c \times ({x}_{t_0})_c$, onde $({z}_{t0})_c$ indica o eixo de coordenadas do alvo $z_t$ em sua posição inicial conforme a figura \ref{fig:camera_target}. Em seguida encontra-se o ângulo entre os vetores $({z}_{t_0})_c$ e $({z}_{t_0})_c$. 
+Portanto, optou-se pela segunda alternativa. Projeta-se o eixo do alvo $({z}_t)_c$, representado do referencial da câmera, no plano $({z}_{t_0})_c \times ({x}_{t_0})_c$, onde $({z}_{t0})_c$ indica o eixo de coordenadas do alvo $z_t$ em sua posição inicial conforme a Figura \ref{fig:camera_target}. Em seguida encontra-se o ângulo entre os vetores $({z}_{t_0})_c$ e $({z}_{t_0})_c$. 
 
 \begin{figure}[!ht]
 \centering
@@ -414,14 +415,19 @@ Portanto, optou-se pela segunda alternativa. Projeta-se o eixo do alvo $({z}_t)_
 \end{figure}%
 
 
-Dada a matriz de rotação ${R}_{ct_0}$, da câmera à posição inicial
+Dada a matriz de rotação ${R}_{ct_0}$, do sistema de coordenadas da câmera ao sistema de coordenadas do alvo em sua posição inicial, mostrada na Figura \ref{fig:camera_ref}
 \begin{equation}
 {R}_{ct_0} = \m{ ({x}_{t_0})_c & ({y}_{t_0})_c  & ({z}_{t_0})_c} = 
 \m{
+	-1 & 0 & 0 \\
 	0 & 1 & 0 \\
-	1 & 0 & 0 \\
 	0 & 0 & -1
 }
+%\m{
+%  0 & 1 & 0 \\
+%  1 & 0 & 0 \\
+%  0 & 0 & -1
+%}
 \end{equation}
 é conhecida a normal ao plano do alvo é ${n} = {x}_{t_0} \times {z}_{t_0} =  {y}_{t_0} $. A matriz de projeção linear \citep{strang} de um vetor em um plano é dada por
 \begin{equation}
@@ -572,7 +578,7 @@ Considerando que o controle de força seja ativado somente após a etapa de cont
 \label{fig:controle_forca}
 \end{figure}
 
-O diagrama \ref{fig:controle_forca} pode ser simplificado se abstrairmos as outras dimensões que não a de approach, resultando em \ref{fig:controle_forca_simples}.
+O diagrama da Figura \ref{fig:controle_forca} pode ser simplificado se abstrairmos as outras dimensões que não a de approach, resultando em \ref{fig:controle_forca_simples}.
 
 \begin{figure}[h!]
 \centering

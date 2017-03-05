@@ -3,7 +3,7 @@
 \chapter{Estimação \textit{online} da \textit{pose}}  \label{chap:pose_est}
 \section{ViSP - Visual Servoing Platform}
 
-Para a implementação do modo de controle por Servo Visão, foi utilizada a biblioteca ViSP. A ViSP contém um módulo de visão computacional que permite computar a \textit{pose} de um objeto a ser reconhecido por meio de um padrão pre-determindado. São utilizados algoritmos robustos e fornecidos mecanismos para calibração da câmera. Esse módulo em alguns casos utiliza a biblioteca OpenCV, com aplicação em problemas de robótica. 
+Para a implementação do modo de controle por servovisão, foi utilizada a biblioteca ViSP. A ViSP contém um módulo de visão computacional que permite computar a \textit{pose} de um objeto a ser reconhecido por meio de um padrão pre-determindado. São utilizados algoritmos robustos e fornecidos mecanismos para calibração da câmera. Esse módulo em alguns casos utiliza a biblioteca OpenCV, com aplicação em problemas de robótica. 
 %funciona como um envoltório para a
 \section{Rastreamento Baseada em Modelo}
 O ViSP propoe um rastreador baseado em modelo 3D que permite simultaneamente rastrear um objeto utilizando conhecimento de seu modelo CAD e fornecer a sua posição e  orientação, no sistema de coordenadas da câmera.
@@ -25,7 +25,7 @@ Dependendo das características visuais, três rastreadores estão disponíveis.
 \end{figure}%
 
 \section{Perspective-n-Point}
-O problema Perspective-n-Point é essencial para problemas de servo visão pois permite a obtenção da pose de um objeto através de um conjunti de pontos característicos.  As seguintes abordagens ao problema PnP estão disponíveis na biblioteca ViSP são:
+O problema Perspective-n-Point é essencial para problemas de servovisão pois permite a obtenção da pose de um objeto através de um conjunti de pontos característicos.  As seguintes abordagens ao problema PnP estão disponíveis na biblioteca ViSP são:
 \begin{itemize}
 \item Abordagem Linear Lagrange. É realizado um teste para verificar aplicação da versão planar ou não-planar do algoritmo. 
 
@@ -37,7 +37,7 @@ O problema Perspective-n-Point é essencial para problemas de servo visão pois 
 \end{itemize}
 
 \section{Pacote ROS visp\_auto\_tracker}
-O pacote de ROS chamado \verb|visp_auto_tracker| consiste em um rastreador de objetos baseado em padrões. Ele funciona como um envoltório de ROS para rastreadores baseados em modelo fornecidos pela biblioteca de servo visão ViSP. O objeto a ser rastreado deve possuir um \textit{QRCode} ou um padrão \textit{Flash}. Baseado nesse padrão, o objeto é detectado automaticamente, permitindo a inicialização de rastreadores baseados em modelo. Quando o rastreamento se perde, uma nova detecção é feita e os rastreador é re-inicializado.
+O pacote de ROS chamado \verb|visp_auto_tracker| consiste em um rastreador de objetos baseado em padrões. Ele funciona como um envoltório de ROS para rastreadores baseados em modelo fornecidos pela biblioteca de servovisão ViSP. O objeto a ser rastreado deve possuir um \textit{QRCode} ou um padrão \textit{Flash}. Baseado nesse padrão, o objeto é detectado automaticamente, permitindo a inicialização de rastreadores baseados em modelo. Quando o rastreamento se perde, uma nova detecção é feita e os rastreador é re-inicializado.
 
 O algoritmo utilizado para a solução do problema Perspective-n-Point é a abordagem descrita em \citep{dementhon1995model,oberkampf1996iterative}, que permite computar a posição e orientação rápido o suficiente para permitir rastreio \textit{online} utilizando uma câmera.
 

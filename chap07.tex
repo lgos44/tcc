@@ -32,7 +32,7 @@ O sistema de atuação é responsável pela atuação dos motores do DORIS. É c
 
 A tecnologia \textit{Harmonic gear}, registrada pela \textit{Harmonic Drive}, consiste em engrenagens do tipo \textit{strain wave}. Esse mecanismo melhora certas características em comparação com sistemas de transmissão tradicionais como engrenagens helicoidais, ou planetárias. As vantagens incluem a inexistência de folgas, ser mais compacto e leve, altas taxas de redução, excelente resolução e repetibilidade e alto torque.
 
-As juntas do manipulador TETIS utilizam atuadores \textit{FHA Mini Servo} da \textit{Harmonic Drive AG}, mostrados na figura \ref{fig:harmonic_drive}. Segundo o estudo em \citep{xaud2016doris}, esse atuador cumpre os requisitos acima. Ele conta também com \textit{encoder}, montado no eixo do motor, antes da redução, e sensores \textit{hall} para os três enrolamentos. Com base nos requisitos de torque, para as duas primeiras juntas é utilizado o modelo FHA-11C-100-D200-EKMI, enquanto que para as duas últimas o modelo FHA-8C-100-D200-EKMI.
+As juntas do manipulador TETIS utilizam atuadores \textit{FHA Mini Servo} da \textit{Harmonic Drive AG}, mostrados na Figura \ref{fig:harmonic_drive}. Segundo o estudo em \citep{xaud2016doris}, esse atuador cumpre os requisitos acima. Ele conta também com \textit{encoder}, montado no eixo do motor, antes da redução, e sensores \textit{hall} para os três enrolamentos. Com base nos requisitos de torque, para as duas primeiras juntas é utilizado o modelo FHA-11C-100-D200-EKMI, enquanto que para as duas últimas o modelo FHA-8C-100-D200-EKMI.
 
 \newlength{\twosubht}
 \newsavebox{\twosubbox}
@@ -64,7 +64,7 @@ Para atinjir um controle satisfatório a nível de junta, são utilizados driver
 
 O robô DORIS conta com diversos tipos de câmeras, como câmera de alta definição, térmica, \textit{fisheye} e estereoscópica. 
 
-A figura \ref{fig:efet_minoru} mostra a câmera utilizada para o controle por servovisão e o efetuador com a câmera montada.
+A Figura \ref{fig:efet_minoru} mostra a câmera utilizada para o controle por servovisão e o efetuador com a câmera montada.
 A câmera em questão é a \textit{Minoru 3D Webcam}, uma câmera esterescópica que possui dois sensores VGA CMOS. É um dispositivo leve que pode ser acoplado ao efetuador final.
 
 \begin{figure}[H]
@@ -114,7 +114,7 @@ No efetuador do manipulador TETIS há um sensor de força da \textit{OptoForce K
 
 A malha de controle do manipulador TETIS é integrada através de \textit{Controller Area Network} (CAN) e da interface USB do computador embarcado PCIe/104. O computador é o nó principal, recebendo dados de sensores e enviando comandos de controle para os drivers.
 
-Através da interface USB, o computador recebe realimentação do sensor de força e vídeo da câmera. A realimentação dos encoders é feita através do barramento CAN, passando pelos drivers EPOS2. A figura \ref{fig:integration} ilustra a integração do manipulador ao sistema do robô.
+Através da interface USB, o computador recebe realimentação do sensor de força e vídeo da câmera. A realimentação dos \textit{encoders} é feita através do barramento CAN, passando pelos \textit{drivers} EPOS2. A Figura \ref{fig:integration} ilustra a integração do manipulador ao sistema do robô.
 
 \begin{figure}[!ht]
 \centering

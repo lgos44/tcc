@@ -3,6 +3,120 @@
 \chapter{Modelagem e Controle Cinemático}
 Neste capitulo serão abordados os conceitos necessários para modelagem e controle de manipuladores robóticos, focando no que foi utilizado neste projeto, para implementação no manipulador 4-DOF chamado de TETIS. Os tópicos tratados aqui podem ser encontrados em \citep{siciliano, petercorke}.
 
+\section{Posição e Orientação de um Corpo Rígido}
+
+Um corpo rígido é descrito no espaço por sua posição e orientação (pose) em relação a um sistema de coordenadas de referência. Escolhe-se um ponto do corpo e afixa-se um sistema de coordenadas. Denota-se como $\bar{E}$ um sistema de coordenadas ortonormal com $\vec{x}$, $\vec{y}$ e $\vec{z}$ como vetores unitários.
+
+Sejam o sistema de coordenadas inercial $\bar{E}_a = [\vec{x}_a \; \vec{y}_a \; \vec{z}_a ]$ e o sistema de coordenadas do corpo $\bar{E}_b = [\vec{x}_b \; \vec{y}_b \; \vec{z}_b ]$, como mostra a Figura \ref{fig:pose_frames}.
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=0.4\linewidth]{./img/pose_frames}
+  \caption{Sistemas de coordenadas de referência $\bar{E}_a$ e do corpo $\bar{E}_b$.}
+  \label{fig:pose_frames}
+\end{figure}
+
+A \textbf{posição} da origem $O_b$ do sistema de coordenadas do corpo rígido em relação ao sistema de coordenadas inercial é dada por 
+\begin{equation}
+p_b = p_{b_x} \vec{x}_a + p_{b_y} \vec{y}_a + p_{b_z} \vec{z}_a, 
+\end{equation}
+onde $p_{b_x}$, $p_{b_y}$ e $p_{b_z}$ denotam as componentes do vetor $p_b \in \mathbb{R}^3$ representadas no sistema de coordenadas $\bar{E}_a$. Pode ser escrita de forma compacta como um vetor $(3 \times 1)$
+\begin{equation}
+p_{b} = \m{p_{b_x} \\ p_{b_y} \\ p_{b_z}}
+\end{equation}
+
+As coordenadas de $\vec{x}_b$, $\vec{y}_b$ e $\vec{z}_b$ representadas no sistema de coordenadas $\bar{E}_a$ são dadas por $x_{ab}$, $y_{ab}$ e $z_{ab}$ em
+\begin{align}
+x_{ab} &= \bar{E}_a^* \vec{x}_b  \label{eq:xab} \\
+y_{ab} &= \bar{E}_a^* \vec{y}_b \label{eq:yab}\\ 
+z_{ab} &= \bar{E}_a^* \vec{z}_b \label{eq:zab}
+\end{align}
+onde $\bar{E}^* = [\vec{e}_1 \cdot  \;\; \vec{e}_2  \dot \;\; \vec{e}_3 \dot] $ denota o operador adjunto de $\bar{E}$.
+
+
+A partir das equações \eqref{eq:xab}, \eqref{eq:yab} e \eqref{eq:zab}, podemos escrever:
+\begin{align}
+\vec{x}_b &= \bar{E}_a x_{ab} \\
+\vec{y}_b &= \bar{E}_a y_{ab} \\
+\vec{z}_b &= \bar{E}_a z_{ab} ,
+\end{align}
+portanto,
+\begin{equation}
+\bar{E}_b = [\bar{E}_a x_{ab} \;\; \bar{E}_a y_{ab} \;\; \bar{E}_a z_{ab}] = \bar{E}_a [x_{ab} \;\;  y_{ab} \;\; z_{ab}] = \bar{E}_a R_{ab}
+\end{equation}
+
+A matriz $R_{ab}$ é chamada de matriz de rotação e define a \textbf{orientação} do corpo rígido.
+\begin{equation}
+R_{ab} = \m{ x_{ab} & y_{ab} & z_{ab} }
+\end{equation}
+onde $x_{ab} \in \mathbb{R}^3$,  $y_{ab} \in \mathbb{R}^3$ e $z_{ab} \in \mathbb{R}^3$ são as componentes do sistema de coordenadas $\bar{E}_b$ no sistema de coordenadas $\bar{E}_a$, ou seja:
+\begin{equation}
+R_{ab} =  \m{ \vec{x}_a \cdot \\ \vec{y}_a \cdot  \\ \vec{z}_a \cdot  } \m{ \vec{x}_b & \vec{y}_b & \vec{z}_b } = 
+\m{
+    (\vec{x}_a \cdot \vec{x}_b) & (\vec{x}_a \cdot \vec{y}_b)& (\vec{x}_a \cdot \vec{z}_b) \\
+    (\vec{y}_a \cdot \vec{x}_b)& (\vec{y}_a \cdot \vec{y}_b)& (\vec{y}_a \cdot \vec{z}_b) \\
+    (\vec{z}_a \cdot \vec{x}_b) &(\vec{z}_a \cdot \vec{y}_b)& (\vec{z}_a \cdot \vec{z}_b)
+}
+\end{equation}
+
+
+\subsection{Representação de um vetor}
+%Uma matriz de rotação pode ser interpretada como 
+Um vetor $\vec{p}$ pode ser representado como $(p)_a = [p_{x} \;\; p_{y} \;\; p_{z}]$ no sistema de coordenadas $\bar{E}_a$ e como $(p)_b = [p'_{x} \;\; p'_{y} \;\; p'_{z}]$ no sistema de coordenadas $\bar{E}_b$. 
+A matriz de rotação $R_{ab}$ representa a transformação de coordenadas de $\vec{p}$ em $\bar{E}_b$ para suas coordenadas em $\bar{E}_a$, através de 
+\begin{equation}
+(p)_a = R_{ab}(p)_b.
+\end{equation}
+
+
+\subsection{Transformações Homogêneas}
+A posição de um corpo rígido é expressa em função da posição de um ponto no corpo rígido com respeito ao sistema de coordenadas de referência (translação),
+ enquanto que sua orientação é expressa em termos das componentes dos vetores unitários do sistema de coordenadas do corpo em relação ao sistema de coordenadas de referência (rotação).
+
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=0.4\linewidth]{./img/homogeneous_transform}
+  \caption{Representação de um ponto $P$ em diferentes sistemas de coordenadas.}
+  \label{fig:homogeneous_transform}
+\end{figure}
+
+
+Seja $(p)_a$ o vetor de coordenadas de um ponto P no espaço, em relação a um sistema de coordenadas de referência $\bar{E}_a = [\vec{x}_a \; \vec{y}_a \; \vec{z}_a ]$. 
+Considerando um sistema de coordenadas  $\bar{E}_b = [\vec{x}_b \; \vec{y}_b \; \vec{z}_b]$, seja $(p_{ab})_a$ o vetor de coordenadas descrevendo a origem do sistema de coordenadas $\bar{E}_b$ com relação sistema de coordenadas  $\bar{E}_a$. A matriz de rotação $R_{ab}$ descreve a orientação do sistema de coordenadas $\bar{E}_b$ em relação a $\bar{E}_a$. Seja, também, $(p)_b$ o vetor de coordenadas do ponto $P$ em relação ao sistema de coordenadas $\bar{E}_b$.  A posição do ponto $P$ pode ser representada no sistema de coordenadas de referência como
+\begin{equation} \label{eq:transrot}
+(p)_a = (p_{ab})_a + R_{ab} (p)_b.
+\end{equation}
+A Equação \eqref{eq:transrot} representa a transformação de coordenadas (translação e rotação) de um vetor, de um sistema de coordenadas para outro.
+
+De forma a obter uma representação compacta da relação entre as coordenadas de um mesmo ponto em dois sistemas de coordenadas diferentes, introduz-se a representação homogênea de um vetor $p$ como $\tilde{p} \in \mathbb{R}^4$, formado adicionando um quarto componente unitário, ou seja
+\begin{equation}
+\tilde{p} = \m{p \\ 1}.
+\end{equation}  
+Adotando essa representação a transformação de coordenadas pode ser escrita através da matriz $(4 \times 4) $
+\begin{equation}
+T_{ab} = \m{
+    R_{ab} & (p)_b \\
+    0_{1 \times 3} & 1
+}
+\end{equation}
+
+Portanto a transformação de coordenadas de um vetor de $\bar{E}_b$ para $\bar{E}_a$ pode ser expressa de forma compacta por uma única matriz, como
+\begin{equation}
+(\tilde{p})_a = T_{ab} (\tilde{p})_b
+\end{equation}
+enquanto que a transformação de $\bar{E}_a$ para $\bar{E}_b$ é descrita pela matriz $T_{ba}$ que satisfaz a equação
+\begin{equation}
+(\tilde{p})_b = T_{ba} (\tilde{p})_b = (T_{ab})^{-1} (\tilde{p})_a .
+\end{equation}
+A matriz $T_{ba}$ pode ser expressa como
+\begin{equation}
+T_{ba} = \m{
+    R_{ba} & -R_{ba}(p_{ab})_a \\
+    0_{1 \times 3} & 1
+}.
+\end{equation}
+
 \section{Cinemática Direta}
 Um manipulador robótico é composto de uma série de corpos rígidos denominados \textit{elos} conectados através de \textit{juntas}. 
 Juntas podem ser:
@@ -23,7 +137,7 @@ Uma cadeia cinemática aberta é constituída por $n+1$ elos numerados de $0$ a 
 \begin{equation}\label{eq:cinedireta}
 {T}_{0n}({q}) = {T}_{01}(q_1) {T}_{12}(q_{2}) {\dots} {T}_{n-1,n}(q_n)
 \end{equation}
-onde ${T}_{i-1,i}(q_i)$ denota a transformação homogênea do sistema de coordenadas solidário ao elo $i-1$ àquele solidário ao elo $i$ e $q \in \mathbb{R}^N$ é o vetor de variáveis de junta.
+onde ${T}_{i-1,i}(q_i)$ denota a transformação homogênea do sistema de coordenadas solidário ao elo $i-1$ àquele solidário ao elo $i$ e $q \in \mathbb{R}^n$ é o vetor de variáveis de junta, com $n$ sendo o número de juntas.
 
 Logo a transformação homogênea do efetuador final com respeito a base é dada por
 \begin{equation} \label{eq:base_efetuador}
@@ -32,6 +146,13 @@ Logo a transformação homogênea do efetuador final com respeito a base é dada
 
 \subsection{Convenção Denavit-Hartenberg} \label{sec:denavit}
 Para calcular a cinemática direta para uma manipulador de cadeia cinemática aberta de acordo com a equação \eqref{eq:cinedireta} um método sistemático foi definido para obter a relação entre a posição e orientação de dois elos consecutivos. A convenção Denavit-Hartenberg especifica um conjunto de regras sobre como definir os sistemas de coordenadas de cada elo.
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=0.8\linewidth]{./img/dh_pt.png}
+  \caption{Parâmetros Denavit-Hartenberg.}
+  \label{fig:dh_pt}
+\end{figure}
 
 Seja o $\vec{h}_i$ eixo de rotação da junta que conecta o elo $i-1$, ao elo $i$, então:
 
@@ -116,21 +237,21 @@ Para isso utiliza-se a técnica analítica.
 
 Seja ${p}_e \in \mathbb{R}^3$ a posição do sistema de coordenadas do efetuador representada no sistema de coordenadas da base. O vetor $\dot{{p}}_e$ é portanto a velocidade de translação, ou linear.
 \begin{equation} \label{eq:jacob_pos}
-\dot{{p}}_e = \frac{\partial {p}_e }{\partial {q}} {{q}} = {J}_{ap} ({q}) {{q}} 
+\dot{{p}}_e = \frac{\partial {p}_e }{\partial {q}} {\dot{q}} = {J}_{ap} ({q}) {\dot{q}} 
 \end{equation}
-onde ${J}_{ap}$ denota o Jacobiano analítico de posição.
+onde ${J}_{ap} \in \mathbb{R}^{3 \times n} $ denota o Jacobiano analítico de posição.
 
-Para a velocidade angular, pode ser considerada uma representação mínima da orientação em função de três variáveis ${\phi_e}_i$. 
+Para a velocidade angular, pode ser considerada uma representação mínima da orientação em função de três variáveis ${\phi_e}_i$ com $i=1,2,3$. 
 A derivada no tempo $\dot{{\phi}}_e$ não é igual a velocidade angular, no entanto, conhecida a função ${\phi}_e({q})$:
 
 \begin{equation} \label{eq:jacob_or}
 \dot{{\phi}}_e = \frac{\partial {\phi}_e}{\partial {q}} {\dot{q}} = {J}_{a\phi}({q}){\dot{q}}
 \end{equation}
-onde ${J}_{a\phi}$ denota o Jacobiano analítico de orientação. Assim, a cinemática diferencial pode ser obtida como:
+onde ${J}_{a\phi}  \in \mathbb{R}^{3 \times n} $ denota o Jacobiano analítico de orientação. Assim, a cinemática diferencial pode ser obtida como:
 \begin{equation} \label{eq:jacoba}
 \dot{x}_e = \m{ \dot{p}_e \\ \phi_e } = \m{ J_{a_p}(q) \\ J_{a_\phi}(q)} {\dot{q}} = {J}_a ({q}) \dot{{q}}
 \end{equation}
-
+onde ${J}_{a}  \in \mathbb{R}^{6 \times n} $.
  
 \section{Controle Cinemático} \label{sec:controle_cinematico}
 O estratégia de controle cinemático pode ser aplicada quando considera-se que a dinâmica do manipulador pode ser desprezada. Essa hipótese se sustenta quando as seguintes premissas são válidas:
@@ -140,7 +261,7 @@ O estratégia de controle cinemático pode ser aplicada quando considera-se que 
 \item Existência uma malha de controle de velocidade de alto desempenho em cada junta.
 \end{itemize}
 
-A maioria dos manipuladores possui uma malha de controle de velocidade em nível de juntas como na figura \ref{fig:controlejuntas}. Logo, para um controle de alto ganho temos que:
+A maioria dos manipuladores possui uma malha de controle de velocidade em nível de juntas como na Figura \ref{fig:controlejuntas}. Logo, para um controle de alto ganho temos que:
 \[ {u} \approx \dot{{q}}\]
 
 \begin{figure}[h!]
@@ -158,7 +279,7 @@ A maioria dos manipuladores possui uma malha de controle de velocidade em nível
     \node [output, right of=Integral] (output) {};
 
     % Once the nodes are placed, connecting them is easy. 
-    \draw [draw,->] (input) -- node {$u$} (sum);
+    \draw [draw,->] (input) -- node[pos=0.3] {$u$} node[pos=0.8] {$+$} (sum);
     \draw [->] (sum) -- node {$e$} (K);
     \draw [->] (K) -- node {$v$} (PWM);
     \draw [->] (PWM) -- node [name=tau] {$\tau$} (Robo);
@@ -191,7 +312,7 @@ Portanto é possível implementar o controle cinemático segundo o diagrama \ref
     \node [output, right of=Integral] (output) {};
 
     % Once the nodes are placed, connecting them is easy. 
-    \draw [draw,->] (input) -- node {${x}_d$} (sum);
+    \draw [draw,->] (input) -- node[pos=0.3] {${x}_d$}  node[pos=0.8] {$+$} (sum);
     %\draw [draw,->] (input2) -- node {$u$} (sum2);
     \draw [draw,->] (input2) -- node [pos=0.1] {${\dot{x}}_d$} (tmp1)-| node [pos=0.8,anchor=left,left] {$+$} (sum2);
     \draw [->] (sum) -- node {${e}$} (K);
@@ -241,12 +362,12 @@ obtem-se a seguinte dinâmica para o erro
 \end{equation}
 onde $K_t = k_t I$. Se $k_t > 0$ o sistema é assintoticamente estável, com $e \rightarrow 0$ quando $t \to \infty$.
 
-\section{Servo Visão}
-A tarefa proposta na Servo Visão é controlar a posição e orientação do efetuador do manipulador, em relação a um alvo, usando características visuais extraídas de uma imagem. A câmera pode ser carregada pelo manipulador (montada no efetuador) ou colocada em um ponto fixo, observando tanto o efetuador como o alvo.
+\section{Servovisão}
+A tarefa proposta na Servovisão é controlar a posição e orientação do efetuador do manipulador, em relação a um alvo, usando características visuais extraídas de uma imagem. A câmera pode ser carregada pelo manipulador (montada no efetuador) ou colocada em um ponto fixo, observando tanto o efetuador como o alvo.
 
 Primeiramente é importante entender os princípios de formação de imagem através de câmeras \citep{petercorke}. 
 
-\subsection{Transformação de Perspectiva}
+\subsection{Transformação de Perspectiva} \label{sec:camera_model}
 A equação elementar para descrever a formação de imagem com uma lente é a Lei das Lentes
 \begin{equation} 
 \frac{1}{z_o} + \frac{1}{z_i} = \frac{1}{f}
@@ -255,14 +376,13 @@ onde $z_o$ é a distância até o objeto, $z_i$ é a distância ao plano da imag
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=0.8\linewidth]{./img/camera_model2.png}
-  \caption{}
-\label{fig:camera_model}
+  \includegraphics[width=0.8\linewidth]{./img/camera_model3.png}
 \caption{Modelo da câmera (disponível em \citep{opencvCameraCalibration})}
+\label{fig:camera_model}
 \end{figure}
 
-Em visão computacional geralmente é utilizado o modelo de perspectiva central mostrado na figura \ref{fig:camera_model}.
-Seja ${P} = [X\; Y\; Z]^T$ as coordenadas de um ponto do mundo e ${p} = [x\;y]^T$ as coordenadas projetadas no plano da imagem por
+Em visão computacional geralmente é utilizado o modelo de perspectiva central mostrado na Figura \ref{fig:camera_model}.
+Seja ${P} = [X\; Y\; Z]^T$ as coordenadas de um ponto expresso no sistema de coordenadas inercial e ${p} = [x\;y]^T$ as coordenadas projetadas no plano da imagem por
 % TODO confirmar referencial do mundo
 \begin{equation}
 x = f \frac{X}{Z}, \quad y = f \frac{Y}{Z}
@@ -282,7 +402,7 @@ x = f \frac{X}{Z}, \quad y = f \frac{Y}{Z}
 Podemos retornar às coordenadas não-homogêneas com:
 \[ x = \frac{x'}{z'} \qquad y = \frac{y'}{z'}\]
 
-O ponto ${P}$ do mundo pode ser representado em coordenadas homogêneas como $({\tilde{P}})_C = [X \; Y \; Z \; 1]^T$no referencial da câmera. A projeção de perspectiva é escrita em forma linear por 
+O ponto ${P}$ expresso no sistema de coordenadas inercial pode ser representado em coordenadas homogêneas como $({\tilde{P}})_C = [X \; Y \; Z \; 1]^T$ no referencial da câmera. A projeção de perspectiva é escrita em forma linear por 
 
 \begin{equation} \label{eq:projpersp}
 \tilde{{p}} = \m{
@@ -291,17 +411,31 @@ O ponto ${P}$ do mundo pode ser representado em coordenadas homogêneas como $({
     0 & 0 & 1 & 0
 } (\tilde{{P}})_C
 \end{equation}
-
+A matriz pode ser fatorada como %ou $\tilde{p} = C (\tilde{{P}})_C$, onde $C$ é chamada de matriz da câmera. 
+\begin{equation}
+\tilde{{p}} = \m{
+    f & 0 & 0 \\
+    0 & f & 0 \\
+    0 & 0 & 1 
+} 
+\m{
+    1 & 0 & 0 & 0 \\
+    0 & 1 & 0 & 0 \\
+    0 & 0 & 1 & 0
+}(\tilde{{P}})_C
+\end{equation}
+onde a primeira matriz é chamada de matriz da câmera e a segunda de matriz de projeção.
 
 Uma imagem digital pode ser interpretada como uma matriz bidimensional de \textit{pixels}. As coordenadas de um ponto são expressas, portanto, em \textit{pixels} como um vetor de números inteiros $[u\; v]$. As coordenadas no plano da imagem se relacionam com as coordenadas em \textit{pixels} por
 \begin{equation}
 u =  \frac{x}{\rho_w} + u_0 \qquad v = \frac{y}{\rho_h} + v_0
 \end{equation}
+onde $\rho_w$ e $\rho_h$ são a largura e altura de cada \textit{pixel} respectivamente e $[u_0\;\; v_0]$ são as coordenadas do ponto em que o eixo ótico intercepta o plano da imagem.
 
 Reescrevendo a equação \eqref{eq:projpersp} adicionando uma matriz ${K}$ de parâmetros
 
 \begin{equation} \label{eq:camera_parameter}
-{\tilde{p}} = 
+{\tilde{p}_{px}} = 
 \m {
 	1/\rho_w & 0 & u_0 \\
 	0        & 1/\rho_h &v_0 \\
@@ -313,11 +447,14 @@ Reescrevendo a equação \eqref{eq:projpersp} adicionando uma matriz ${K}$ de pa
 }
 (\tilde{{P}})_C
 \end{equation}
-
-A câmera possui uma posição arbitrária com respeito ao sistema de coordenadas inercial, logo a posição do ponto com respeito a câmera é dada por  $({P})_c = {T}_{0c}^{-1} {P}$. Utilizando a equação \eqref{eq:camera_parameter} podemos escrever a projeção da câmera na sua forma geral como
+onde $p_{px} = [u' \;\; v' \;\; w']$ são as coordenadas homogêneas em pixels do ponto $P$. As coodenadas não homogêneas no plano da imagem são dadas por
+\begin{equation}
+u = \frac{u'}{w'} \qquad v = \frac{v'}{w'}.
+\end{equation} 
+A câmera possui uma posição e orientação arbitrárias com respeito ao sistema de coordenadas inercial, logo a posição do ponto com respeito a câmera é dada por  $({P})_c = {T}_{0c}^{-1} {P}$. Utilizando a equação \eqref{eq:camera_parameter} podemos escrever a projeção da câmera na sua forma geral como
 % TODO: confirmar
 \begin{align}\label{eq:camera_projection}
-{\tilde{p}} =& 
+{\tilde{p}_{px}} =& 
 \m {
 	f/\rho_w & 0 & u_0 \\
 	0        & f/\rho_h &v_0 \\
@@ -332,7 +469,7 @@ A câmera possui uma posição arbitrária com respeito ao sistema de coordenada
 =& {C} ({\tilde{P})_0}
 \end{align}
 
-A equação \eqref{eq:camera_projection} define a projeção na câmera. A matriz $C$ realiza a mudança de escala, tradução e projeção de perspectiva. 
+A equação \eqref{eq:camera_projection} expressa a posição de um ponto no plano da imagem em coordenadas homogêneas. A matriz $C$ realiza a mudança de escala, transformação e projeção de perspectiva. 
 
 %\subsection{Calibração da Câmera}
 %TODO
@@ -382,8 +519,8 @@ Uma desvantagem do \textit{POSIT} é que ele não é diretamente aplicável a po
 
 %Considerando $N$ pontos $P_i$, cujas coordenadas homogêneas são dadas por $\tilde{P}_i = [X_i \;\; Y_i \;\; Z_i \;\; 1]$. Essas coordenadas
 
-\subsection{Servo Visão Baseada em Posição}
-Em um sistema de servo visão baseado em posição a posição e orientação do alvo com respeito a câmera ${T}_{ct}$ é estimada. O problema de estimação da posição e orientação foi discutido acima e as implementações disponíveis em código aberto estão listadas no apêndice \ref{chap:pose_est}.
+\subsection{Servovisão Baseada em Posição}
+Em um sistema de servovisão baseado em posição a posição e orientação do alvo com respeito a câmera ${T}_{ct}$ é estimada. O problema de estimação da posição e orientação foi discutido acima e as implementações disponíveis em código aberto estão listadas no Apêndice \ref{chap:pose_est}.
 Especifica-se uma posição desejada relativa ao sistema de coordenadas do alvo  ${T}_{c^*t}$ e deseja-se determinar o movimento necessário para mover a câmera para a posição desejada, que chamamos de ${T}_\delta$.
 
 \begin{equation}
@@ -395,10 +532,10 @@ Especifica-se uma posição desejada relativa ao sistema de coordenadas do alvo 
 \end{equation}
 
 Com isso é possível aplicar uma estratégia de controle cinemático de posição no referencial do efetuador de modo a atingir a posição e orientação desejada. A lei de controle
-\begin{equation}
-{u} = ({J}_a)_e^{-1}{K}_v[({x}_t)_e - ({x})_e]
+\begin{equation} \label{eq:visionctrllaw}
+{u} = ({J}_a)_e^{-1}{K}_v[({x}_o)_e - ({x}_t)_e]
 \end{equation}
-é capaz de fazer ${e}(t) \rightarrow 0$ quando $t \rightarrow \infty$ se $\dot{{x}}_t = 0$.
+é capaz de fazer ${e}(t) \rightarrow 0$ quando $t \rightarrow \infty$ se $\dot{{x}}_t = 0$. Na Equação \eqref{eq:visionctrllaw}, ${x}_t$ é um vetor do espaço operacional representando a posição e orientação do alvo, ${T}_{ct}$. O vetor $x_o$ representa a posição e orientação ${T}_{c^*t}$ no espaço operacional, podendo ser interpretado como um \textit{offset} em relação ao alvo.
 
 \section{Controle de Força}
 Considera-se o problema de controle cinemático de força, para um manipulador já em contato com uma superfície, assumindo que a força de contato pode ser medida com um sensor acoplado ao efetuador. 
@@ -416,7 +553,7 @@ onde ${p} \in \mathbb{R}^3$ é a posição inicial do ponto de contato e ${d}_s 
 
 Derivando \eqref{eq:problema_ctrl_forca} e \eqref{eq:hooke_mat} em relação ao tempo com respeito ao tempo, a equação do erro de força $e_f \in \mathbb{R}^3$ é dada por $\dot{{e}}_f = \dot{{f}}_d + {K}_s \dot{{p}}$. Considerando uma lei de controle de força com ação \textit{feedforward} e proporcional
 \begin{equation}
-{\bar{u}}_f = -{K}_s^{-1} (\dot{{f}}_d + {K}_d {e}_f)
+{\bar{u}}_f = -{K}_s^{-1} (\dot{{f}}_d + {K}_f {e}_f)
 \end{equation}
 onde ${K}_f = k_f {I}$, a dinâmica do erro é governada por
 \begin{equation}
@@ -445,7 +582,7 @@ S_f = \m{
 \end{equation}
 e cumpre o papel de cancelar os esforços de controle nos graus de liberdade complementares. A matriz de seleção de posição é complementar e pode ser definida como
 \begin{equation}
-S_p = (I - S_f) \m{
+S_p = (I - S_f) = \m{
     1 & 0 & 0 \\
     0 & 1 & 0 \\
     0 & 0 & 0 
@@ -465,12 +602,13 @@ Para o sinal de controle de força é utilizada um controle proporcional integra
 \begin{equation}
 (\bar{u}_f)_e = K_{pf} (e_f)_e + K_{if} \int^{\tau}_0 (e_f(\tau))_e d\tau
 \end{equation}
-onde a parcela feedforward não é utilizada, já que considera-se apenas o problema de \textit{set-point}, para o qual $\dot{f}_d$. Como a matriz de seleção desacopla os subespaços de controle somente no referencial da superfície, os sinais de controle devem ser representados primeiramente nesse sistema de coordenadas, antes de serem operados po $S$ e, então, representados de volta no sistema de coordenadas da base.
+onde a parcela feedforward não é utilizada, já que considera-se apenas o problema de \textit{set-point}, para o qual $\dot{f}_d$. Como a matriz de seleção desacopla os subespaços de controle somente no referencial da superfície $\bar{E}_s$, os sinais de controle devem ser representados primeiramente nesse sistema de coordenadas, antes de serem operados po $S$ e, então, representados de volta no sistema de coordenadas da base.
 
 \begin{align}
 ({u}_{hf})_b &= R_{bs} S_f R_{se} (\bar{u}_f)_e \\
 ({u}_{hp})_b &= R_{bs} S_p R_{sb} (\bar{u}_p)_b 
 \end{align}
+onde $R_{bs}$ é a matriz de rotação do sistema de coordenadas $\bar{E}_b$ da base para o da superfície $\bar{E}_s$,   $R_{se}$ é a matriz de rotação do sistema de coordenadas $\bar{E}_s$ da superfície para o sistema de coordenadas do efetuador $\bar{E}_e$ e $R_{sb} = R_{bs}^T$. 
 
 O controle híbrido pode ser representado pelo diagrama de blocos da figura \ref{fig:hybrid_block}.
 
