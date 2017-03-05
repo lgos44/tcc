@@ -187,7 +187,6 @@ Seguindo os princípios do ROS, busca-se separar em classes a interação com RO
 
 A classe \textit{DorisManipulatorController} implementa os modos de controle descritos na tabela \ref{tab:control_modes}. 
 
-
 \begin{table}[h!]
 \centering
 \caption{Modos de controle}
@@ -209,6 +208,7 @@ Modo de controle      	& Descrição \\ \hline
 \end{tabular}
 \end{table}
 
+No Apêndice \ref{chap:code} é mostrada a implementação dos modos de controle \verb|PplusFF|, \verb|Vision| e \verb|Force|.
 \subsection{DorisManipulatorTool}
 Para interagir com o manipulador é utilizada a \textit{Tool} chamada DorisManipulatorTool. Ela permite alternar entre os modos de controle listados acima, ajustar parâmetros e ganhos dos controladores e alterar referências. A Figura \ref{fig:screenshot1} mostra a interface com DorisManipulatorTool a direita,  Plotter no canto esquerdo superior, e DeviceManagement no canto esquerdo inferior.
  
@@ -245,6 +245,7 @@ Portanto, a linguagem Julia mostrou-se uma opção interessante e mais dinâmica
 
 Dessa forma a trajetória pode ser alterada em tempo de execução sem prejudicar a performance e sem necessitar acesso a dados externos constantemente. O Código~\ref{lst:julia} mostra a trajetória de teste em \textit{Julia Language}.
 
+\newpage
 \begin{lstlisting}[caption={trajectory.jl}\label{lst:julia}]
 function trajectory(t::Float64)
 	xd = Array(Float64,4)

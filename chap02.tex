@@ -96,7 +96,7 @@ De forma a obter uma representação compacta da relação entre as coordenadas 
 Adotando essa representação a transformação de coordenadas pode ser escrita através da matriz $(4 \times 4) $
 \begin{equation}
 T_{ab} = \m{
-    R_{ab} & (p)_b \\
+    R_{ab} & (p_{ab})_a \\
     0_{1 \times 3} & 1
 }
 \end{equation}
@@ -215,11 +215,11 @@ onde utiliza-se a notação $s_i$ para $\sin \theta_i$ e $c_i$ para $\cos \theta
 \subsection{Espaço das Juntas e Espaço Operacional}
 Para que o efetuador final de um manipulador realize alguma tarefa é necessário atribuir uma posição e orientação desejada, que  pode ser função do tempo (trajetória). Surge então o problema de representar posição e orientação. 
 
-Para descrever a posição utiliza-se as coordenadas cartesianas. Para a orientação adota-se uma representação mínima (ângulos de Euler), descrevendo a rotação do efetuador em relação ao sistema de coordenadas da base. Portanto é possível descrever a \textit{pose} do efetuador através do vetor
+Para descrever a posição utiliza-se as coordenadas cartesianas. Para a orientação adota-se uma representação mínima (ângulos de Euler), descrevendo a rotação do efetuador em relação ao sistema de coordenadas da base. Portanto é possível descrever a \textit{pose} do efetuador com relação a base através do vetor
 \begin{equation} \label{eq:op_space}
-{x}_e = \m{ {p}_e \\ {\phi}_e}
+{x}_{be} = \m{ {p}_{be} \\ {\phi}_{be}}
 \end{equation}
-onde ${p}_e \in \mathbb{R}^3$ descreve a posição e ${\phi}_e \in \mathbb{R}^3$ é uma representação mínima da orientação.
+onde ${p}_{be} \in \mathbb{R}^3$ descreve a posição e ${\phi}_{be} \in \mathbb{R}^3$ é uma representação mínima da orientação.
 
 O \textit{espaço das juntas} denota o espaço em que o vetor $(n \times 1)$ das variáveis das juntas
 \begin{equation} \label{eq:joint_space}
@@ -235,21 +235,21 @@ O \textit{espaço das juntas} denota o espaço em que o vetor $(n \times 1)$ das
 Quando a posição e orientação do efetuador são dadas em função de um número mínimos de parâmetros no espaço operacional é possível computar o Jacobiano pela diferenciação das equações da cinemática direta em função das variáveis das juntas.
 Para isso utiliza-se a técnica analítica.
 
-Seja ${p}_e \in \mathbb{R}^3$ a posição do sistema de coordenadas do efetuador representada no sistema de coordenadas da base. O vetor $\dot{{p}}_e$ é portanto a velocidade de translação, ou linear.
+Seja ${p}_{be} \in \mathbb{R}^3$ a posição do sistema de coordenadas do efetuador representada no sistema de coordenadas da base. O vetor $\dot{{p}}_{be}$ é portanto a velocidade de translação, ou linear.
 \begin{equation} \label{eq:jacob_pos}
-\dot{{p}}_e = \frac{\partial {p}_e }{\partial {q}} {\dot{q}} = {J}_{ap} ({q}) {\dot{q}} 
+\dot{{p}}_{be} = \frac{\partial {p}_{be} }{\partial {q}} {\dot{q}} = {J}_{ap} ({q}) {\dot{q}} 
 \end{equation}
 onde ${J}_{ap} \in \mathbb{R}^{3 \times n} $ denota o Jacobiano analítico de posição.
 
-Para a velocidade angular, pode ser considerada uma representação mínima da orientação em função de três variáveis ${\phi_e}_i$ com $i=1,2,3$. 
-A derivada no tempo $\dot{{\phi}}_e$ não é igual a velocidade angular, no entanto, conhecida a função ${\phi}_e({q})$:
+%Para a velocidade angular, pode ser considerada uma representação mínima da orientação em função de três variáveis ${\phi_e}_i$ com $i=1,2,3$. 
+A derivada no tempo $\dot{{\phi}}_{be}$ não é igual a velocidade angular, no entanto, conhecida a função ${\phi}_{be}({q})$:
 
 \begin{equation} \label{eq:jacob_or}
-\dot{{\phi}}_e = \frac{\partial {\phi}_e}{\partial {q}} {\dot{q}} = {J}_{a\phi}({q}){\dot{q}}
+\dot{{\phi}}_{be} = \frac{\partial {\phi}_{be}}{\partial {q}} {\dot{q}} = {J}_{a\phi}({q}){\dot{q}}
 \end{equation}
 onde ${J}_{a\phi}  \in \mathbb{R}^{3 \times n} $ denota o Jacobiano analítico de orientação. Assim, a cinemática diferencial pode ser obtida como:
 \begin{equation} \label{eq:jacoba}
-\dot{x}_e = \m{ \dot{p}_e \\ \phi_e } = \m{ J_{a_p}(q) \\ J_{a_\phi}(q)} {\dot{q}} = {J}_a ({q}) \dot{{q}}
+\dot{x}_{be} = \m{ \dot{p}_{be} \\ \dot{\phi}_{be} } = \m{ J_{a_p}(q) \\ J_{a_\phi}(q)} {\dot{q}} = {J}_a ({q}) \dot{{q}}
 \end{equation}
 onde ${J}_{a}  \in \mathbb{R}^{6 \times n} $.
  
@@ -260,9 +260,6 @@ O estratégia de controle cinemático pode ser aplicada quando considera-se que 
 \item Baixas velocidades na realização das tarefas.
 \item Existência uma malha de controle de velocidade de alto desempenho em cada junta.
 \end{itemize}
-
-A maioria dos manipuladores possui uma malha de controle de velocidade em nível de juntas como na Figura \ref{fig:controlejuntas}. Logo, para um controle de alto ganho temos que:
-\[ {u} \approx \dot{{q}}\]
 
 \begin{figure}[h!]
 \centering
@@ -284,7 +281,7 @@ A maioria dos manipuladores possui uma malha de controle de velocidade em nível
     \draw [->] (K) -- node {$v$} (PWM);
     \draw [->] (PWM) -- node [name=tau] {$\tau$} (Robo);
     \draw [->] (Robo) -- node [name=dtheta] {$\dot{q}$} (JA);
-    \draw [->] (JA) -- node {$\dot{x}_e$} (Integral);
+    \draw [->] (JA) -- node {$\dot{x}_{be}$} (Integral);
     \draw [->] (Integral) -- node [name=x] {$x_e$}(output);
     \draw [->] (dtheta) |- (tmp1)-| node[pos=0.99] {$-$} (sum);
 \end{tikzpicture}
@@ -292,8 +289,12 @@ A maioria dos manipuladores possui uma malha de controle de velocidade em nível
 \label{fig:controlejuntas}
 \end{figure}
 
+A maioria dos manipuladores possui uma malha de controle de velocidade em nível de juntas como na Figura \ref{fig:controlejuntas}. Logo, para um controle de alto ganho temos que:
+\[ {u} \approx \dot{{q}}\]
 
-Portanto é possível implementar o controle cinemático segundo o diagrama \ref{fig:controlecinematico} 	
+
+
+Portanto é possível implementar o controle cinemático segundo o diagrama da Figura \ref{fig:controlecinematico}, considerando que o manipulador tem 6 juntas, i.e. $n=6$.
 
 \begin{figure}[h!]
 \centering
@@ -321,7 +322,7 @@ Portanto é possível implementar o controle cinemático segundo o diagrama \ref
     \draw [->] (JA) -- node [name=dtheta] {$\dot{{q}}$} (Integral);
     \draw [->] (Integral) -- node [name=x] {${q}$}(output);
     \draw [->] (x) |- (k);
-    \draw [->] (k) -| node[pos=0.99] {$-$} node [near end] {${x}_e$} (sum);
+    \draw [->] (k) -| node[pos=0.99] {$-$} node [near end] {${x}_{be}$} (sum);
     \draw [->] (x) |- (tmp2) -| (JA);
     %\draw [->] (output) |- (tmp1)-| node[pos=0.99] {$-$} (sum);
 \end{tikzpicture}
@@ -330,20 +331,19 @@ Portanto é possível implementar o controle cinemático segundo o diagrama \ref
 \end{figure}
 
 
-Se ${x_e} \in \mathbb{R}^3$ é uma representação da posição e orientação e ${x}_d$ o valor desejado nessa representação, seja o erro no espaço operacional:
+Se ${x_{be}} \in \mathbb{R}^6$ é uma representação da posição e orientação e ${x}_d$ o valor desejado nessa representação, seja o erro no espaço operacional:
 \begin{equation}
-{e} = {x}_d - {x}_e
+{e} = {x}_d - {x}_{be}
 \end{equation}
-
 Derivando em relação ao tempo
 \begin{equation}
-{\dot{e}} = {\dot{x}}_d - {\dot{x}_e}
+{\dot{e}} = {\dot{x}}_d - {\dot{x}_{be}}
 \end{equation}
 podemos escrever a partir da equação \ref{eq:jacoba}:
 \begin{equation}
 {\dot{e}} = {\dot{x}}_d - {J}_a({q})\dot{{q}}
 \end{equation}
-Sendo ${x}_d(t)$ uma trajetória desejada, deseja-se que ${x}_e$ atinja ${x}_d(t)$ em $t \to \infty$ .
+Sendo ${x}_d(t)$ uma trajetória desejada, deseja-se que ${x}_{be}$ atinja ${x}_d(t)$ em $t \to \infty$ .
 A entrada de controle para o sistema é um valor de ${u} = \dot{{q}}$, logo, assumindo que ${J}_a({q})$ é quadrada e não singular, a escolha da lei de controle
 \begin{equation}
 {u} = {J}_a^{-1}({q})\bar{{u}}
@@ -354,7 +354,7 @@ leva ao sistema linear:
 \end{equation}
 Se for escolhido $\bar{{u}}$:
 \begin{equation}
-\bar{{u}} = \dot{{x}}_d + {K_t} ({x}_d - {x}_e)
+\bar{{u}} = \dot{{x}}_d + {K_t} ({x}_d - {x}_{be})
 \end{equation}
 obtem-se a seguinte dinâmica para o erro
 \begin{equation}
@@ -382,7 +382,7 @@ onde $z_o$ é a distância até o objeto, $z_i$ é a distância ao plano da imag
 \end{figure}
 
 Em visão computacional geralmente é utilizado o modelo de perspectiva central mostrado na Figura \ref{fig:camera_model}.
-Seja ${P} = [X\; Y\; Z]^T$ as coordenadas de um ponto expresso no sistema de coordenadas inercial e ${p} = [x\;y]^T$ as coordenadas projetadas no plano da imagem por
+Seja ${P} = [X\; Y\; Z]^T$ as coordenadas de um ponto expresso no sistema de coordenadas da câmera e ${p} = [x\;y]^T$ as coordenadas projetadas no plano da imagem por
 % TODO confirmar referencial do mundo
 \begin{equation}
 x = f \frac{X}{Z}, \quad y = f \frac{Y}{Z}
@@ -447,11 +447,11 @@ Reescrevendo a equação \eqref{eq:projpersp} adicionando uma matriz ${K}$ de pa
 }
 (\tilde{{P}})_C
 \end{equation}
-onde $p_{px} = [u' \;\; v' \;\; w']$ são as coordenadas homogêneas em pixels do ponto $P$. As coodenadas não homogêneas no plano da imagem são dadas por
+onde $\tilde{p}_{px} = [u' \;\; v' \;\; w']$ são as coordenadas homogêneas em pixels do ponto $P$. As coodenadas não homogêneas no plano da imagem são dadas por
 \begin{equation}
 u = \frac{u'}{w'} \qquad v = \frac{v'}{w'}.
 \end{equation} 
-A câmera possui uma posição e orientação arbitrárias com respeito ao sistema de coordenadas inercial, logo a posição do ponto com respeito a câmera é dada por  $({P})_c = {T}_{0c}^{-1} {P}$. Utilizando a equação \eqref{eq:camera_parameter} podemos escrever a projeção da câmera na sua forma geral como
+A câmera possui uma posição e orientação arbitrárias com respeito ao sistema de coordenadas inercial, logo a posição do ponto com respeito a câmera é dada por  $({\tilde{P}})_c = {T}_{0c}^{-1} {\tilde{P}}$. Utilizando a equação \eqref{eq:camera_parameter} podemos escrever a projeção da câmera na sua forma geral como
 % TODO: confirmar
 \begin{align}\label{eq:camera_projection}
 {\tilde{p}_{px}} =& 
@@ -475,7 +475,7 @@ A equação \eqref{eq:camera_projection} expressa a posição de um ponto no pla
 %TODO
 
 \subsection{Estimação da Pose}
-O problema de estimar a \textit{pose} consiste em determinar a posição e orientação ${T}_{ct}$ do alvo com respeito ao sistema de coordenadas da câmera. Considera-se que a geometria do alvo é conhecida, isto é um conjunto de pontos característicos $[X_i \; Y_i \; Z_i]$ com $i \in [1\; \cdots \; N]$, assim como os parâmetros intrínsecos da câmera. A imagem capturada pela câmera é processada e as coordenadas no plano da imagem $[u_i\; v_i]$ são determinadas utilizando algoritmos de visão computacional. Esse problema é conhecido como \textit{Perspective-n-Point}.
+O problema de estimar a \textit{pose} consiste em determinar a posição e orientação ${T}_{ct}$ do alvo com respeito ao sistema de coordenadas da câmera. Considera-se que a geometria do alvo é conhecida, isto é um conjunto de pontos característicos $[X_i \; Y_i \; Z_i]$ com $i \in [1\; \cdots \; N]$, assim como os parâmetros intrínsecos da câmera. A imagem capturada pela câmera é processada e as coordenadas no plano da imagem $p_{px} = [u_i\; v_i]$ são determinadas utilizando algoritmos de visão computacional. Esse problema é conhecido como \textit{Perspective-n-Point}.
 
 Existem diversas abordagens para solucionar esse problema. Aqui será destacado o caso simples com 3 pontos e comentada a abordagem de \citep{dementhon1995model}  para N pontos pois esta foi utilizada na implementação desse projeto. Maiores detalhes sobre implementações disponíveis em código aberto podem ser encontradas no apêndice \ref{chap:pose_est}. 
 
@@ -520,24 +520,27 @@ Uma desvantagem do \textit{POSIT} é que ele não é diretamente aplicável a po
 %Considerando $N$ pontos $P_i$, cujas coordenadas homogêneas são dadas por $\tilde{P}_i = [X_i \;\; Y_i \;\; Z_i \;\; 1]$. Essas coordenadas
 
 \subsection{Servovisão Baseada em Posição}
-Em um sistema de servovisão baseado em posição a posição e orientação do alvo com respeito a câmera ${T}_{ct}$ é estimada. O problema de estimação da posição e orientação foi discutido acima e as implementações disponíveis em código aberto estão listadas no Apêndice \ref{chap:pose_est}.
-Especifica-se uma posição desejada relativa ao sistema de coordenadas do alvo  ${T}_{c^*t}$ e deseja-se determinar o movimento necessário para mover a câmera para a posição desejada, que chamamos de ${T}_\delta$.
-
+Em um sistema de servovisão baseado em posição a posição e orientação do alvo com respeito a câmera ${T}_{ct}$ é estimada. O problema de estimação da posição e orientação foi discutido acima e as implementações disponíveis em código aberto estão listadas no Apêndice \ref{chap:pose_est}. Como desejamos que alguma ferramenta no efetuador seja capaz de atingir o alvo, é preciso saber a posição e orientação do alvo em relação ao efetuador, dada por
 \begin{equation}
- {T}_{ct} =  {T}_\Delta {T}_{c^*t}
-\end{equation}
-
-\begin{equation}
- {T}_\Delta  =   {T}_{ct} {T}_{c^*t}^{-1}
-\end{equation}
+T_{et} = T_{ec} T_{ct}.
+\end{equation} 
+Especifica-se uma posição desejada relativa ao sistema de coordenadas do alvo  ${T}_{e^*t}$ e deseja-se determinar o movimento necessário para mover a câmera para a posição desejada, que chamamos de ${T}_\Delta$.
+\begin{align}
+ {T}_{et} =  {T}_\Delta {T}_{e^*t} \\
+ {T}_\Delta  =   {T}_{et} {T}_{e^*t}^{-1}
+\end{align}
 
 Com isso é possível aplicar uma estratégia de controle cinemático de posição no referencial do efetuador de modo a atingir a posição e orientação desejada. A lei de controle
 \begin{equation} \label{eq:visionctrllaw}
-{u} = ({J}_a)_e^{-1}{K}_v[({x}_o)_e - ({x}_t)_e]
+%{u} = ({J}_a)_e^{-1}{K}_v[({x}_o)_e - ({x}_t)_e]
+{u} = ({J}_a)_e^{-1}{K}_v x_\Delta
 \end{equation}
-é capaz de fazer ${e}(t) \rightarrow 0$ quando $t \rightarrow \infty$ se $\dot{{x}}_t = 0$. Na Equação \eqref{eq:visionctrllaw}, ${x}_t$ é um vetor do espaço operacional representando a posição e orientação do alvo, ${T}_{ct}$. O vetor $x_o$ representa a posição e orientação ${T}_{c^*t}$ no espaço operacional, podendo ser interpretado como um \textit{offset} em relação ao alvo.
+é capaz de fazer ${x_\Delta}(t) \rightarrow 0$ quando $t \rightarrow \infty$ se $\dot{{x}}_t = 0$. Na Equação \eqref{eq:visionctrllaw}, $x_\Delta$ é obtido a partir de $T_\Delta$.
+
+%Na Equação \eqref{eq:visionctrllaw}, ${x}_t$ é um vetor do espaço operacional representando a posição e orientação do alvo, ${T}_{ct}$. O vetor $x_o$ representa a posição e orientação ${T}_{c^*t}$ no espaço operacional, podendo ser interpretado como um \textit{offset} em relação ao alvo.
 
 \section{Controle de Força}
+\subsection{Problema de Rastreamento}
 Considera-se o problema de controle cinemático de força, para um manipulador já em contato com uma superfície, assumindo que a força de contato pode ser medida com um sensor acoplado ao efetuador. 
 
 Em \citep{leite2011servo} aplica-se o controle de força com base em uma abordagem de controle cinemático. O objetivo de controle é seguir uma força desejada variante no tempo ${f}_d(t) \in \mathbb{R}^3$ a partir da força de contato ${f} \in \mathbb{R}^3$ ao longo da superfície de restrição, medida com um sensor de força:
@@ -560,6 +563,41 @@ onde ${K}_f = k_f {I}$, a dinâmica do erro é governada por
 \dot{{e}}_f + {K}_f {e}_f = 0.
 \end{equation}
 Portanto escolhendo $k_f$ como uma constante positiva, o sistema em malha fechada é exponencialmente estável. 
+
+\subsection{Problema de Regulação}
+Quando não está disponível o sinal $\dot{f}$ ou o mesmo é muito ruidoso é possível utilizar uma 
+estratégia de controle baseada em uma ação proporcional e integral. Essa estratégia tem sido o algoritmo mais utilizado devido a sua robustez com respeito ao atraso de tempo de medição e capacidade de remoção de perturbações de força \citep{wilfinger1994integral}.
+
+Considerando o problema de regular a força de contato medida $f$ para uma força desejada constante $f_d$ ao longo da superfície. 
+\begin{equation} \label{eq:ef_reg}
+f \rightarrow f_d, \qquad e_f = f - f_d \to 0
+\end{equation}
+Como em geral as medidas podem ser contaminadas por ruído utiliza-se um filtro de primeira ordem.
+\begin{equation} \label{eq:efilter_reg}
+\tau \dot{e}'_{f} = -e'_{f} + e_f 
+\end{equation}
+onde $e'_{f} \in \mathbb{R}^3$ é o erro de força filtrado e $\tau$ é a constante de tempo do filtro. 
+
+Derivando \eqref{eq:hooke_mat}, \eqref{eq:ef_reg} e \eqref{eq:efilter_reg} com respeito ao tempo, a equação do erro de força é dada por 
+\begin{equation}
+\tau \ddot{e}'_{f} + \dot{e}'_f = {f}_d + K_s \bar{u}_f
+\end{equation}
+onde $\bar{u}_f \in \mathbb{R}^3$ é a lei de controle de posição $\bar{u}_p$ em
+\begin{equation}
+\bar{u} = \m{ \bar{u}_p \\ \bar{u}_o }
+\end{equation}
+
+Considerando $\bar{u}_p = \bar{u}_f$, utiliza-se uma lei de controle proporcional
+\begin{equation} \label{eq:pi_force}
+\bar{{u}}_f = -{K}_s^{-1} ({K}_f {e'}_f + {K}_i \int_0^t {e'}_f (\tau)d\tau),
+\end{equation}
+onde $K_f = k_f I$ e $K_i = k_i I$. Portanto a dinâmica do erro é governada por 
+\begin{equation}
+\tau \dddot{e}'_f + \ddot{e}'_f + k_f \dot{e}'_f + k_i e_f = 0
+\end{equation}
+
+Assim, deve-se escolher $k_f$ e $k_i$ como constantes positivas satisfazendo as condições de estabilidade estabelecidas pelo critério de establididade de \textit{Routh–Hurwitz}, ou seja, $k_f > k_i \tau$. Sob essas condições o sistema em malha fechada é exponencialmente estável.
+
 
 \section{Controle Híbrido de Força e Posição}
 

@@ -135,15 +135,11 @@ Definindo ${T}_{b0} = {I}$ e ${T}_{4e} = {I}$, pela equação \eqref{eq:base_efe
 Antes de tratar de estratégias de controle é necessário definir o espaço operacional e o espaço das juntas,  sob os quais serão aplicadas as leis de controle. 
 Como trata-se de um manipulador 4-DOF de temos que o vetor do espaço operacional tem dimensão $(4 \times 1)$ dado por 
 \begin{equation} \label{eq:operational_space}
-{x_e} = \m{{p}_e \\ \phi_e}
+{x_e} = \m{{p}_{be} \\ \phi_{be}}
 \end{equation}
-onde o vetor ${p}_e$ descreve a posição cartesiana representada no referencial da base:
-\begin{equation}
-{p}_e = \m{x \\ y \\ z}
-\end{equation}
-e $\phi_e$ é o grau de liberdade de orientação \textit{pitch}, dado por
+onde o vetor $p_{be}$ descreve a posição cartesiana representada no referencial da base e $\phi_{be}$ é o grau de liberdade de orientação \textit{pitch}, dado por
 \begin{equation} \label{eq:orientacao}
-\phi_e = -(\theta_2 + \theta_3 + \theta_4)
+\phi_{be} = -(\theta_2 + \theta_3 + \theta_4)
 \end{equation}
 
 O espaço das juntas é definido por 
@@ -157,7 +153,7 @@ pois todas as juntas são de revolução.
 \subsection{Jacobiano Analítico}
 A partir da cinemática direta em \eqref{eq:cine_direta} e da equação \ref{eq:jacob_pos} podemos obter o Jacobiano de posição para o manipulador diferenciando a equação em relação as variáveis de junta. 
 \begin{equation}
-{p}_e = \m{x \\ y \\ z} =
+{p}_{be} = \m{p_{be_x} \\ p_{be_y} \\ p_{be_z}} =
 \m{
    -M_5 s_1 + E_4 c_{23}c_1 + E_3 c_1 c_2 + E_5 c_{234} c_1 \\
      M_5 c_1+E_4 c_{23} s_1 + E_3 c_2 s_1 + E_5 c_{234} s_1 \\
@@ -174,6 +170,7 @@ A partir da cinemática direta em \eqref{eq:cine_direta} e da equação \ref{eq:
 }
 \end{equation}
 onde
+\allowdisplaybreaks
 \begin{align*}
 &\frac{\partial x}{\partial q_1} =& - M_5c_1 - E_4c_{23}s_1 - E_3c_2s_1 - E_5c_{234}s_1  \\
 &\frac{\partial x}{\partial q_2} =& -c_1(E_4s_{23}+E_3s_2+E_5s_{234}) \\
@@ -205,7 +202,10 @@ Em alguns modos como controle por servovisão e no controle manual com \textit{j
 }
 \end{equation}
 
-
+Note que para a escolha de sistemas de coordenadas do TETIS tem-se que
+\begin{equation}
+(J_{a\phi})_e = (J_{a\phi})_b.
+\end{equation}
 %A partir daqui, para simplificar a notação, sempre será referenciado o Jacobiano Analitico no referencial da base $(\bm{J}_A)_0$  como  $\bm{J}_0$ e o Jacobiano Analítico no referencial do efetuador $(\bm{J}_A)_N$ como $\bm{J}_N$.
 
 %\section{Singularidades}
@@ -222,7 +222,7 @@ Este é um modo em malha aberta, onde o sinal de entrada no controlador é de ve
     \node [block, right of=J] (Integral) {$\int$};
     \node [output, right of=Integral] (output) {};
 
-    \draw [draw,->] (input) -- node {$\dot{{x}}_e$} (J);
+    \draw [draw,->] (input) -- node {$\dot{{x}}_d$} (J);
     \draw [->] (J) -- node {${\dot{q}}$} (Integral);
     \draw [->] (Integral) -- node [name=x] {${q}$}(output);
 \end{tikzpicture}
@@ -279,19 +279,19 @@ A lei de controle é dada por
 \begin{equation}
 {u} = {K}_j ({q}_d - {q})
 \end{equation}
-onde ${K_j} = k_j {I}$.
+onde ${K_j} = k_j {I} > 0$.
 
 \section{Controle de Posição no Espaço Operacional} \label{sec:pos_operacional}
 Para este modo considera-se o problema de \textit{set-point} para o controle de posição no espaço operacional conforme definido em \ref{eq:op_space}. Para referências constantes, ou seja, quando $\dot{{x}}_d = 0$ a lei de controle dada por
 \begin{equation} \label{eq:lei_posicao}
-{u} = ({J}_{a})_b^{-1} {K}_p ( ({x_d})_b - ({x_e})_b)
+{u} = ({J}_{a})_b^{-1} {K}_p ( {x_d} - ({x_{be}})_b)
 \end{equation}
 é capaz de levar o ${e} \rightarrow 0$ quando $t \rightarrow \infty$.
 
 \section{Controle Proporcional com Feedforward} \label{sec:pplusf}
 Para o rastreamento de trajetória considera-se o problema de seguir um referência no referencial da base ${x}_d(t)$ que é função do tempo, conhecidos ${x}_d(t)$ e ${\dot{x}}_d(t)$. Para levar o erro assintoticamente a zero, utiliza-se uma lei de controle proporcional com \textit{feedforward} utilizando a inversa do Jacobiano Analítico. Conforme mostrado na Seção \ref{sec:controle_cinematico}, a lei de controle dada por 
 \begin{equation}
-{u} = ({J}_{a})_b^{-1} (\dot{{x}}_d + {K}_t ({x_d} - {x_e}))
+{u} = ({J}_{a})_b^{-1} [\dot{{x}}_d + {K}_t ({x_d} - (x_{be})_b)]
 \end{equation} 
 é capaz de levar o erro assintoticamente a zero pois a dinâmica fica 
 \begin{equation}
@@ -299,7 +299,7 @@ Para o rastreamento de trajetória considera-se o problema de seguir um referên
 \end{equation}
 O algoritmo de controle pode ser resumido por:
 \begin{align}
-{e} &= ({x}_d)_b- ({x_e})_b  \label{eq:error_pf}\\
+{e} &= {x}_d- (x_{be})_b  \label{eq:error_pf}\\
 {\bar{u}} &= {K}_t {e} + ({\dot{x}}_d)_b \\
 {u} &= ({J}_a)_b^{-1} {\bar{u}}
 \end{align}
@@ -385,22 +385,23 @@ Observando que o referencial da câmera e do efetuador são dados pela Figura \r
 \end{figure}
 
 
-Para a servovisão baseada em posição, foi utilizada uma lei de controle proporcional
-\begin{equation} \label{eq:lei_posicao}
-{u} = ({J}_a)_e^{-1}{K}_v[({x}_o)_e - ({x}_t)_e]
+Para a abordagem PBVS, foi utilizada a lei de controle proporcional descrita na equação \eqref{eq:visionctrllaw}
+\begin{equation*} 
+{u} = ({J}_a)_e^{-1}{K}_v x_\Delta%[({x}_o)_e - ({x}_t)_e]
 %{u} = ({J}_{a})_e^{-1} {K}_t [({x}_t)_e - ({x_e})_e]
-\end{equation}
-onde ${x}_o$ e ${x_t}$ estão representados no referencial do efetuador. Portanto precisamos saber a posição e orientação ${x}_t$ do alvo em relação ao efetuador
+\end{equation*}
+onde $x_\Delta = ({x}_{et})_e - ({x}_{e^*t})_e$. O vetor do espaço operacional ${x}_{e^*t}$ representa uma posição e orientação relativa ao alvo, enquanto que $({x}_{et})_e$ é obtida a partir de $T_{et}$.
+%onde ${x}_o$ e ${x_t}$ estão representados no referencial do efetuador. Portanto precisamos saber a posição e orientação ${x}_t$ do alvo em relação ao efetuador
+
 \begin{equation}
 {T}_{et} = {T}_{ec} {T}_{ct}
 \end{equation}
-onde ${T}_{ec}$ é dado por \eqref{eq:tec} e ${T}_{ct}$ obtemos através de algoritmos de estimação de posição e orientação a partir de visão computacional. 
+onde ${T}_{ec}$ é dado por \eqref{eq:tec} e ${T}_{ct}$ obtemos através de algoritmos de estimação de posição e orientação a partir de visão computacional. Ficamos então com
 
 \begin{equation}
-({x}_t)_e = \m{ ({p}_t)_e \\ \phi_t }
+({x}_{et})_e = \m{ ({p}_{et})_e \\ (\phi_{et})_e }
 \end{equation}
-onde $({p}_t)_e$ é o vetor de translação que pode ser obtido diretamente de ${T}_{ec}$ e  $\phi_t$ é a orientação, que pode ser obtido de duas formas.
-
+onde $({p}_{et})_e$ é o vetor de translação que pode ser obtido diretamente de ${T}_{et}$ e  $(\phi_{et})_e$ é a orientação, que pode ser obtido de duas formas.
 
 %TODO
 A primeira alternativa é obter a rotação em torno do eixo $x$ (\textit{pitch}) em relação ao referencial do efetuador, extraído de ${T}_{et}$. No entanto essa opção não permite que o alvo seja rotacionado em torno de ${z}_c$, pois a rotação em torno de ${x}_c$ não mais representará a inclinação do plano do alvo em relação a posição inicial, que faz o efetuador rastrear a direção normal ao alvo ( vide Figura \ref{fig:projection}). 
@@ -409,7 +410,7 @@ Portanto, optou-se pela segunda alternativa. Projeta-se o eixo do alvo $({z}_t)_
 
 \begin{figure}[!ht]
 \centering
-  \includegraphics[width=0.3\linewidth]{./img/projection.eps}
+  \includegraphics[width=0.3\linewidth]{./img/projection2.eps}
   \caption{Caso em que a rotação em torno de ${x}_c$ não representa a inclinação do plano do alvo.}
   \label{fig:projection}
 \end{figure}%
@@ -448,17 +449,17 @@ O vetor projetado no plano é dado por
 \end{equation}
 assim basta apenas encontrar o ângulo entre os vetores ${z'}_{t}$ e ${z}_{t_0}$, que pode ser calculado pela fórmula do Cosseno \citep{strang} 
 \begin{equation}
-\phi_t = \cos^{-1} \left( \frac{{z'}^T_{t} {z}_{t_0} } {||{z'}_{t}|| \; ||{z}_{t_0}||} \right)
+\phi_{et} = \cos^{-1} \left( \frac{{z'}^T_{t} {z}_{t_0} } {||{z'}_{t}|| \; ||{z}_{t_0}||} \right)
 \end{equation}
 %\begin{align}
 %(\bm{p}_t)_e &= (\bm{p}_c)_e + (\bm{p}_t)_e \\
 %(\bm{p}_t)_e &= (\bm{p}_c)_e + \bm{R}_{ec} (\bm{p}_t)_c 
 %\end{align}
-Após obter os valores de $(p_t)_e$ e $\phi_t$, sabemos $(x_t)_e$ e controle se resume a:
+Após obter os valores de $(p_{et})_e$ e $\phi_{et}$, sabemos $(x_{et})_e$ e controle se resume a:
 \begin{align}
-{e} &= ({x}_t)_e - ({x})_e \\
-{\bar{u}} &= {K}_v {e}  \\
-{u} &= ({J}_{a})_e^{-1} {e}
+x_\Delta &= ({x}_{et})_e - ({x}_{e^*t})_e\\
+{\bar{u}} &= {K}_v {x_\Delta}  \\
+{u} &= ({J}_{a})_e^{-1} {\bar{u}}
 \end{align}
 
 \section{Controle de Força} \label{sec:force}
@@ -498,12 +499,10 @@ f = -k_s (x - x_s)
 \end{equation}
 onde $x$ é a posição do ponto de contato com a superfície e $x_s$ um ponto na superfície.
 
-Considerando que o controle de força seja ativado somente após a etapa de contato com o ambiente onde será aplicada a força e que o controle de força é feito apenas na direção de approach (segundo o sistema de coordenadas $\bar{E}_e$, na direção $x$), pode-se utilizar a malha de controle mostrada na figura \ref{fig:controle_forca}.
-
-É utilizada uma lei de controle com ação proporcional e integral:
-\begin{equation}
-\bar{u} = -K_s^{-1} (K_fe_f + K_i \int_0^t e_f(\tau)d\tau)
-\end{equation}
+Considerando que o controle de força seja ativado somente após a etapa de contato com o ambiente onde será aplicada a força e que o controle de força é feito apenas na direção de approach (segundo o sistema de coordenadas $\bar{E}_e$, na direção $x$), pode-se utilizar a malha de controle mostrada na figura \ref{fig:controle_forca}. É utilizada uma lei de controle com ação proporcional e integral conforme a equação \eqref{eq:pi_force}.
+%\begin{equation}
+%\bar{u} = -K_s^{-1} (K_fe_f + K_i \int_0^t e_f(\tau)d\tau)
+%\end{equation}
 
 
 \begin{figure}[h!]
