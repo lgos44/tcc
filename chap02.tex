@@ -18,11 +18,11 @@ Sejam o sistema de coordenadas inercial $\bar{E}_a = [\vec{x}_a \; \vec{y}_a \; 
 
 A \textbf{posição} da origem $O_b$ do sistema de coordenadas do corpo rígido em relação ao sistema de coordenadas inercial é dada por 
 \begin{equation}
-p_b = p_{b_x} \vec{x}_a + p_{b_y} \vec{y}_a + p_{b_z} \vec{z}_a, 
+p_{ab} = p_{ab_x} \vec{x}_a + p_{ab_y} \vec{y}_a + p_{ab_z} \vec{z}_a, 
 \end{equation}
 onde $p_{b_x}$, $p_{b_y}$ e $p_{b_z}$ denotam as componentes do vetor $p_b \in \mathbb{R}^3$ representadas no sistema de coordenadas $\bar{E}_a$. Pode ser escrita de forma compacta como um vetor $(3 \times 1)$
 \begin{equation}
-p_{b} = \m{p_{b_x} \\ p_{b_y} \\ p_{b_z}}
+p_{ab} = \m{p_{ab_x} \\ p_{ab_y} \\ p_{ab_z}}
 \end{equation}
 
 As coordenadas de $\vec{x}_b$, $\vec{y}_b$ e $\vec{z}_b$ representadas no sistema de coordenadas $\bar{E}_a$ são dadas por $x_{ab}$, $y_{ab}$ e $z_{ab}$ em
@@ -294,7 +294,7 @@ A maioria dos manipuladores possui uma malha de controle de velocidade em nível
 
 
 
-Portanto é possível implementar o controle cinemático segundo o diagrama da Figura \ref{fig:controlecinematico}, considerando que o manipulador tem 6 juntas, i.e. $n=6$.
+Portanto é possível implementar o controle cinemático segundo o diagrama da Figura \ref{fig:controlecinematico}, considerando que o manipulador tem 6 juntas, i.e. $n=6$. %Na Figura \ref{fig:controlecinematico} 
 
 \begin{figure}[h!]
 \centering
@@ -535,34 +535,16 @@ Com isso é possível aplicar uma estratégia de controle cinemático de posiç�
 %{u} = ({J}_a)_e^{-1}{K}_v[({x}_o)_e - ({x}_t)_e]
 {u} = ({J}_a)_e^{-1}{K}_v x_\Delta
 \end{equation}
-é capaz de fazer ${x_\Delta}(t) \rightarrow 0$ quando $t \rightarrow \infty$ se $\dot{{x}}_t = 0$. Na Equação \eqref{eq:visionctrllaw}, $x_\Delta$ é obtido a partir de $T_\Delta$.
+é capaz de fazer ${x_\Delta}(t) \rightarrow 0$ quando $t \rightarrow \infty$ se $\dot{{x}}_t = 0$. Na Equação \eqref{eq:visionctrllaw}, $x_\Delta$ é dado por como
+\begin{equation}
+x_\Delta = {x}_{et} - {x}_{e^*t}
+\end{equation}
+onde ${x}_{et}$ é obtido a partir de $T_{et}$ e ${x}_{e^*t}$ a partir de ${T}_{e^*t}$.
+%a partir de $T_\Delta$.
 
 %Na Equação \eqref{eq:visionctrllaw}, ${x}_t$ é um vetor do espaço operacional representando a posição e orientação do alvo, ${T}_{ct}$. O vetor $x_o$ representa a posição e orientação ${T}_{c^*t}$ no espaço operacional, podendo ser interpretado como um \textit{offset} em relação ao alvo.
 
 \section{Controle de Força}
-\subsection{Problema de Rastreamento}
-Considera-se o problema de controle cinemático de força, para um manipulador já em contato com uma superfície, assumindo que a força de contato pode ser medida com um sensor acoplado ao efetuador. 
-
-Em \citep{leite2011servo} aplica-se o controle de força com base em uma abordagem de controle cinemático. O objetivo de controle é seguir uma força desejada variante no tempo ${f}_d(t) \in \mathbb{R}^3$ a partir da força de contato ${f} \in \mathbb{R}^3$ ao longo da superfície de restrição, medida com um sensor de força:
-\begin{equation} \label{eq:problema_ctrl_forca}
-{f} \rightarrow {f}_d(t), \qquad {e}_f = {f}_d(t) - {f} \rightarrow 0
-\end{equation}
-
-A força de contato pode ser modelada como uma mola linear, através da Lei de Hooke:
-\begin{equation} \label{eq:hooke_mat}
-{f} = -{K}_s ({p} - {d}_s)
-\end{equation}
-onde ${p} \in \mathbb{R}^3$ é a posição inicial do ponto de contato e ${d}_s \in \mathbb{R}^3$ é um ponto da superfície, ${K}_s = k_s I$ é a matriz de rigidez e $k_s > 0$ é o coeficiente de rigidez da superfície.
-
-Derivando \eqref{eq:problema_ctrl_forca} e \eqref{eq:hooke_mat} em relação ao tempo com respeito ao tempo, a equação do erro de força $e_f \in \mathbb{R}^3$ é dada por $\dot{{e}}_f = \dot{{f}}_d + {K}_s \dot{{p}}$. Considerando uma lei de controle de força com ação \textit{feedforward} e proporcional
-\begin{equation}
-{\bar{u}}_f = -{K}_s^{-1} (\dot{{f}}_d + {K}_f {e}_f)
-\end{equation}
-onde ${K}_f = k_f {I}$, a dinâmica do erro é governada por
-\begin{equation}
-\dot{{e}}_f + {K}_f {e}_f = 0.
-\end{equation}
-Portanto escolhendo $k_f$ como uma constante positiva, o sistema em malha fechada é exponencialmente estável. 
 
 \subsection{Problema de Regulação}
 %Quando não está disponível o sinal $\dot{f}$ ou o mesmo é muito ruidoso é possível utilizar uma 
