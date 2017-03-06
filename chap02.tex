@@ -565,8 +565,9 @@ onde ${K}_f = k_f {I}$, a dinâmica do erro é governada por
 Portanto escolhendo $k_f$ como uma constante positiva, o sistema em malha fechada é exponencialmente estável. 
 
 \subsection{Problema de Regulação}
-Quando não está disponível o sinal $\dot{f}$ ou o mesmo é muito ruidoso é possível utilizar uma 
-estratégia de controle baseada em uma ação proporcional e integral. Essa estratégia tem sido o algoritmo mais utilizado devido a sua robustez com respeito ao atraso de tempo de medição e capacidade de remoção de perturbações de força \citep{wilfinger1994integral}.
+%Quando não está disponível o sinal $\dot{f}$ ou o mesmo é muito ruidoso é possível utilizar uma 
+
+A estratégia de controle de força baseada em uma ação proporcional e integral tem sido o algoritmo mais utilizado devido a sua robustez com respeito ao atraso de tempo de medição e capacidade de remoção de perturbações de força \citep{wilfinger1994integral}. No problema de regulação, o uso de um controlador PI permite evitar instabilidade em uma possível perda de contato.
 
 Considerando o problema de regular a força de contato medida $f$ para uma força desejada constante $f_d$ ao longo da superfície. 
 \begin{equation} \label{eq:ef_reg}
