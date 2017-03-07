@@ -1,0 +1,16 @@
+\chapter{Coordenadas Homogêneas} \label{chap:hom_coordinates}
+
+Um ponto n-dimensional no espaço Euclidiano $p \in \mathbb{R}^n$ é representado por suas coordenadas como $p = [p_1 \;\; p_2 \; \cdots \; p_n]$. 
+O ponto é representado em coordenadas homogêneas, ou seja, no espaço projetivo como $\tilde{x} \in \mathbb{P}^n$ com coordenadas $\tilde{x} = [\tilde{p}_1 \;\; \tilde{p}_2  \cdots \tilde{p}_{n+1}]$. 
+As coordenadas Euclidianas estão relacionadas com as coordenadas homogêneas por
+\begin{equation}
+p_i  = \frac{\tilde{p}_i}{\tilde{p}_{n+1}} \qquad i = 1 \cdots n
+\end{equation}
+
+Um vetor em coordenadas homogêneas pode ser obtido a partir de suas coordenadas Euclidianas por
+\begin{equation}
+\tilde{x} = [x_1 \;\; x_2 \; \cdots \; x_n \;\; 1]
+\end{equation}
+
+O fato de as coordenadas homogêneas (ou projetivas) possuírem uma dimensão a mais, oferece algumas vantagens. Permite que pontos e retas no infinito sejam representados utilizando apenas números reais. 
+Também elimina a relevância da escala, pois $\tilde{p}_1$ e $\tilde{p}_2 = \alpha \tilde{p}_1$ representam o mesmo ponto em coordenadas Euclidianas para qualquer $\alpha \neq 0$. Pontos em coordenadas homogêneas também podem ser multiplicados por uma matriz de transformação linear de dimensão $(n+1) \times (n+1)$ de forma a sofrer rotação e translação.

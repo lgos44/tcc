@@ -476,3 +476,27 @@ Foi aplicado o controle de força com uma referência constante de $1000 mN$ na 
 
 Os resultados mostraram a existência de não linearidades que não foram consideradas no modelo. Por exemplo, a relação entre força e distância no ambiente testado não é exatamente linear, no entanto a aproximação foi aceitável. O fato de o sensor de força ter uma alta relação sinal-ruído para a ordem de grandeza do sinal de referência também contribuiu para os resultados observados. 
 
+\section{Controle por Servovisão}
+
+Considerando o controle por servovisão conforme definido na Seção \ref{sec:servo_vision}, foi realizado um experimento em que o operador posicionou o alvo a frente do efetuador, movimentando-o nos primeiros segundos de forma a aproximá-lo do efetuador e em seguida parando o movimento. Foi utilizada uma posição relativa em relação ao alvo $({x}_{e^*t})_e = [400 \;\; 0 \;\; 0 \;\; 0]^T$.
+
+
+Conforme esperado, quando o alvo está parado, ou seja, $\dot{{x}}_t = 0$, ${x_\Delta}(t) \rightarrow 0$ quando $t \rightarrow \infty$ como mostra a Figura \ref{fig:xdelta}.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{.45\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/mpv-shot0001.jpg}
+  \caption{Operador posicionando o alvo a frente do efetuador.}
+  \label{fig:sub1}
+\end{subfigure}%
+\begin{subfigure}{.4\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./img/x_delta.eps}
+  \caption{$x_\Delta$}
+  \label{fig:xdelta}
+\end{subfigure}
+\caption{Resultados experimentais - Controle por Servovisão}
+\label{fig:vision_exp}
+\end{figure}

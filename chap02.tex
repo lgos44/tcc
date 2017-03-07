@@ -89,7 +89,7 @@ Considerando um sistema de coordenadas  $\bar{E}_b = [\vec{x}_b \; \vec{y}_b \; 
 \end{equation}
 A Equação \eqref{eq:transrot} representa a transformação de coordenadas (translação e rotação) de um vetor, de um sistema de coordenadas para outro.
 
-De forma a obter uma representação compacta da relação entre as coordenadas de um mesmo ponto em dois sistemas de coordenadas diferentes, introduz-se a representação homogênea de um vetor $p$ como $\tilde{p} \in \mathbb{R}^4$, formado adicionando um quarto componente unitário, ou seja
+De forma a obter uma representação compacta da relação entre as coordenadas de um mesmo ponto em dois sistemas de coordenadas diferentes, introduz-se a representação homogênea de um vetor $p \in \mathbb{R}^3$ como $\tilde{p} \in \mathbb{R}^4$, formado adicionando um quarto componente unitário\footnote{A representação homogênea de um vetor n-dimensional é abordada no Apêndice \ref{chap:hom_coordinates}.}, ou seja
 \begin{equation}
 \tilde{p} = \m{p \\ 1}.
 \end{equation}  
@@ -294,7 +294,8 @@ A maioria dos manipuladores possui uma malha de controle de velocidade em nível
 
 
 
-Portanto é possível implementar o controle cinemático segundo o diagrama da Figura \ref{fig:controlecinematico}, considerando que o manipulador tem 6 juntas, i.e. $n=6$. %Na Figura \ref{fig:controlecinematico} 
+Portanto é possível implementar o controle cinemático segundo o diagrama da Figura \ref{fig:controlecinematico}, considerando que o manipulador tem 6 juntas, i.e. $n=6$. 
+Na Figura \ref{fig:controlecinematico} ${k}(\cdot)$ denota a cinemática direta do manipulador.
 
 \begin{figure}[h!]
 \centering
@@ -368,11 +369,13 @@ A tarefa proposta na Servovisão é controlar a posição e orientação do efet
 Primeiramente é importante entender os princípios de formação de imagem através de câmeras \citep{petercorke}. 
 
 \subsection{Transformação de Perspectiva} \label{sec:camera_model}
-A equação elementar para descrever a formação de imagem com uma lente é a Lei das Lentes
-\begin{equation} 
-\frac{1}{z_o} + \frac{1}{z_i} = \frac{1}{f}
-\end{equation} 
-onde $z_o$ é a distância até o objeto, $z_i$ é a distância ao plano da imagem e $f$ é a distância focal da lente.
+
+Em visão computacional geralmente é utilizado o modelo de perspectiva central mostrado na Figura \ref{fig:camera_model}, onde $f$ é a distância focal da lente.
+Seja ${P} = [X\; Y\; Z]^T$ as coordenadas de um ponto expresso no sistema de coordenadas da câmera e ${p} = [x\;y]^T$ as coordenadas projetadas no plano da imagem por
+% TODO confirmar referencial do mundo
+\begin{equation}
+x = f \frac{X}{Z}, \quad y = f \frac{Y}{Z}
+\end{equation}
 
 \begin{figure}[h!]
   \centering
@@ -381,35 +384,32 @@ onde $z_o$ é a distância até o objeto, $z_i$ é a distância ao plano da imag
 \label{fig:camera_model}
 \end{figure}
 
-Em visão computacional geralmente é utilizado o modelo de perspectiva central mostrado na Figura \ref{fig:camera_model}.
-Seja ${P} = [X\; Y\; Z]^T$ as coordenadas de um ponto expresso no sistema de coordenadas da câmera e ${p} = [x\;y]^T$ as coordenadas projetadas no plano da imagem por
-% TODO confirmar referencial do mundo
-\begin{equation}
-x = f \frac{X}{Z}, \quad y = f \frac{Y}{Z}
-\end{equation}
+É possivel expressar o ponto no plano da imagem em coordenadas homogêneas (conforme definido no Apêndice \ref{chap:hom_coordinates}) na forma $\tilde{{p}} = [x'\; y' \; z']$ onde 
 
-É possivel expressar o ponto no plano da imagem em coordenadas homogêneas na forma $\tilde{{p}} = [x'\; y' \; z']$ onde $x' = \frac{fX}{z'}$, $y' = \frac{fY}{z'}$ e $z' = Z$. Em forma matricial:
+\begin{align}
+x' = \frac{fX}{z'} \qquad  y' = \frac{fY}{z'} \qquad z' = 1
+\end{align}
 
+Escrevendo em forma matricial:
 \begin{equation}
-{\tilde{p}} = 
+ {\tilde{p}} = \frac{1}{Z}
 \m{ f & 0 & 0 \\
 	 0 & f & 0 \\
 	 0 & 0 & 1	
 }
 \m{X\\Y\\Z}
 \end{equation}
-
-Podemos retornar às coordenadas não-homogêneas com:
+Conforme mencionado no Apêndice \ref{chap:hom_coordinates} as coordenadas homogêneas tornam indiferente um fator de escala, ou seja $\tilde{p}_1$ e $\tilde{p}_2 = \alpha \tilde{p}_1$ com $\alpha \neq 0$ representam o mesmo ponto Euclidiano, cujas coordenadas no plano da imagem são dadas por:
 \[ x = \frac{x'}{z'} \qquad y = \frac{y'}{z'}\]
 
-O ponto ${P}$ expresso no sistema de coordenadas inercial pode ser representado em coordenadas homogêneas como $({\tilde{P}})_C = [X \; Y \; Z \; 1]^T$ no referencial da câmera. A projeção de perspectiva é escrita em forma linear por 
+O ponto ${P}$ expresso no sistema de coordenadas inercial pode ser representado em coordenadas homogêneas como $({\tilde{P}})_C = [X \; Y \; Z \; 1]^T$ no referencial da câmera. A projeção de perspectiva pode ser escrita em forma linear, considerando que o fator de escala é indiferente, como 
 
 \begin{equation} \label{eq:projpersp}
 \tilde{{p}} = \m{
     f & 0 & 0 & 0 \\
     0 & f & 0 & 0 \\
     0 & 0 & 1 & 0
-} (\tilde{{P}})_C
+} (\tilde{{P}})_C.
 \end{equation}
 A matriz pode ser fatorada como %ou $\tilde{p} = C (\tilde{{P}})_C$, onde $C$ é chamada de matriz da câmera. 
 \begin{equation}
@@ -447,7 +447,7 @@ Reescrevendo a equação \eqref{eq:projpersp} adicionando uma matriz ${K}$ de pa
 }
 (\tilde{{P}})_C
 \end{equation}
-onde $\tilde{p}_{px} = [u' \;\; v' \;\; w']$ são as coordenadas homogêneas em pixels do ponto $P$. As coodenadas não homogêneas no plano da imagem são dadas por
+onde $\tilde{p}_{px} = [u' \;\; v' \;\; w']$ são as coordenadas homogêneas em pixels do ponto $P$. As coodenadas cartesianas no plano da imagem são dadas por
 \begin{equation}
 u = \frac{u'}{w'} \qquad v = \frac{v'}{w'}.
 \end{equation} 
@@ -524,7 +524,7 @@ Em um sistema de servovisão baseado em posição a posição e orientação do 
 \begin{equation}
 T_{et} = T_{ec} T_{ct}.
 \end{equation} 
-Especifica-se uma posição desejada relativa ao sistema de coordenadas do alvo  ${T}_{e^*t}$ e deseja-se determinar o movimento necessário para mover a câmera para a posição desejada, que chamamos de ${T}_\Delta$.
+Especifica-se uma posição desejada relativa ao sistema de coordenadas do alvo  ${T}_{e^*t} = {T}_{ec} T_{c^*t} $ e deseja-se determinar o movimento necessário para mover a câmera para a posição desejada, que chamamos de ${T}_\Delta$.
 \begin{align}
  {T}_{et} =  {T}_\Delta {T}_{e^*t} \\
  {T}_\Delta  =   {T}_{et} {T}_{e^*t}^{-1}
@@ -535,7 +535,7 @@ Com isso é possível aplicar uma estratégia de controle cinemático de posiç�
 %{u} = ({J}_a)_e^{-1}{K}_v[({x}_o)_e - ({x}_t)_e]
 {u} = ({J}_a)_e^{-1}{K}_v x_\Delta
 \end{equation}
-é capaz de fazer ${x_\Delta}(t) \rightarrow 0$ quando $t \rightarrow \infty$ se $\dot{{x}}_t = 0$. Na Equação \eqref{eq:visionctrllaw}, $x_\Delta$ é dado por como
+é capaz de fazer ${x_\Delta}(t) \rightarrow 0$ quando $t \rightarrow \infty$ se $\dot{{x}}_t = 0$. Na Equação \eqref{eq:visionctrllaw}, $x_\Delta$ pode ser obtido a partir de  ${T}_\Delta$. Alternativamente, é possível especificar ${x}_{e^*t}$ no espaço operacional e $x_\Delta$ será dado por
 \begin{equation}
 x_\Delta = {x}_{et} - {x}_{e^*t}
 \end{equation}
